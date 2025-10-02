@@ -13,7 +13,7 @@ class ConnectingTrip extends Model
 
     protected $fillable = [
         'booking_number',
-        'schedule_id',
+        'sched_id',
         'leg',
         'route'
     ];
@@ -25,6 +25,6 @@ class ConnectingTrip extends Model
 
     public function schedule()
     {
-        return $this->belongsTo(Schedule::class, 'schedule_id');
+        return $this->belongsTo(Schedule::class, 'sched_id');
     }
 }

@@ -13,7 +13,7 @@ class Booking extends Model
     protected $primaryKey = 'booking_id';
 
     protected $fillable = [
-        'schedule_id',
+        'sched_id',
         'booking_number',
         'booking_date',
         'booking_source',
@@ -32,7 +32,7 @@ class Booking extends Model
 
     public function schedule()
     {
-        return $this->belongsTo(Schedule::class, 'schedule_id');
+        return $this->belongsTo(Schedule::class, 'sched_id');
     }
 
     public function passengers()

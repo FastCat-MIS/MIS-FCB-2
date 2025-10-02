@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id('booking_id');
-            $table->foreignId('schedule_id')->constrained('schedules', 'schedule_id')->onDelete('cascade');
+            $table->foreignId('sched_id')->constrained('schedules', 'sched_id')->onDelete('cascade');
             $table->string('booking_number')->unique();
             $table->timestamp('booking_date');
             $table->string('booking_source', 50);
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index('booking_number');
-            $table->index('schedule_id');
+            $table->index('sched_id');
             $table->index('user_id');
             $table->index('booking_date');
         });

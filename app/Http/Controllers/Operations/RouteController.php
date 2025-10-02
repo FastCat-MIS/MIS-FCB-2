@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Operations;
 
 use App\Http\Controllers\Controller;
-use App\Actions\Route\GetRoutesAction;
-use App\Actions\Route\GetRouteAction;
-use App\Actions\Route\CreateRouteAction;
-use App\Actions\Route\UpdateRouteAction;
-use App\Actions\Route\DeleteRouteAction;
+use App\Actions\Operations\Route\GetRoutesAction;
+use App\Actions\Operations\Route\GetRouteAction;
+use App\Actions\Operations\Route\CreateRouteAction;
+use App\Actions\Operations\Route\UpdateRouteAction;
+use App\Actions\Operations\Route\DeleteRouteAction;
 use App\Models\Operations\Route;
 use Illuminate\Http\Request;
 

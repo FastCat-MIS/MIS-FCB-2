@@ -13,8 +13,8 @@ class Route extends Model
     protected $primaryKey = 'route_id';
 
     protected $fillable = [
-        'origin',
-        'destination'
+        'port_a',
+        'port_b',
     ];
 
     public function rates()
@@ -29,6 +29,6 @@ class Route extends Model
 
     public function getRouteNameAttribute()
     {
-        return "{$this->origin} - {$this->destination}";
+        return "{$this->port_a} - {$this->port_b}";
     }
 }

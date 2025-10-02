@@ -10,7 +10,9 @@ use Spatie\Permission\Traits\HasRoles; // Add this import
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, HasRoles; // Add HasRoles trait
+    use HasFactory, Notifiable, HasRoles;
+
+    protected string $guard_name = 'api';
 
     protected $fillable = [
         'first_name',

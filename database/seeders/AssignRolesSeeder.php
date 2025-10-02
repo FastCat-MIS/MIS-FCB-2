@@ -10,24 +10,34 @@ class AssignRolesSeeder extends Seeder
 {
     public function run(): void
     {
-        // Assign roles to users - use 'web' guard instead of 'api'
-        $tellerRole = Role::findByName('Teller', 'api');
-        $opManagerRole = Role::findByName('Operation Manager', 'api');
-        $customerRole = Role::findByName('Customer', 'api');
+        // Use 'api' guard since this is an API-only app
+        $roles = [
+            'Teller'             => ['tovvy@example.com', 'sean@example.com', 'laurence@example.com'],
+            'Operation Manager'  => ['godadmin@example.com'],
+            'Customer'           => ['customer@example.com'],
+        ];
 
-        // Assign roles based on email
-        $tovvy = User::where('email', 'tovvy@example.com')->first();
-        $sean = User::where('email', 'sean@example.com')->first();
-        $laurence = User::where('email', 'laurence@example.com')->first();
-        $godadmin = User::where('email', 'godadmin@example.com')->first();
-        $customer = User::where('email', 'customer@example.com')->first();
+        foreach ($roles as $roleName => $emails) {
+            $role = Role::where('name', $roleName)->where('guard_name', 'api')->first();
 
-        if ($tovvy) $tovvy->assignRole($tellerRole);
-        if ($sean) $sean->assignRole($tellerRole);
-        if ($laurence) $laurence->assignRole($tellerRole);
-        if ($godadmin) $godadmin->assignRole($opManagerRole);
-        if ($customer) $customer->assignRole($customerRole);
+            if (!$role) {
+                $this->command->warn("⚠️  Role '{$roleName}' not found with guard 'api'. Skipping.");
+                continue;
+            }
 
-        $this->command->info('Roles assigned to users successfully!');
+            foreach ($emails as $email) {
+                $user = User::where('email', $email)->first();
+
+                if (!$user) {
+                    $this->command->warn("⚠️  User with email '{$email}' not found. Skipping.");
+                    continue;
+                }
+
+                $user->assignRole($role);
+                $this->command->info("✅ Assigned '{$roleName}' role to {$email}");
+            }
+        }
+
+        $this->command->info('🎉 All available roles assigned to users successfully!');
     }
 }

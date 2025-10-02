@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Models\Operations;
+
+use Illuminate\Database\Eloquent\Model;
+
+class VehicleType extends Model
+{
+    protected $primaryKey = 'type_id';
+    protected $fillable = ['group_id', 'label', 'type_code'];
+
+    public function group()
+    {
+        return $this->belongsTo(VehicleGroup::class, 'group_id');
+    }
+
+    public function brands()
+    {
+        return $this->hasMany(VehicleBrand::class, 'type_id');
+    }
+}

@@ -4,11 +4,11 @@
 namespace App\Http\Controllers\Marketing;
 
 use App\Http\Controllers\Controller;
-use App\Actions\Rate\GetRatesAction;
-use App\Actions\Rate\GetRateAction;
-use App\Actions\Rate\CreateRateAction;
-use App\Actions\Rate\UpdateRateAction;
-use App\Actions\Rate\DeleteRateAction;
+use App\Actions\Marketing\Rate\GetRatesAction;
+use App\Actions\Marketing\Rate\GetRateAction;
+use App\Actions\Marketing\Rate\CreateRateAction;
+use App\Actions\Marketing\Rate\UpdateRateAction;
+use App\Actions\Marketing\Rate\DeleteRateAction;
 use App\Models\Marketing\Rate;
 use Illuminate\Http\Request;
 

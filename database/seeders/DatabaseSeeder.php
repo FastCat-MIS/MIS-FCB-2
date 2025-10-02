@@ -15,6 +15,13 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             AssignRolesSeeder::class,
             RoutesTableSeeder::class,
+            SchedulesTableSeeder::class,
+            PassengerTypesTableSeeder::class,
+            PassengerCategoriesTableSeeder::class,
+            PassengerAccommodationSeeder::class,
+            VehicleGroupsTableSeeder::class,
+            VehicleTypesTableSeeder::class,
+            VehicleBrandsTableSeeder::class,
             // Add other seeders here as you create them
         ]);
     }

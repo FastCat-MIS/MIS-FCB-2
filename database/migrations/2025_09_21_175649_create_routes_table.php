@@ -4,25 +4,20 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateRoutesTable extends Migration
 {
-    public function up(): void
+    public function up()
     {
         Schema::create('routes', function (Blueprint $table) {
-            $table->id('route_id');
-            $table->string('origin', 100);
-            $table->string('destination', 100);
-            $table->integer('distance')->nullable();
-            $table->integer('estimated_duration')->nullable();
-            $table->string('status')->default('active');
+            $table->id('route_id'); // Custom PK
+            $table->string('port_a', 100);
+            $table->string('port_b', 100);
             $table->timestamps();
-
-            $table->index(['origin', 'destination']);
         });
     }
 
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('routes');
     }
-};
+}

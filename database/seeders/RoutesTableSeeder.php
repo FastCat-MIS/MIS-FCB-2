@@ -3,57 +3,26 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Operations\Route;
 
 class RoutesTableSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
         $routes = [
-            [
-                'route_id' => 1,
-                'origin' => 'Batangas',
-                'destination' => 'Calapan',
-                'distance' => 50,
-                'estimated_duration' => 120,
-                'status' => 'active',
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'route_id' => 2,
-                'origin' => 'Calapan',
-                'destination' => 'Batangas',
-                'distance' => 50,
-                'estimated_duration' => 120,
-                'status' => 'active',
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'route_id' => 3,
-                'origin' => 'Dumaguete',
-                'destination' => 'Dapitan',
-                'distance' => 200,
-                'estimated_duration' => 300,
-                'status' => 'active',
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'route_id' => 4,
-                'origin' => 'Calapan',
-                'destination' => 'Caticlan',
-                'distance' => 150,
-                'estimated_duration' => 240,
-                'status' => 'active',
-                'created_at' => now(),
-                'updated_at' => now()
-            ]
+            ['port_a' => 'Batangas Port', 'port_b' => 'Calapan Port'],
+            ['port_a' => 'Dumaguete Port', 'port_b' => 'Dapitan Port'],
+            ['port_a' => 'San Carlos Port', 'port_b' => 'Toledo Port'],
         ];
 
-        DB::table('routes')->insert($routes);
-
-        $this->command->info('Routes seeded successfully!');
+        foreach ($routes as $route) {
+            Route::updateOrCreate(
+                [
+                    'port_a' => $route['port_a'],
+                    'port_b' => $route['port_b'],
+                ],
+                $route
+            );
+        }
     }
 }

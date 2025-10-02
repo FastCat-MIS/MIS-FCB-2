@@ -4,11 +4,11 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes - NO JWT middleware
 Route::post('/register', function (Illuminate\Http\Request $request) {
-    return App\Actions\Auth\RegisterAction::make()->run($request->all());
+    return App\Actions\Accounts\Auth\RegisterAction::make()->run($request->all());
 });
 
 Route::post('/login', function (Illuminate\Http\Request $request) {
-    return App\Actions\Auth\LoginAction::make()->run($request->all());
+    return App\Actions\Accounts\Auth\LoginAction::make()->run($request->all());
 });
 
 Route::post('/refresh', function () {

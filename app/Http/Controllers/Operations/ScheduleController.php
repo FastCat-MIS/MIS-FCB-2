@@ -4,18 +4,18 @@
 namespace App\Http\Controllers\Operations;
 
 use App\Http\Controllers\Controller;
-use App\Actions\Schedule\GetSchedulesAction;
-use App\Actions\Schedule\GetScheduleAction;
-use App\Actions\Schedule\CreateScheduleAction;
-use App\Actions\Schedule\UpdateScheduleAction;
-use App\Actions\Schedule\DeleteScheduleAction;
+use App\Actions\Operations\Schedule\GetSchedulesAction;
+use App\Actions\Operations\Schedule\GetScheduleAction;
+use App\Actions\Operations\Schedule\CreateScheduleAction;
+use App\Actions\Operations\Schedule\UpdateScheduleAction;
+use App\Actions\Operations\Schedule\DeleteScheduleAction;
 use App\Models\Operations\Schedule;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
     /**
-     * Display a listing of schedules.
+     * Retrieve all schedules.
      */
     public function index(GetSchedulesAction $getSchedulesAction)
     {
@@ -23,7 +23,7 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Display the specified schedule.
+     * Retrieve a specific schedule by ID.
      */
     public function show(Schedule $schedule, GetScheduleAction $getScheduleAction)
     {
@@ -31,23 +31,23 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Store a newly created schedule.
+     * Create a new schedule.
      */
     public function store(Request $request, CreateScheduleAction $createScheduleAction)
     {
-        return $createScheduleAction->execute($request->all());
+        return $createScheduleAction->execute($request->only(['departure_time', 'vessel']));
     }
 
     /**
-     * Update the specified schedule.
+     * Update an existing schedule.
      */
     public function update(Request $request, Schedule $schedule, UpdateScheduleAction $updateScheduleAction)
     {
-        return $updateScheduleAction->execute($schedule, $request->all());
+        return $updateScheduleAction->execute($schedule, $request->only(['departure_time', 'vessel']));
     }
 
     /**
-     * Remove the specified schedule.
+     * Delete a schedule.
      */
     public function destroy(Schedule $schedule, DeleteScheduleAction $deleteScheduleAction)
     {

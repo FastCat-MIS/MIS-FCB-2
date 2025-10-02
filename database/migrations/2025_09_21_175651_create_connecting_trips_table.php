@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('connecting_trips', function (Blueprint $table) {
             $table->id('connecting_id');
             $table->string('booking_number');
-            $table->foreignId('schedule_id')->constrained('schedules', 'schedule_id')->onDelete('cascade');
+            $table->foreignId('sched_id')->constrained('schedules', 'sched_id')->onDelete('cascade');
             $table->integer('leg');
             $table->string('route', 100);
 
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index('booking_number');
-            $table->index('schedule_id');
+            $table->index('sched_id');
             $table->foreign('booking_number')->references('booking_number')->on('bookings')->onDelete('cascade');
         });
     }
