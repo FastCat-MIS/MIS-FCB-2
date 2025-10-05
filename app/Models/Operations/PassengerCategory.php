@@ -14,4 +14,6 @@ class PassengerCategory extends Model
     protected $fillable = [
         'category',
     ];
+
+    public $timestamps = true;
 }

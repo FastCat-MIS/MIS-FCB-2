@@ -27,4 +27,6 @@ class ConnectingTrip extends Model
     {
         return $this->belongsTo(Schedule::class, 'sched_id');
     }
+
+    public $timestamps = true;
 }

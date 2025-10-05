@@ -13,4 +13,6 @@ class VehicleBrand extends Model
     {
         return $this->belongsTo(VehicleType::class, 'type_id');
     }
+
+    public $timestamps = true;
 }

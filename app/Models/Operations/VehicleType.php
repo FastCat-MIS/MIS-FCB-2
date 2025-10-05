@@ -18,4 +18,6 @@ class VehicleType extends Model
     {
         return $this->hasMany(VehicleBrand::class, 'type_id');
     }
+
+    public $timestamps = true;
 }

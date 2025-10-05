@@ -23,4 +23,6 @@ class Vessel extends Model
     {
         return $this->hasMany(Schedule::class, 'vessel_id');
     }
+
+    public $timestamps = true;
 }

@@ -14,4 +14,6 @@ class PassengerAccommodation extends Model
     protected $fillable = [
         'accommodation_name',
     ];
+
+    public $timestamps = true;
 }

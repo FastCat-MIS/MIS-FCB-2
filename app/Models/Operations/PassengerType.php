@@ -15,5 +15,5 @@ class PassengerType extends Model
         'type',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 }

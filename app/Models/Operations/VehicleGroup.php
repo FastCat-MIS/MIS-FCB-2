@@ -13,4 +13,6 @@ class VehicleGroup extends Model
     {
         return $this->hasMany(VehicleType::class, 'group_id');
     }
+
+    public $timestamps = true;
 }

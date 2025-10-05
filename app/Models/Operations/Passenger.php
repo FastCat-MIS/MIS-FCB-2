@@ -39,4 +39,6 @@ class Passenger extends Model
     {
         return $this->amount + $this->vehicle_amount;
     }
+
+    public $timestamps = true;
 }

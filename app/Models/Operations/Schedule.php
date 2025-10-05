@@ -15,4 +15,6 @@ class Schedule extends Model
         'departure_time',
         'vessel',
     ];
+
+    public $timestamps = true;
 }

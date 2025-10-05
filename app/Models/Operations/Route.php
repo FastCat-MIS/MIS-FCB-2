@@ -31,4 +31,6 @@ class Route extends Model
     {
         return "{$this->port_a} - {$this->port_b}";
     }
+
+    public $timestamps = true;
 }
