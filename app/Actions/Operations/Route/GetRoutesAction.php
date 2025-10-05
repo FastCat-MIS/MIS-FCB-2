@@ -5,6 +5,7 @@ namespace App\Actions\Operations\Route;
 
 use App\Actions\Action;
 use App\Models\Operations\Route;
+use Exception;
 
 class GetRoutesAction extends Action
 {
@@ -15,9 +16,9 @@ class GetRoutesAction extends Action
 
             return $this->success([
                 'routes' => $routes,
-            ], 'Routes retrieved successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to retrieve routes.', $e->getMessage());
+            ], 'Routes retrieved successfully.');
+        } catch (\Throwable $e) {
+            throw new Exception('Failed to retrieve routes: ' . $e->getMessage(), 500);
         }
     }
 }

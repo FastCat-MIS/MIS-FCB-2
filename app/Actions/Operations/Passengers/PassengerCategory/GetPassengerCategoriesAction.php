@@ -9,10 +9,14 @@ class GetPassengerCategoriesAction extends Action
 {
     public function execute()
     {
-        $categories = PassengerCategory::all();
+        try {
+            $categories = PassengerCategory::all();
 
-        return $this->success([
-            'categories' => $categories
-        ], 'Passenger categories retrieved successfully.');
+            return $this->success([
+                'categories' => $categories
+            ], 'Passenger categories retrieved successfully.');
+        } catch (\Throwable $e) {
+            throw new \Exception('Failed to retrieve passenger categories: ' . $e->getMessage(), 500);
+        }
     }
 }

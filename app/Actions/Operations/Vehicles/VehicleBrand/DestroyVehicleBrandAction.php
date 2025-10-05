@@ -11,9 +11,14 @@ class DestroyVehicleBrandAction extends Action
     {
         try {
             $vehicleBrand->delete();
-            return $this->success([], 'Vehicle brand deleted successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to delete vehicle brand.', 500, $e->getMessage());
+            return $this->success(null, 'Vehicle brand deleted successfully.', 204);
+        } catch (\Throwable $e) {
+            // ALWAYS use an integer as code
+            return $this->error(
+                'Failed to delete vehicle brand',
+                500,
+                $e->getMessage()
+            );
         }
     }
 }

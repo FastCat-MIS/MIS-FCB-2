@@ -10,18 +10,14 @@ class UpdatePassengerCategoryAction extends Action
 {
     public function execute(PassengerCategory $passengerCategory, array $data)
     {
-        $validator = Validator::make($data, [
+        $validated = Validator::make($data, [
             'category' => 'required|string|unique:passenger_categories,category,' . $passengerCategory->p_ctgry_id . ',p_ctgry_id',
-        ]);
+        ])->validate(); // Let global exception handler catch ValidationException
 
-        if ($validator->fails()) {
-            return $this->error('Validation failed.', 422, $validator->errors()->toArray());
-        }
-
-        $passengerCategory->update($data);
+        $passengerCategory->update($validated);
 
         return $this->success([
-            'category' => $passengerCategory
+            'category' => $passengerCategory->fresh()
         ], 'Passenger category updated successfully.');
     }
 }

@@ -6,20 +6,22 @@ namespace App\Actions\Operations\Schedule;
 use App\Actions\Action;
 use App\Models\Operations\Schedule;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Exception;
 
 class CreateScheduleAction extends Action
 {
     public function execute(array $data)
     {
         try {
-            // Validate only what's in the simplified table
+            // Validate input
             $validator = Validator::make($data, [
                 'departure_time' => 'required|date_format:H:i',
                 'vessel'         => 'required|string|max:50',
             ]);
 
             if ($validator->fails()) {
-                return $this->error('Validation failed.', 422, $validator->errors()->toArray());
+                throw new ValidationException($validator);
             }
 
             // Create schedule
@@ -30,10 +32,10 @@ class CreateScheduleAction extends Action
 
             return $this->success([
                 'schedule' => $schedule,
-            ], 'Schedule created successfully', 201);
+            ], 'Schedule created successfully.', 201);
 
-        } catch (\Exception $e) {
-            return $this->error('Failed to create schedule.', 500, $e->getMessage());
+        } catch (\Throwable $e) {
+            throw new Exception('Failed to create schedule: ' . $e->getMessage(), $e->getCode() ?: 500);
         }
     }
 }

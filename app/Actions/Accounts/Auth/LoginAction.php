@@ -7,6 +7,7 @@ use App\Models\Accounts\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Auth\AuthenticationException;
 
 class LoginAction extends Action
 {
@@ -20,7 +21,7 @@ class LoginAction extends Action
         $user = User::where('email', $validated['email'])->first();
 
         if (!$user || !Hash::check($validated['password'], $user->password)) {
-            return $this->error('The provided credentials are incorrect.', 401);
+            throw new AuthenticationException('The provided credentials are incorrect.');
         }
 
         $token = JWTAuth::fromUser($user);

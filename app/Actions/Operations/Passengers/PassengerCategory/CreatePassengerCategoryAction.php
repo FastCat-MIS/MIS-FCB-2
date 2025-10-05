@@ -14,9 +14,7 @@ class CreatePassengerCategoryAction extends Action
             'category' => 'required|string|unique:passenger_categories,category',
         ]);
 
-        if ($validator->fails()) {
-            return $this->error('Validation failed.', 422, $validator->errors()->toArray());
-        }
+        $validator->validate(); // Let the global handler catch ValidationException
 
         $category = PassengerCategory::create($data);
 

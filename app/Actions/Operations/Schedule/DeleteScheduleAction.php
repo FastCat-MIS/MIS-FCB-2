@@ -5,6 +5,7 @@ namespace App\Actions\Operations\Schedule;
 
 use App\Actions\Action;
 use App\Models\Operations\Schedule;
+use Exception;
 
 class DeleteScheduleAction extends Action
 {
@@ -13,9 +14,9 @@ class DeleteScheduleAction extends Action
         try {
             $schedule->delete();
 
-            return $this->success([], 'Schedule deleted successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to delete schedule.', 500, $e->getMessage());
+            return $this->success([], 'Schedule deleted successfully.', 204);
+        } catch (\Throwable $e) {
+            throw new Exception('Failed to delete schedule: ' . $e->getMessage(), $e->getCode() ?: 500);
         }
     }
 }

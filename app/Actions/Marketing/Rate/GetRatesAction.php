@@ -5,6 +5,7 @@ namespace App\Actions\Marketing\Rate;
 
 use App\Actions\Action;
 use App\Models\Marketing\Rate;
+use RuntimeException;
 
 class GetRatesAction extends Action
 {
@@ -17,7 +18,7 @@ class GetRatesAction extends Action
                 'rates' => $rates,
             ], 'Rates retrieved successfully');
         } catch (\Exception $e) {
-            return $this->error('Failed to retrieve rates.', 500, $e->getMessage());
+            throw new RuntimeException('Failed to retrieve rates.');
         }
     }
 }

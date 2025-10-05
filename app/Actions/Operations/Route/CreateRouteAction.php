@@ -6,6 +6,7 @@ namespace App\Actions\Operations\Route;
 use App\Actions\Action;
 use App\Models\Operations\Route;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class CreateRouteAction extends Action
 {
@@ -14,20 +15,21 @@ class CreateRouteAction extends Action
         try {
             // Validate input
             $validator = Validator::make($data, [
-                'origin' => 'required|string|max:100',
-                'destination' => 'required|string|max:100|different:origin',
+                'port_a' => 'required|string|max:100',
+                'port_b' => 'required|string|max:100|different:port_a',
             ]);
 
             if ($validator->fails()) {
-                return $this->error('Validation failed.', $validator->errors()->toArray());
+                throw new ValidationException($validator);
             }
 
-            $existingRoute = Route::where('origin', $data['origin'])
-                ->where('destination', $data['destination'])
+            // Check if route already exists
+            $existingRoute = Route::where('port_a', $data['port_a'])
+                ->where('port_b', $data['port_b'])
                 ->first();
 
             if ($existingRoute) {
-                return $this->error('Route already exists.');
+                throw new \Exception('Route already exists.', 409);
             }
 
             // Create route
@@ -35,10 +37,10 @@ class CreateRouteAction extends Action
 
             return $this->success([
                 'route' => $route,
-            ], 'Route created successfully', 201);
+            ], 'Route created successfully.', 201);
 
-        } catch (\Exception $e) {
-            return $this->error('Failed to create route.', $e->getMessage());
+        } catch (\Throwable $e) {
+            throw new \Exception('Failed to create route: ' . $e->getMessage(), $e->getCode() ?: 500);
         }
     }
 }

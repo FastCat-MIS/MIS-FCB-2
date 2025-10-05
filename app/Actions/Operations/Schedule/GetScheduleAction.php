@@ -5,6 +5,7 @@ namespace App\Actions\Operations\Schedule;
 
 use App\Actions\Action;
 use App\Models\Operations\Schedule;
+use Exception;
 
 class GetScheduleAction extends Action
 {
@@ -13,9 +14,9 @@ class GetScheduleAction extends Action
         try {
             return $this->success([
                 'schedule' => $schedule,
-            ], 'Schedule retrieved successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to retrieve schedule.', 500, $e->getMessage());
+            ], 'Schedule retrieved successfully.');
+        } catch (\Throwable $e) {
+            throw new Exception('Failed to retrieve schedule: ' . $e->getMessage(), $e->getCode() ?: 500);
         }
     }
 }

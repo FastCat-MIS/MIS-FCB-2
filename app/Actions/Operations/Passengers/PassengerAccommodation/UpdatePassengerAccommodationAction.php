@@ -11,23 +11,16 @@ class UpdatePassengerAccommodationAction extends Action
 {
     public function execute(PassengerAccommodation $accommodation, array $data)
     {
-        try {
-            $validator = Validator::make($data, [
-                'accomodation_name' => 'sometimes|required|string|max:255',
-            ]);
+        $validator = Validator::make($data, [
+            'accomodation_name' => 'sometimes|required|string|max:255',
+        ]);
 
-            if ($validator->fails()) {
-                return $this->error('Validation failed.', 422, $validator->errors()->toArray());
-            }
+        $validator->validate(); // Let global handler catch ValidationException
 
-            $accommodation->update($data);
+        $accommodation->update($data);
 
-            return $this->success([
-                'passengerAccommodation' => $accommodation->fresh(),
-            ], 'Passenger Accommodation updated successfully');
-
-        } catch (\Exception $e) {
-            return $this->error('Failed to update accommodation.', 500, $e->getMessage());
-        }
+        return $this->success([
+            'passengerAccommodation' => $accommodation->fresh(),
+        ], 'Passenger Accommodation updated successfully');
     }
 }

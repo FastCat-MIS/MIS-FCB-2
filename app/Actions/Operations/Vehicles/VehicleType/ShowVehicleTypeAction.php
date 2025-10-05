@@ -4,6 +4,7 @@ namespace App\Actions\Operations\Vehicles\VehicleType;
 
 use App\Actions\Action;
 use App\Models\Operations\VehicleType;
+use Exception;
 
 class ShowVehicleTypeAction extends Action
 {
@@ -11,9 +12,12 @@ class ShowVehicleTypeAction extends Action
     {
         try {
             $vehicleType->load('group');
-            return $this->success(['vehicleType' => $vehicleType], 'Vehicle type retrieved successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to retrieve vehicle type.', 500, $e->getMessage());
+
+            return $this->success([
+                'vehicleType' => $vehicleType,
+            ], 'Vehicle type retrieved successfully.');
+        } catch (\Throwable $e) {
+            throw new Exception('Failed to retrieve vehicle type: ' . $e->getMessage(), $e->getCode() ?: 500);
         }
     }
 }

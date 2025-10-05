@@ -10,14 +10,9 @@ class DeletePassengerAccommodationAction extends Action
 {
     public function execute(PassengerAccommodation $accommodation)
     {
-        try {
-            // Optional: check if linked to bookings
-            $accommodation->delete();
+        // Optional: add relationship checks here if needed
+        $accommodation->delete();
 
-            return $this->success([], 'Passenger Accommodation deleted successfully');
-
-        } catch (\Exception $e) {
-            return $this->error('Failed to delete accommodation.', 500, $e->getMessage());
-        }
+        return $this->success([], 'Passenger Accommodation deleted successfully', 204);
     }
 }

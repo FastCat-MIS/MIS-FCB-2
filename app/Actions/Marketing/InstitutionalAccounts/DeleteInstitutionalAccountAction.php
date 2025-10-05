@@ -4,6 +4,7 @@ namespace App\Actions\Marketing\InstitutionalAccounts;
 
 use App\Actions\Action;
 use App\Models\Marketing\InstitutionalAccount;
+use Illuminate\Database\QueryException;
 
 class DeleteInstitutionalAccountAction extends Action
 {
@@ -12,9 +13,13 @@ class DeleteInstitutionalAccountAction extends Action
         try {
             $account->delete();
 
-            return $this->success([], 'Institutional account deleted successfully');
+            return $this->success([], 'Institutional account deleted successfully', 204);
+        } catch (QueryException $e) {
+            // DB-related errors (e.g., FK constraints) can be handled specifically
+            throw new \RuntimeException('Failed to delete institutional account due to a database error.');
         } catch (\Exception $e) {
-            return $this->error('Failed to delete institutional account.', 500, $e->getMessage());
+            // Generic fallback exception
+            throw new \RuntimeException('Failed to delete institutional account.');
         }
     }
 }

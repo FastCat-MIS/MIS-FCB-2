@@ -6,6 +6,8 @@ namespace App\Actions\Operations\Route;
 use App\Actions\Action;
 use App\Models\Operations\Route;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Exception;
 
 class UpdateRouteAction extends Action
 {
@@ -19,7 +21,7 @@ class UpdateRouteAction extends Action
             ]);
 
             if ($validator->fails()) {
-                return $this->error('Validation failed.', $validator->errors()->toArray());
+                throw new ValidationException($validator);
             }
 
             // Check if updated route would conflict with existing one
@@ -33,7 +35,7 @@ class UpdateRouteAction extends Action
                     ->first();
 
                 if ($existingRoute) {
-                    return $this->error('Route with these details already exists.');
+                    throw new Exception('Route with these details already exists.', 409);
                 }
             }
 
@@ -42,10 +44,9 @@ class UpdateRouteAction extends Action
 
             return $this->success([
                 'route' => $route->fresh(),
-            ], 'Route updated successfully');
-
-        } catch (\Exception $e) {
-            return $this->error('Failed to update route.', $e->getMessage());
+            ], 'Route updated successfully.');
+        } catch (\Throwable $e) {
+            throw new Exception('Failed to update route: ' . $e->getMessage(), $e->getCode() ?: 500);
         }
     }
 }

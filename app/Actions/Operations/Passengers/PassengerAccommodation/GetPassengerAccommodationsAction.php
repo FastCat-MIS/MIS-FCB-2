@@ -10,14 +10,10 @@ class GetPassengerAccommodationsAction extends Action
 {
     public function execute()
     {
-        try {
-            $accommodations = PassengerAccommodation::all();
+        $accommodations = PassengerAccommodation::all();
 
-            return $this->success([
-                'passengerAccommodations' => $accommodations,
-            ], 'Passenger Accommodations retrieved successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to retrieve accommodations.', 500, $e->getMessage());
-        }
+        return $this->success([
+            'passengerAccommodations' => $accommodations,
+        ], 'Passenger Accommodations retrieved successfully');
     }
 }

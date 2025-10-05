@@ -11,8 +11,9 @@ return new class extends Migration
         Schema::create('institutional_accounts', function (Blueprint $table) {
             $table->id('ia_id');
             $table->string('ia_name', 150);
-            $table->binary('ia_image')->nullable(); // Store as BLOB
+            $table->string('ia_image')->nullable(); // Store path as string
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

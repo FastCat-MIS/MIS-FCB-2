@@ -11,9 +11,16 @@ class IndexVehicleTypeAction extends Action
     {
         try {
             $types = VehicleType::with('group')->get();
-            return $this->success(['vehicleTypes' => $types], 'Vehicle types retrieved successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to retrieve vehicle types.', 500, $e->getMessage());
+
+            return $this->success([
+                'vehicleTypes' => $types,
+            ], 'Vehicle types retrieved successfully.');
+        } catch (\Throwable $e) {
+            return $this->error(
+                'Failed to retrieve vehicle types',
+                500,
+                $e->getMessage()
+            );
         }
     }
 }

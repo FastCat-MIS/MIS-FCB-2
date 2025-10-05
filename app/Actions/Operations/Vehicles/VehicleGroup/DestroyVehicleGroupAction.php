@@ -4,6 +4,7 @@ namespace App\Actions\Operations\Vehicles\VehicleGroup;
 
 use App\Actions\Action;
 use App\Models\Operations\VehicleGroup;
+use Exception;
 
 class DestroyVehicleGroupAction extends Action
 {
@@ -11,9 +12,10 @@ class DestroyVehicleGroupAction extends Action
     {
         try {
             $vehicleGroup->delete();
-            return $this->success([], 'Vehicle group deleted successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to delete vehicle group.', 500, $e->getMessage());
+
+            return $this->success([], 'Vehicle group deleted successfully.', 204);
+        } catch (\Throwable $e) {
+            throw new Exception('Failed to delete vehicle group: ' . $e->getMessage(), $e->getCode() ?: 500);
         }
     }
 }

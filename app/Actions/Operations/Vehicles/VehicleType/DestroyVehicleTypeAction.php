@@ -11,9 +11,13 @@ class DestroyVehicleTypeAction extends Action
     {
         try {
             $vehicleType->delete();
-            return $this->success([], 'Vehicle type deleted successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to delete vehicle type.', 500, $e->getMessage());
+            return $this->success(null, 'Vehicle type deleted successfully.', 204);
+        } catch (\Throwable $e) {
+            return $this->error(
+                'Failed to delete vehicle type',
+                500,
+                $e->getMessage()
+            );
         }
     }
 }

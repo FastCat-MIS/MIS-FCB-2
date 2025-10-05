@@ -4,6 +4,7 @@ namespace App\Actions\Marketing\InstitutionalAccounts;
 
 use App\Actions\Action;
 use App\Models\Marketing\InstitutionalAccount;
+use Illuminate\Database\QueryException;
 
 class GetInstitutionalAccountsAction extends Action
 {
@@ -15,8 +16,10 @@ class GetInstitutionalAccountsAction extends Action
             return $this->success([
                 'institutional_accounts' => $accounts,
             ], 'Institutional accounts retrieved successfully');
+        } catch (QueryException $e) {
+            throw new \RuntimeException('Database error while retrieving institutional accounts.');
         } catch (\Exception $e) {
-            return $this->error('Failed to retrieve institutional accounts.', 500, $e->getMessage());
+            throw new \RuntimeException('Failed to retrieve institutional accounts.');
         }
     }
 }

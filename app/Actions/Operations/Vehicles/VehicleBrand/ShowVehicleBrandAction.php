@@ -11,9 +11,16 @@ class ShowVehicleBrandAction extends Action
     {
         try {
             $vehicleBrand->load('type');
-            return $this->success(['vehicleBrand' => $vehicleBrand], 'Vehicle brand retrieved successfully');
-        } catch (\Exception $e) {
-            return $this->error('Failed to retrieve vehicle brand.', 500, $e->getMessage());
+
+            return $this->success([
+                'vehicleBrand' => $vehicleBrand,
+            ], 'Vehicle brand retrieved successfully.');
+        } catch (\Throwable $e) {
+            return $this->error(
+                'Failed to retrieve vehicle brand',
+                500,
+                $e->getMessage()
+            );
         }
     }
 }

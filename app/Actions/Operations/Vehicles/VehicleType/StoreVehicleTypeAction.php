@@ -10,21 +10,29 @@ class StoreVehicleTypeAction extends Action
 {
     public function execute(array $data)
     {
+        $validator = Validator::make($data, [
+            'group_id'  => 'required|exists:vehicle_groups,group_id',
+            'label'     => 'required|string|max:255',
+            'type_code' => 'required|string|max:255|unique:vehicle_types,type_code',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error(
+                'Validation failed',
+                422,
+                $validator->errors()
+            );
+        }
+
         try {
-            $validator = Validator::make($data, [
-                'label' => 'required|string|max:255',
-                'group_id' => 'required|exists:vehicle_groups,id',
-            ]);
-
-            if ($validator->fails()) {
-                return $this->error('Validation failed.', 422, $validator->errors()->toArray());
-            }
-
-            $type = VehicleType::create($data);
-
-            return $this->success(['vehicleType' => $type], 'Vehicle type created successfully', 201);
-        } catch (\Exception $e) {
-            return $this->error('Failed to create vehicle type.', 500, $e->getMessage());
+            $vehicleType = VehicleType::create($data);
+            return $this->success($vehicleType, 'Vehicle type created successfully.', 201);
+        } catch (\Throwable $e) {
+            return $this->error(
+                'Failed to create vehicle type',
+                500,
+                $e->getMessage()
+            );
         }
     }
 }

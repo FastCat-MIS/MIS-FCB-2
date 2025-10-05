@@ -9,8 +9,12 @@ class DeletePassengerCategoryAction extends Action
 {
     public function execute(PassengerCategory $passengerCategory)
     {
-        $passengerCategory->delete();
+        try {
+            $passengerCategory->delete();
 
-        return $this->success([], 'Passenger category deleted successfully.');
+            return $this->success([], 'Passenger category deleted successfully.', 204);
+        } catch (\Throwable $e) {
+            throw new \Exception('Failed to delete passenger category: ' . $e->getMessage(), 500);
+        }
     }
 }
