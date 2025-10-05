@@ -17,6 +17,13 @@ class Route extends Model
         'port_b',
     ];
 
+    public $timestamps = true;
+
+    public function getRouteKeyName()
+    {
+        return 'route_id';
+    }
+
     public function rates()
     {
         return $this->hasMany(Rate::class, 'route_id');
@@ -31,6 +38,4 @@ class Route extends Model
     {
         return "{$this->port_a} - {$this->port_b}";
     }
-
-    public $timestamps = true;
 }
