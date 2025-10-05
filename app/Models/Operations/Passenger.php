@@ -5,10 +5,10 @@ namespace App\Models\Operations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Marketing\Discount;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Passenger extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $primaryKey = 'passenger_id';
 

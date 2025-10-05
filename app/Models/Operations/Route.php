@@ -5,10 +5,10 @@ namespace App\Models\Operations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Marketing\Rate;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Route extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $primaryKey = 'route_id';
 
@@ -24,15 +24,15 @@ class Route extends Model
         return 'route_id';
     }
 
-    public function rates()
-    {
-        return $this->hasMany(Rate::class, 'route_id');
-    }
+    // public function rates()
+    // {
+    //     return $this->hasMany(Rate::class, 'route_id');
+    // }
 
-    public function schedules()
-    {
-        return $this->hasMany(Schedule::class, 'route_id');
-    }
+    // public function schedules()
+    // {
+    //     return $this->hasMany(Schedule::class, 'route_id');
+    // }
 
     public function getRouteNameAttribute()
     {

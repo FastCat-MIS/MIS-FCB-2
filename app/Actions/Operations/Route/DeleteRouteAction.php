@@ -1,5 +1,4 @@
 <?php
-// app/Actions/Operations/Route/DeleteRouteAction.php
 
 namespace App\Actions\Operations\Route;
 
@@ -12,16 +11,18 @@ class DeleteRouteAction extends Action
     {
         try {
             // Check if route has related records
-            if ($route->rates()->count() > 0 || $route->schedules()->count() > 0) {
-                return $this->error('Cannot delete route. It has associated rates or schedules.');
-            }
+            // if ($route->rates()->count() > 0 || $route->schedules()->count() > 0) {
+            //     return $this->error('Cannot delete route. It has associated rates or schedules.', 422);
+            // }
 
             $route->delete();
 
             return $this->success([], 'Route deleted successfully');
 
         } catch (\Exception $e) {
-            return $this->error('Failed to delete route.', $e->getMessage());
+            return $this->error('Failed to delete route.', 500, [
+                'exception' => $e->getMessage()
+            ]);
         }
     }
 }
