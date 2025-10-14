@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             VehicleTypesTableSeeder::class,
             VehicleBrandsTableSeeder::class,
             InstitutionalAccountsTableSeeder::class,
+            PortSeeder::class,
             // Add other seeders here as you create them
         ]);
     }

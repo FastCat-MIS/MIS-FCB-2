@@ -150,4 +150,14 @@ Route::middleware('jwt.auth')->group(function () {
         // Route::delete('/{vehicleBrand}', [VehicleBrandController::class, 'destroy'])->middleware('permission:vehicle brand delete');
     });
 
+    // Port CRUD
+
+    Route::prefix('ports')->group(function () {
+        Route::get('/', [PortController::class, 'index']);
+        Route::get('/{port}', [PortController::class, 'show']);
+        Route::post('/', [PortController::class, 'store']);
+        Route::put('/{port}', [PortController::class, 'update']);
+        Route::delete('/{port}', [PortController::class, 'destroy']);
+    });
+
 });
