@@ -10,6 +10,7 @@ use App\Http\Controllers\Operations\Vehicles\VehicleBrandController;
 use App\Http\Controllers\Operations\Passengers\PassengerCategoryController;
 use App\Http\Controllers\Operations\Passengers\PassengerAccommodationController;
 use App\Http\Controllers\Operations\Passengers\PassengerTypeController;
+use App\Http\Controllers\Operations\PortController;
 
 // Operations domain routes
 Route::middleware('jwt.auth')->group(function () {
