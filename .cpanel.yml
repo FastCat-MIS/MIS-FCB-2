@@ -2,15 +2,32 @@
 deployment:
   tasks:
     - export REPOPATH=/home/fcbdev/api
-    - echo "Deploying Laravel from $REPOPATH"
     - cd $REPOPATH
+    - /usr/local/cpanel/3rdparty/bin/git reset --hard HEAD
+    - /usr/local/cpanel/3rdparty/bin/git clean -fd
+    - echo "Deploying Laravel from $REPOPATH"
     - /usr/local/cpanel/3rdparty/bin/git pull origin main
-    - /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev || echo "Composer install failed"
+    - /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
     - /usr/local/bin/php artisan down || true
-    - /usr/local/bin/php artisan migrate --force || echo "Migration failed"
-    - /usr/local/bin/php artisan optimize:clear || true
-    - /usr/local/bin/php artisan config:cache || true
-    - /usr/local/bin/php artisan route:cache || true
-    - /usr/local/bin/php artisan view:clear || true
+    - /usr/local/bin/php artisan migrate --force
+    - /usr/local/bin/php artisan optimize:clear
+    - /usr/local/bin/php artisan config:cache
+    - /usr/local/bin/php artisan route:cache
+    - /usr/local/bin/php artisan view:clear
     - /usr/local/bin/php artisan up
     - echo "Deployment completed successfully!"
+```
+
+The `git reset --hard HEAD` and `git clean -fd` will clear any local changes before deployment.
+
+## 🔍 Check .gitignore is Correct
+
+Make sure your `.gitignore` includes:
+```
+/vendor
+/node_modules
+.env
+storage/*.key
+/storage/logs
+/bootstrap/cache/*.php
+.phpunit.result.cache
