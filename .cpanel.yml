@@ -1,9 +1,9 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/fcbdev/api
-    - echo "Deploying Laravel to $DEPLOYPATH"
-    - cd $DEPLOYPATH
+    - export REPOPATH=/home/fcbdev/api
+    - echo "Deploying Laravel from $REPOPATH"
+    - cd $REPOPATH
     - /usr/local/bin/php artisan down || true
     - /usr/local/cpanel/3rdparty/bin/git pull origin main
     - /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
