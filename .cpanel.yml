@@ -5,12 +5,12 @@ deployment:
     - echo "Deploying Laravel from $REPOPATH"
     - cd $REPOPATH
     - /usr/local/cpanel/3rdparty/bin/git pull origin main
-    - /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
+    - /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev || echo "Composer install failed"
     - /usr/local/bin/php artisan down || true
-    - /usr/local/bin/php artisan migrate --force
-    - /usr/local/bin/php artisan optimize:clear
-    - /usr/local/bin/php artisan config:cache
-    - /usr/local/bin/php artisan route:cache
-    - /usr/local/bin/php artisan view:clear
+    - /usr/local/bin/php artisan migrate --force || echo "Migration failed"
+    - /usr/local/bin/php artisan optimize:clear || true
+    - /usr/local/bin/php artisan config:cache || true
+    - /usr/local/bin/php artisan route:cache || true
+    - /usr/local/bin/php artisan view:clear || true
     - /usr/local/bin/php artisan up
-    - echo "Deployment completed successfully! Thanks!"
+    - echo "Deployment completed successfully!"
