@@ -1,29 +1,35 @@
 ---
 deployment:
   tasks:
+    # Go to your Laravel project directory
     - export REPOPATH=/home/fcbdev/api
     - cd $REPOPATH
-    - echo "🔄 Resetting repository..."
+
+    # Reset repo to latest
     - /usr/local/cpanel/3rdparty/bin/git reset --hard HEAD
     - /usr/local/cpanel/3rdparty/bin/git clean -fd
-    - echo "⬇️ Pulling latest code from GitHub..."
+    - echo "🚀 Starting deployment for Laravel project in $REPOPATH"
+
+    # Pull latest from main branch
     - /usr/local/cpanel/3rdparty/bin/git pull origin main
 
-    - echo "📦 Installing Composer dependencies..."
-    - if [ -f /opt/cpanel/composer/bin/composer ]; then
-        /opt/cpanel/composer/bin/composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader;
-      elif [ -f /usr/local/bin/composer ]; then
-        /usr/local/bin/composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader;
-      else
-        echo "⚠️ Composer not found!";
-      fi
+    # Ensure composer is available
+    - if [ -x /usr/local/bin/composer ]; then echo "Composer found"; else echo "Composer not found"; fi
 
-    - echo "⚙️ Running Laravel optimization commands..."
+    # Install PHP dependencies
+    - /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
+
+    # Laravel maintenance mode
     - /usr/local/bin/php artisan down || true
-    - /usr/local/bin/php artisan migrate --force || true
+
+    # Run migrations (if applicable)
+    - /usr/local/bin/php artisan migrate --force
+
+    # Optimize and cache everything
     - /usr/local/bin/php artisan optimize:clear
     - /usr/local/bin/php artisan config:cache
     - /usr/local/bin/php artisan route:cache
     - /usr/local/bin/php artisan view:clear
     - /usr/local/bin/php artisan up
+
     - echo "✅ Deployment completed successfully!"
