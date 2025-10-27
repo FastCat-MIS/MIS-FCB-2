@@ -4,18 +4,22 @@ deployment:
     - export REPOPATH=/home/fcbdev/api
     - cd $REPOPATH
 
+    # Reset repo
     - /usr/local/cpanel/3rdparty/bin/git reset --hard HEAD
     - /usr/local/cpanel/3rdparty/bin/git clean -fd
     - echo "🚀 Starting deployment for Laravel project in $REPOPATH"
     - /usr/local/cpanel/3rdparty/bin/git pull origin main
 
-    - /usr/local/cpanel/3rdparty/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
+    # Install dependencies with the correct PHP + Composer paths
+    - /opt/cpanel/ea-php82/root/usr/bin/php /opt/cpanel/composer/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
 
-    - /usr/local/cpanel/3rdparty/bin/php artisan down || true
-    - /usr/local/cpanel/3rdparty/bin/php artisan migrate --force
-    - /usr/local/cpanel/3rdparty/bin/php artisan optimize:clear
-    - /usr/local/cpanel/3rdparty/bin/php artisan config:cache
-    - /usr/local/cpanel/3rdparty/bin/php artisan route:cache
-    - /usr/local/cpanel/3rdparty/bin/php artisan view:clear
-    - /usr/local/cpanel/3rdparty/bin/php artisan up
+    # Laravel maintenance and caching
+    - /opt/cpanel/ea-php82/root/usr/bin/php artisan down || true
+    - /opt/cpanel/ea-php82/root/usr/bin/php artisan migrate --force
+    - /opt/cpanel/ea-php82/root/usr/bin/php artisan optimize:clear
+    - /opt/cpanel/ea-php82/root/usr/bin/php artisan config:cache
+    - /opt/cpanel/ea-php82/root/usr/bin/php artisan route:cache
+    - /opt/cpanel/ea-php82/root/usr/bin/php artisan view:clear
+    - /opt/cpanel/ea-php82/root/usr/bin/php artisan up
+
     - echo "✅ Deployment completed successfully!"
