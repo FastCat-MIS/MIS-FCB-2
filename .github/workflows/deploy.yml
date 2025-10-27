@@ -1,4 +1,4 @@
-name: Deploy to cPanel
+name: 🚀 Deploy Laravel API to cPanel (fastcat-book.dev)
 
 on:
   push:
@@ -10,28 +10,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # --- 1️⃣ Checkout your Laravel repository ---
+      - name: 📦 Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      # --- 2️⃣ Install dependencies locally (for build) ---
+      - name: ⚙️ Install dependencies
         run: |
           composer install --no-dev --optimize-autoloader
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
 
-      - name: Zip project
+      # --- 3️⃣ (Optional) Create a zip for debug reference ---
+      - name: 📁 Prepare deployment package
         run: zip -r deploy.zip . -x "vendor/*" ".git/*" "storage/logs/*"
 
-      - name: Upload via FTP
+      # --- 4️⃣ Upload the Laravel API to cPanel via FTP ---
+      - name: 🚀 Upload to cPanel (fcbdev@fastcat-book.dev)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASS }}
+          server: fastcat-book.dev
+          username: fcbdev@fastcat-book.dev
+          password: ${{ secrets.FTP_PASS }} # <-- Add this in GitHub Secrets
+          protocol: ftp
+          port: 21
           local-dir: .
-          server-dir: /public_html/api/
+          server-dir: /home/fcbdev/api/
           exclude: |
             **/.git*
+            **/.github*
+            **/node_modules/**
             **/vendor/**
             **/storage/logs/**
+            .env
+            deploy.zip
+
+      # --- 5️⃣ Trigger remote deploy-runner.php after upload ---
+      - name: 🧩 Run remote artisan commands
+        run: |
+          curl -sS "https://fastcat-book.dev/api/deploy-runner.php?secret=nP8vX7rQ2wL9eT6zF1kA3yH5uJ0bS4mG"
