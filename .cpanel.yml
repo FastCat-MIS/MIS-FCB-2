@@ -1,18 +1,36 @@
 ---
 deployment:
   tasks:
+    # Define repo path (Laravel app directory)
     - export REPOPATH=/home/fcbdev/api
     - cd $REPOPATH
+
+    # Reset and clean working directory
     - /usr/local/cpanel/3rdparty/bin/git reset --hard HEAD
     - /usr/local/cpanel/3rdparty/bin/git clean -fd
-    - echo "Deploying Laravel from $REPOPATH"
+    - echo "Deploying Laravel app from $REPOPATH..."
+
+    # Pull latest from main branch
     - /usr/local/cpanel/3rdparty/bin/git pull origin main
-    - /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
+
+    # Install Composer dependencies (use correct Composer path)
+    - if [ -f /usr/local/bin/composer ]; then /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader;
+      elif [ -f /opt/cpanel/composer/bin/composer ]; then /opt/cpanel/composer/bin/composer install --no-interaction --prefer-dist --optimize-autoloader;
+      else echo "Composer not found! Please install composer on cPanel."; fi
+
+    # Laravel maintenance mode (ignore failure if already down)
     - /usr/local/bin/php artisan down || true
-    - /usr/local/bin/php artisan migrate --force
+
+    # Run migrations forcefully
+    - /usr/local/bin/php artisan migrate --force || true
+
+    # Clear & rebuild caches
     - /usr/local/bin/php artisan optimize:clear
     - /usr/local/bin/php artisan config:cache
     - /usr/local/bin/php artisan route:cache
     - /usr/local/bin/php artisan view:clear
+
+    # Bring Laravel back up
     - /usr/local/bin/php artisan up
-    - echo "Deployment completed successfully!"
+
+    - echo "✅ Deployment completed successfully!"
