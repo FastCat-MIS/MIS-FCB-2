@@ -17,7 +17,7 @@ deployment:
     - if [ -x /usr/local/bin/composer ]; then echo "Composer found"; else echo "Composer not found"; fi
 
     # Install PHP dependencies
-    - /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
+    - /opt/cpanel/composer/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
 
     # Laravel maintenance mode
     - /usr/local/bin/php artisan down || true
