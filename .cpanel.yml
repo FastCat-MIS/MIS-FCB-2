@@ -1,35 +1,21 @@
 ---
 deployment:
   tasks:
-    # Go to your Laravel project directory
     - export REPOPATH=/home/fcbdev/api
     - cd $REPOPATH
 
-    # Reset repo to latest
     - /usr/local/cpanel/3rdparty/bin/git reset --hard HEAD
     - /usr/local/cpanel/3rdparty/bin/git clean -fd
     - echo "🚀 Starting deployment for Laravel project in $REPOPATH"
-
-    # Pull latest from main branch
     - /usr/local/cpanel/3rdparty/bin/git pull origin main
 
-    # Ensure composer is available
-    - if [ -x /usr/local/bin/composer ]; then echo "Composer found"; else echo "Composer not found"; fi
+    - /usr/local/cpanel/3rdparty/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
 
-    # Install PHP dependencies
-    - /opt/cpanel/composer/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
-
-    # Laravel maintenance mode
-    - /usr/local/bin/php artisan down || true
-
-    # Run migrations (if applicable)
-    - /usr/local/bin/php artisan migrate --force
-
-    # Optimize and cache everything
-    - /usr/local/bin/php artisan optimize:clear
-    - /usr/local/bin/php artisan config:cache
-    - /usr/local/bin/php artisan route:cache
-    - /usr/local/bin/php artisan view:clear
-    - /usr/local/bin/php artisan up
-
+    - /usr/local/cpanel/3rdparty/bin/php artisan down || true
+    - /usr/local/cpanel/3rdparty/bin/php artisan migrate --force
+    - /usr/local/cpanel/3rdparty/bin/php artisan optimize:clear
+    - /usr/local/cpanel/3rdparty/bin/php artisan config:cache
+    - /usr/local/cpanel/3rdparty/bin/php artisan route:cache
+    - /usr/local/cpanel/3rdparty/bin/php artisan view:clear
+    - /usr/local/cpanel/3rdparty/bin/php artisan up
     - echo "✅ Deployment completed successfully!"
