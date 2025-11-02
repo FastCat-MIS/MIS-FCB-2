@@ -9,16 +9,20 @@ deployment:
     - echo "🚀 Starting deployment for Laravel project in $REPOPATH"
     - /usr/local/cpanel/3rdparty/bin/git pull origin main
 
-    # Install dependencies using your own Composer
-    - /opt/cpanel/ea-php82/root/usr/bin/php /home/fcbdev/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
+    # Detect PHP binary
+    - export PHPBIN=$(which php)
+    - echo "Using PHP binary: $PHPBIN"
+
+    # Install dependencies using your own Composer safely
+    - $PHPBIN /home/fcbdev/bin/composer.phar install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=ext-sodium
 
     # Laravel maintenance and caching
-    - /opt/cpanel/ea-php82/root/usr/bin/php artisan down || true
-    - /opt/cpanel/ea-php82/root/usr/bin/php artisan migrate --force
-    - /opt/cpanel/ea-php82/root/usr/bin/php artisan optimize:clear
-    - /opt/cpanel/ea-php82/root/usr/bin/php artisan config:cache
-    - /opt/cpanel/ea-php82/root/usr/bin/php artisan route:cache
-    - /opt/cpanel/ea-php82/root/usr/bin/php artisan view:clear
-    - /opt/cpanel/ea-php82/root/usr/bin/php artisan up
+    - $PHPBIN artisan down || true
+    - $PHPBIN artisan migrate --force || true
+    - $PHPBIN artisan optimize:clear
+    - $PHPBIN artisan config:cache
+    - $PHPBIN artisan route:cache
+    - $PHPBIN artisan view:clear
+    - $PHPBIN artisan up
 
     - echo "✅ Deployment completed successfully!"
