@@ -2,27 +2,23 @@
 deployment:
   tasks:
     - export REPOPATH=/home/fcbdev/api
-    - cd $REPOPATH
+    - cd /home/fcbdev/api
 
     - /usr/local/cpanel/3rdparty/bin/git reset --hard HEAD
     - /usr/local/cpanel/3rdparty/bin/git clean -fd
-    - echo "🚀 Starting deployment for Laravel project in $REPOPATH"
+    - echo "🚀 Starting deployment for Laravel project in /home/fcbdev/api"
     - /usr/local/cpanel/3rdparty/bin/git pull origin main
 
-    # Detect PHP binary
-    - export PHPBIN=$(which php)
-    - echo "Using PHP binary: $PHPBIN"
+    # ✅ Install dependencies (ignore missing sodium extension)
+    - /usr/local/bin/php /home/fcbdev/bin/composer.phar install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=ext-sodium | tee /home/fcbdev/api/deploy_output.log
 
-    # Install dependencies using your own Composer safely
-    - $PHPBIN /home/fcbdev/bin/composer.phar install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-req=ext-sodium
-
-    # Laravel maintenance and caching
-    - $PHPBIN artisan down || true
-    - $PHPBIN artisan migrate --force || true
-    - $PHPBIN artisan optimize:clear
-    - $PHPBIN artisan config:cache
-    - $PHPBIN artisan route:cache
-    - $PHPBIN artisan view:clear
-    - $PHPBIN artisan up
+    # ✅ Laravel maintenance and caching
+    - /usr/local/bin/php artisan down || true
+    - /usr/local/bin/php artisan migrate --force
+    - /usr/local/bin/php artisan optimize:clear
+    - /usr/local/bin/php artisan config:cache
+    - /usr/local/bin/php artisan route:cache
+    - /usr/local/bin/php artisan view:clear
+    - /usr/local/bin/php artisan up
 
     - echo "✅ Deployment completed successfully!"
