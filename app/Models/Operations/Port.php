@@ -4,18 +4,32 @@ namespace App\Models\Operations;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Port extends Model
+class Schedule extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $primaryKey = 'port_id';
+    protected $primaryKey = 'sched_id';
 
     protected $fillable = [
-        'port_name',
-        'corridor',
-        'facilities',
-        'last_update_by',
-        'is_active',
+        'departure_time',
+        'vessel',
+        'port_a_id',
+        'port_b_id',
     ];
+
+    public $timestamps = true;
+
+    /** Port A */
+    public function portA()
+    {
+        return $this->belongsTo(Port::class, 'port_a_id', 'port_id');
+    }
+
+    /** Port B */
+    public function portB()
+    {
+        return $this->belongsTo(Port::class, 'port_b_id', 'port_id');
+    }
 }
