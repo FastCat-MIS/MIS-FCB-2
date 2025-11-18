@@ -12,7 +12,7 @@ class GetSchedulesAction extends Action
     public function execute(array $data = [])
     {
         try {
-            $schedules = Schedule::all();
+            $schedules = Schedule::with(['portA', 'portB'])->get();
 
             return $this->success([
                 'schedules' => $schedules,

@@ -18,6 +18,8 @@ class CreateScheduleAction extends Action
             $validator = Validator::make($data, [
                 'departure_time' => 'required|date_format:H:i',
                 'vessel'         => 'required|string|max:50',
+                'port_a_id'      => 'required|exists:ports,port_id',
+                'port_b_id'      => 'required|exists:ports,port_id',
             ]);
 
             if ($validator->fails()) {
@@ -25,13 +27,10 @@ class CreateScheduleAction extends Action
             }
 
             // Create schedule
-            $schedule = Schedule::create([
-                'departure_time' => $data['departure_time'],
-                'vessel'         => $data['vessel'],
-            ]);
+            $schedule = Schedule::create($data);
 
             return $this->success([
-                'schedule' => $schedule,
+                'schedule' => $schedule->load(['portA', 'portB']),
             ], 'Schedule created successfully.', 201);
 
         } catch (\Throwable $e) {

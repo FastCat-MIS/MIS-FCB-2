@@ -1,5 +1,5 @@
 <?php
-// app/Actions/Operations/Schedule/GetScheduleAction.php
+// app/Actions/Operations/Schedule/GetSchedulesAction.php
 
 namespace App\Actions\Operations\Schedule;
 
@@ -7,16 +7,18 @@ use App\Actions\Action;
 use App\Models\Operations\Schedule;
 use Exception;
 
-class GetScheduleAction extends Action
+class GetSchedulesAction extends Action
 {
-    public function execute(Schedule $schedule, array $data = [])
+    public function execute(array $data = [])
     {
         try {
+            $schedules = Schedule::with(['portA', 'portB'])->get();
+
             return $this->success([
-                'schedule' => $schedule,
-            ], 'Schedule retrieved successfully.');
+                'schedules' => $schedules,
+            ], 'Schedules retrieved successfully.');
         } catch (\Throwable $e) {
-            throw new Exception('Failed to retrieve schedule: ' . $e->getMessage(), $e->getCode() ?: 500);
+            throw new Exception('Failed to retrieve schedules: ' . $e->getMessage(), $e->getCode() ?: 500);
         }
     }
 }

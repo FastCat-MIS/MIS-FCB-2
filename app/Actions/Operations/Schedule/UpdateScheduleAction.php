@@ -18,6 +18,8 @@ class UpdateScheduleAction extends Action
             $validator = Validator::make($data, [
                 'departure_time' => 'sometimes|required|date_format:H:i',
                 'vessel'         => 'sometimes|required|string|max:100',
+                'port_a_id'      => 'sometimes|required|exists:ports,port_id',
+                'port_b_id'      => 'sometimes|required|exists:ports,port_id',
             ]);
 
             if ($validator->fails()) {
@@ -28,7 +30,7 @@ class UpdateScheduleAction extends Action
             $schedule->update($data);
 
             return $this->success([
-                'schedule' => $schedule->fresh(),
+                'schedule' => $schedule->fresh()->load(['portA', 'portB']),
             ], 'Schedule updated successfully.');
         } catch (\Throwable $e) {
             throw new Exception('Failed to update schedule: ' . $e->getMessage(), $e->getCode() ?: 500);
