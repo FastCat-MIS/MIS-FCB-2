@@ -2,40 +2,33 @@
 
 namespace App\Models\Operations;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Marketing\Rate;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Route extends Model
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     protected $primaryKey = 'route_id';
+    protected $fillable = ['port_a_id', 'port_b_id'];
 
-    protected $fillable = [
-        'port_a',
-        'port_b',
-    ];
-
-    public $timestamps = true;
-
-    public function getRouteKeyName()
+    public function portA()
     {
-        return 'route_id';
+        return $this->belongsTo(Port::class, 'port_a_id', 'port_id');
     }
 
-    // public function rates()
-    // {
-    //     return $this->hasMany(Rate::class, 'route_id');
-    // }
+    public function portB()
+    {
+        return $this->belongsTo(Port::class, 'port_b_id', 'port_id');
+    }
 
-    // public function schedules()
-    // {
-    //     return $this->hasMany(Schedule::class, 'route_id');
-    // }
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'route_id', 'route_id');
+    }
 
     public function getRouteNameAttribute()
     {
-        return "{$this->port_a} - {$this->port_b}";
+        return "{$this->portA?->port_name} - {$this->portB?->port_name}";
     }
 }

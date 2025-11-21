@@ -8,6 +8,8 @@ use App\Actions\Operations\Route\GetRouteAction;
 use App\Actions\Operations\Route\CreateRouteAction;
 use App\Actions\Operations\Route\UpdateRouteAction;
 use App\Actions\Operations\Route\DeleteRouteAction;
+use App\Actions\Operations\Route\GetRoutesWithPortsAndSchedulesAction;
+
 use App\Models\Operations\Route;
 use Illuminate\Http\Request;
 
@@ -51,5 +53,10 @@ class RouteController extends Controller
     public function destroy(Route $route, DeleteRouteAction $deleteRouteAction)
     {
         return $deleteRouteAction->execute($route);
+    }
+
+    public function routesWithSchedules(GetRoutesWithPortsAndSchedulesAction $action)
+    {
+        return $action->execute();
     }
 }

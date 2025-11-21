@@ -3,36 +3,47 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Operations\Schedule;
+use App\Models\Operations\Route;
 
 class SchedulesTableSeeder extends Seeder
 {
     public function run(): void
     {
-        $schedules = [
-            [
-                'sched_id' => 1,
-                'departure_time' => '12:00',
-                'vessel' => 'M19',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'sched_id' => 2,
-                'departure_time' => '07:00',
-                'vessel' => 'M15',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'sched_id' => 3,
-                'departure_time' => '15:00',
-                'vessel' => 'M19',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ];
+        $routes = Route::all();
 
-        DB::table('schedules')->insert($schedules);
+        $schedules = [];
+
+        foreach ($routes as $route) {
+            // Example: 2 schedules departing from port A
+            $schedules[] = [
+                'departure_time' => '07:00:00',
+                'vessel' => 'M15',
+                'route_id' => $route->route_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            $schedules[] = [
+                'departure_time' => '12:00:00',
+                'vessel' => 'M19',
+                'route_id' => $route->route_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            // Optional: 1 schedule for port B if needed
+            $schedules[] = [
+                'departure_time' => '15:00:00',
+                'vessel' => 'M21',
+                'route_id' => $route->route_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        foreach ($schedules as $sched) {
+            Schedule::create($sched);
+        }
     }
 }

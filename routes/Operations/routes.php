@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Operations\RouteController;
 use App\Http\Controllers\Operations\ScheduleController;
-use App\Http\Controllers\Operations\Vehicles\VesselController;
+// use App\Http\Controllers\Operations\Vehicles\VesselController;
 use App\Http\Controllers\Operations\Vehicles\VehicleGroupController;
 use App\Http\Controllers\Operations\Vehicles\VehicleTypeController;
 use App\Http\Controllers\Operations\Vehicles\VehicleBrandController;
@@ -18,6 +18,7 @@ Route::middleware('jwt.auth')->group(function () {
     // Routes CRUD
     Route::prefix('routes')->group(function () {
         Route::get('/', [RouteController::class, 'index']);
+        Route::get('/with-schedules', [RouteController::class, 'routesWithSchedules']);
         Route::get('/{route}', [RouteController::class, 'show']);
         Route::post('/', [RouteController::class, 'store']);
         Route::put('/{route}', [RouteController::class, 'update']);
@@ -29,6 +30,8 @@ Route::middleware('jwt.auth')->group(function () {
         // Route::post('/', [RouteController::class, 'store'])->middleware('permission:route management create');
         // Route::put('/{route}', [RouteController::class, 'update'])->middleware('permission:route management update');
         // Route::delete('/{route}', [RouteController::class, 'destroy'])->middleware('permission:route management delete');
+        // Route::get('/with-schedules', [RouteController::class, 'routesWithSchedules'])->middleware('permission:route management read');
+
     });
 
     // Schedules CRUD
@@ -47,19 +50,19 @@ Route::middleware('jwt.auth')->group(function () {
     });
 
     // Vessels CRUD
-    Route::prefix('vessels')->group(function () {
-        Route::get('/', [VesselController::class, 'index']);
-        Route::get('/{vessel}', [VesselController::class, 'show']);
-        Route::post('/', [VesselController::class, 'store']);
-        Route::put('/{vessel}', [VesselController::class, 'update']);
-        Route::delete('/{vessel}', [VesselController::class, 'destroy']);
+    // Route::prefix('vessels')->group(function () {
+    //     Route::get('/', [VesselController::class, 'index']);
+    //     Route::get('/{vessel}', [VesselController::class, 'show']);
+    //     Route::post('/', [VesselController::class, 'store']);
+    //     Route::put('/{vessel}', [VesselController::class, 'update']);
+    //     Route::delete('/{vessel}', [VesselController::class, 'destroy']);
 
         // Route::get('/', [VesselController::class, 'index'])->middleware('permission:vessel management read');
         // Route::get('/{vessel}', [VesselController::class, 'show'])->middleware('permission:vessel management read');
         // Route::post('/', [VesselController::class, 'store'])->middleware('permission:vessel management create');
         // Route::put('/{vessel}', [VesselController::class, 'update'])->middleware('permission:vessel management update');
         // Route::delete('/{vessel}', [VesselController::class, 'destroy'])->middleware('permission:vessel management delete');
-    });
+    // });
 
     // Passenger Categories CRUD
     Route::prefix('passenger-categories')->group(function () {

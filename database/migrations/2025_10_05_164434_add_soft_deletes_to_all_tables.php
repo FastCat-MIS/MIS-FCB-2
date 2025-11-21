@@ -7,27 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::table('permissions', function (Blueprint $table) {
-            $table->softDeletes();
-        });
-
-        Schema::table('roles', function (Blueprint $table) {
-            $table->softDeletes();
-        });
-
-        Schema::table('role_permissions', function (Blueprint $table) {
-            $table->softDeletes();
-        });
 
         Schema::table('users', function (Blueprint $table) {
             $table->softDeletes();
         });
 
         Schema::table('discounts', function (Blueprint $table) {
-            $table->softDeletes();
-        });
-
-        Schema::table('institutional_accounts', function (Blueprint $table) {
             $table->softDeletes();
         });
 
@@ -86,27 +71,13 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::table('permissions', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
 
-        Schema::table('roles', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
-
-        Schema::table('role_permissions', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
 
         Schema::table('users', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
 
         Schema::table('discounts', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
-
-        Schema::table('institutional_accounts', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
 
