@@ -1,5 +1,4 @@
 <?php
-// app/Actions/Operations/Schedule/DeleteScheduleAction.php
 
 namespace App\Actions\Operations\Schedule;
 
@@ -14,9 +13,11 @@ class DeleteScheduleAction extends Action
         try {
             $schedule->delete();
 
-            return $this->success([], 'Schedule deleted successfully.', 204);
+            return $this->success([], 'Schedule deleted successfully.');
+
         } catch (\Throwable $e) {
-            throw new Exception('Failed to delete schedule: ' . $e->getMessage(), $e->getCode() ?: 500);
+            $code = is_numeric($e->getCode()) ? (int) $e->getCode() : 500;
+            throw new Exception('Failed to delete schedule: ' . $e->getMessage(), $code);
         }
     }
 }

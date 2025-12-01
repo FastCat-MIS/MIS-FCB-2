@@ -1,10 +1,10 @@
 <?php
-// app/Actions/Operations/Schedule/GetSchedulesAction.php
 
 namespace App\Actions\Operations\Schedule;
 
 use App\Actions\Action;
 use App\Models\Operations\Schedule;
+use App\Models\Operations\Vessel;
 use Exception;
 
 class GetSchedulesAction extends Action
@@ -12,29 +12,38 @@ class GetSchedulesAction extends Action
     public function execute(array $data = [])
     {
         try {
-            // ✅ Eager load route, and its ports
-            $schedules = Schedule::with(['route.portA', 'route.portB'])->get();
+            $schedules = Schedule::with([
+                'route.portA',
+                'route.portB',
+            ])->get();
 
-            // Transform for API
-            $result = $schedules->map(function ($schedule) {
+            $vesselIds = $schedules->pluck('vessel_id')->filter()->unique()->toArray();
+            $vessels = Vessel::whereIn('id', $vesselIds)->get()->keyBy('id');
+
+            $result = $schedules->map(function ($schedule) use ($vessels) {
+                $vessel = $vessels->get($schedule->vessel_id);
+
                 return [
-                    'sched_id' => $schedule->sched_id,
-                    'departure_time' => $schedule->departure_time,
-                    'vessel' => $schedule->vessel,
-                    'route_name' => $schedule->routeName,
-                    'portA' => $schedule->portA?->port_name,
-                    'portB' => $schedule->portB?->port_name,
+                    'sched_id'        => $schedule->sched_id,
+                    'departure_time'  => $schedule->departure_time,
+                    'vessel_id'       => $schedule->vessel_id,
+                    'vessel_name'     => $vessel?->vessel_name,
+                    'route_id'        => $schedule->route_id,
+                    'route_name'      => $schedule->route?->route_name,
+                    'port_a_name'     => $schedule->route?->portA?->port_name,
+                    'port_b_name'     => $schedule->route?->portB?->port_name,
+                    'created_at'      => $schedule->created_at,
+                    'updated_at'      => $schedule->updated_at,
                 ];
             });
 
             return $this->success([
                 'schedules' => $result,
             ], 'Schedules retrieved successfully.');
+
         } catch (\Throwable $e) {
-            throw new Exception(
-                'Failed to retrieve schedules: ' . $e->getMessage(),
-                $e->getCode() ?: 500
-            );
+            $code = is_numeric($e->getCode()) ? (int) $e->getCode() : 500;
+            throw new Exception('Failed to retrieve schedules: ' . $e->getMessage(), $code);
         }
     }
 }

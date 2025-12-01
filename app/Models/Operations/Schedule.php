@@ -10,11 +10,21 @@ class Schedule extends Model
     use SoftDeletes;
 
     protected $primaryKey = 'sched_id';
-    protected $fillable = ['departure_time', 'vessel', 'route_id'];
+
+    protected $fillable = [
+        'departure_time',
+        'vessel_id',
+        'route_id',
+    ];
 
     public function route()
     {
         return $this->belongsTo(Route::class, 'route_id', 'route_id');
+    }
+
+    public function vessel()
+    {
+        return $this->belongsTo(\App\Models\Operations\Vessel::class, 'vessel_id', 'id');
     }
 
     public function getPortAAttribute()

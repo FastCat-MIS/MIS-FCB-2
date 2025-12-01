@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/Operations/ScheduleController.php
 
 namespace App\Http\Controllers\Operations;
 
@@ -35,7 +34,11 @@ class ScheduleController extends Controller
      */
     public function store(Request $request, CreateScheduleAction $createScheduleAction)
     {
-        return $createScheduleAction->execute($request->only(['departure_time', 'vessel']));
+        return $createScheduleAction->execute($request->only([
+            'departure_time',
+            'vessel_id',
+            'route_id'
+        ]));
     }
 
     /**
@@ -43,7 +46,11 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule, UpdateScheduleAction $updateScheduleAction)
     {
-        return $updateScheduleAction->execute($schedule, $request->only(['departure_time', 'vessel']));
+        return $updateScheduleAction->execute($schedule, $request->only([
+            'departure_time',
+            'vessel_id',
+            'route_id'
+        ]));
     }
 
     /**

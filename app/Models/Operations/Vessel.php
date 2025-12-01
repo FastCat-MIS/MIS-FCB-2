@@ -13,7 +13,7 @@ class Vessel extends Model
     protected $primaryKey = 'vessel_id';
 
     protected $fillable = [
-        'name',
+        'vessel_name',
         'capacity',
         'description',
         'status'
