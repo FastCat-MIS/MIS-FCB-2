@@ -9,8 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vessels', function (Blueprint $table) {
-            $table->id('vessel_id');
-            $table->string('name', 100);
+            $table->id('id');
+            $table->string('vessel_name', 100);
             $table->integer('capacity');
             $table->text('description')->nullable();
             $table->string('status', 20)->default('active');

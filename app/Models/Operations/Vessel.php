@@ -10,7 +10,7 @@ class Vessel extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $primaryKey = 'vessel_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'vessel_name',
