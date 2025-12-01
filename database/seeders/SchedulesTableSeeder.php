@@ -12,13 +12,17 @@ class SchedulesTableSeeder extends Seeder
     {
         $routes = Route::all();
 
+        if ($routes->isEmpty()) {
+            $this->command->warn('No routes found. Please seed routes first.');
+            return;
+        }
+
         $schedules = [];
 
         foreach ($routes as $route) {
-            // Example: 2 schedules departing from port A
+            // Example schedules for this route
             $schedules[] = [
                 'departure_time' => '07:00:00',
-                'vessel' => 'M15',
                 'route_id' => $route->route_id,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -26,16 +30,13 @@ class SchedulesTableSeeder extends Seeder
 
             $schedules[] = [
                 'departure_time' => '12:00:00',
-                'vessel' => 'M19',
                 'route_id' => $route->route_id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
 
-            // Optional: 1 schedule for port B if needed
             $schedules[] = [
                 'departure_time' => '15:00:00',
-                'vessel' => 'M21',
                 'route_id' => $route->route_id,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -45,5 +46,7 @@ class SchedulesTableSeeder extends Seeder
         foreach ($schedules as $sched) {
             Schedule::create($sched);
         }
+
+        $this->command->info(count($schedules) . ' schedules seeded successfully.');
     }
 }

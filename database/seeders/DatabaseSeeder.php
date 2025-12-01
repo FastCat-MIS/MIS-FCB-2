@@ -14,9 +14,9 @@ class DatabaseSeeder extends Seeder
             RolePermissionTableSeeder::class,
             UsersTableSeeder::class,
             AssignRolesSeeder::class,
-            PortSeeder::class,               // Ports first
-            RoutesTableSeeder::class,        // Routes next (depends on ports)
-            SchedulesTableSeeder::class,     // Schedules last (depends on routes)
+            PortSeeder::class,
+            RoutesTableSeeder::class,
+            SchedulesTableSeeder::class,
             PassengerTypesTableSeeder::class,
             PassengerCategoriesTableSeeder::class,
             PassengerAccommodationSeeder::class,
@@ -24,6 +24,10 @@ class DatabaseSeeder extends Seeder
             VehicleTypesTableSeeder::class,
             VehicleBrandsTableSeeder::class,
             InstitutionalAccountsTableSeeder::class,
+            RatesAndDiscountsSeeder::class,
+            BookingsSeeder::class,
+            BookedPassengersSeeder::class,
+            ConnectingTripSeeder::class,
         ]);
 
     }

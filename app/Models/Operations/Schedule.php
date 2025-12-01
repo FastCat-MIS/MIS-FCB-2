@@ -13,8 +13,9 @@ class Schedule extends Model
 
     protected $fillable = [
         'departure_time',
-        'vessel_id',
         'route_id',
+        'vessel_id',
+        'status'
     ];
 
     public function route()
@@ -25,15 +26,5 @@ class Schedule extends Model
     public function vessel()
     {
         return $this->belongsTo(\App\Models\Operations\Vessel::class, 'vessel_id', 'id');
-    }
-
-    public function getPortAAttribute()
-    {
-        return $this->route?->portA;
-    }
-
-    public function getPortBAttribute()
-    {
-        return $this->route?->portB;
     }
 }

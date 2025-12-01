@@ -5,24 +5,25 @@ use App\Http\Controllers\Marketing\RateController;
 use App\Http\Controllers\Marketing\PromoController;
 use App\Http\Controllers\Marketing\BookingController;
 use App\Http\Controllers\Marketing\InstitutionalAccountController; // ✅ Add this line
+use App\Http\Controllers\Marketing\DiscountController;
 
 // Marketing domain routes (Rates, Promos, Bookings, Institutional Accounts)
-Route::middleware('jwt.auth')->prefix('marketing')->group(function () {
+Route::middleware('jwt.auth')->group(function () {
 
     // Rates CRUD
-    // Route::prefix('rates')->group(function () {
-    //     Route::get('/', [RateController::class, 'index']);
-    //     Route::get('/{rate}', [RateController::class, 'show']);
-    //     Route::post('/', [RateController::class, 'store']);
-    //     Route::put('/{rate}', [RateController::class, 'update']);
-    //     Route::delete('/{rate}', [RateController::class, 'destroy']);
+    Route::prefix('rates')->group(function () {
+        Route::get('/', [RateController::class, 'index']);
+        Route::get('/{rate}', [RateController::class, 'show']);
+        Route::post('/', [RateController::class, 'store']);
+        Route::put('/{rate}', [RateController::class, 'update']);
+        Route::delete('/{rate}', [RateController::class, 'destroy']);
 
     //     // Route::get('/', [RateController::class, 'index'])->middleware('permission:rate management read');
     //     // Route::get('/{rate}', [RateController::class, 'show'])->middleware('permission:rate management read');
     //     // Route::post('/', [RateController::class, 'store'])->middleware('permission:rate management create');
     //     // Route::put('/{rate}', [RateController::class, 'update'])->middleware('permission:rate management update');
     //     // Route::delete('/{rate}', [RateController::class, 'destroy'])->middleware('permission:rate management delete');
-    // });
+    });
 
     // // Promotions CRUD
     // Route::prefix('promos')->group(function () {
@@ -38,6 +39,22 @@ Route::middleware('jwt.auth')->prefix('marketing')->group(function () {
     //     // Route::put('/{promo}', [PromoController::class, 'update'])->middleware('permission:promo management update');
     //     // Route::delete('/{promo}', [PromoController::class, 'destroy'])->middleware('permission:promo management delete');
     // });
+
+    // // Discounts CRUD
+    Route::prefix('discount')->group(function () {
+        Route::get('/', [DiscountController::class, 'index']);
+        Route::get('/{discount}', [DiscountController::class, 'show']);
+        Route::post('/', [DiscountController::class, 'store']);
+        Route::put('/{discount}', [DiscountController::class, 'update']);
+        Route::delete('/{discount}', [DiscountController::class, 'destroy']);
+
+        //     // Route::get('/', [DiscountController::class, 'index'])->middleware('permission:discount management read');
+        //     // Route::get('/{discount}', [DiscountController::class, 'show'])->middleware('permission:discount management read');
+        //     // Route::post('/', [DiscountController::class, 'store'])->middleware('permission:discount management create');
+        //     // Route::put('/{discount}', [DiscountController::class, 'update'])->middleware('permission:discount management update');
+        //     // Route::delete('/{discount}', [DiscountController::class, 'destroy'])->middleware('permission:discount management delete');
+    });
+
 
     // Bookings CRUD
     // Route::prefix('bookings')->group(function () {

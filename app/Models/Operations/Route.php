@@ -4,6 +4,8 @@ namespace App\Models\Operations;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Operations\Port;
+use App\Models\Operations\Schedule;
 
 class Route extends Model
 {

@@ -5,6 +5,8 @@ namespace App\Models\Marketing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Operations\Route;
+
 class Rate extends Model
 {
     use HasFactory, SoftDeletes;
@@ -15,11 +17,13 @@ class Rate extends Model
         'route_id',
         'seat_class',
         'base_rate',
-        'effective_date'
+        'effective_date',
+        'status',
     ];
 
     protected $casts = [
-        'effective_date' => 'date'
+        'effective_date' => 'date',
+        'status' => 'string',
     ];
 
     public function route()

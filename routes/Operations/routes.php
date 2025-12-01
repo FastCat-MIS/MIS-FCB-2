@@ -11,6 +11,9 @@ use App\Http\Controllers\Operations\Passengers\PassengerCategoryController;
 use App\Http\Controllers\Operations\Passengers\PassengerAccommodationController;
 use App\Http\Controllers\Operations\Passengers\PassengerTypeController;
 use App\Http\Controllers\Operations\PortController;
+use App\Http\Controllers\Operations\BookingController;
+use App\Http\Controllers\Operations\BookedPassengerController;
+use App\Http\Controllers\Operations\ConnectingTripController;
 
 // Operations domain routes
 Route::middleware('jwt.auth')->group(function () {
@@ -31,7 +34,6 @@ Route::middleware('jwt.auth')->group(function () {
         // Route::put('/{route}', [RouteController::class, 'update'])->middleware('permission:route management update');
         // Route::delete('/{route}', [RouteController::class, 'destroy'])->middleware('permission:route management delete');
         // Route::get('/with-schedules', [RouteController::class, 'routesWithSchedules'])->middleware('permission:route management read');
-
     });
 
     // Schedules CRUD
@@ -57,11 +59,11 @@ Route::middleware('jwt.auth')->group(function () {
     //     Route::put('/{vessel}', [VesselController::class, 'update']);
     //     Route::delete('/{vessel}', [VesselController::class, 'destroy']);
 
-        // Route::get('/', [VesselController::class, 'index'])->middleware('permission:vessel management read');
-        // Route::get('/{vessel}', [VesselController::class, 'show'])->middleware('permission:vessel management read');
-        // Route::post('/', [VesselController::class, 'store'])->middleware('permission:vessel management create');
-        // Route::put('/{vessel}', [VesselController::class, 'update'])->middleware('permission:vessel management update');
-        // Route::delete('/{vessel}', [VesselController::class, 'destroy'])->middleware('permission:vessel management delete');
+    //     // Route::get('/', [VesselController::class, 'index'])->middleware('permission:vessel management read');
+    //     // Route::get('/{vessel}', [VesselController::class, 'show'])->middleware('permission:vessel management read');
+    //     // Route::post('/', [VesselController::class, 'store'])->middleware('permission:vessel management create');
+    //     // Route::put('/{vessel}', [VesselController::class, 'update'])->middleware('permission:vessel management update');
+    //     // Route::delete('/{vessel}', [VesselController::class, 'destroy'])->middleware('permission:vessel management delete');
     // });
 
     // Passenger Categories CRUD
@@ -155,13 +157,69 @@ Route::middleware('jwt.auth')->group(function () {
     });
 
     // Port CRUD
-
     Route::prefix('ports')->group(function () {
         Route::get('/', [PortController::class, 'index']);
         Route::get('/{port}', [PortController::class, 'show']);
         Route::post('/', [PortController::class, 'store']);
         Route::put('/{port}', [PortController::class, 'update']);
         Route::delete('/{port}', [PortController::class, 'destroy']);
+
+        // Route::get('/', [PortController::class, 'index'])->middleware('permission:port management read');
+        // Route::get('/{port}', [PortController::class, 'show'])->middleware('permission:port management read');
+        // Route::post('/', [PortController::class, 'store'])->middleware('permission:port management create');
+        // Route::put('/{port}', [PortController::class, 'update'])->middleware('permission:port management update');
+        // Route::delete('/{port}', [PortController::class, 'destroy'])->middleware('permission:port management delete');
+    });
+
+    // Bookings CRUD
+    Route::prefix('booking')->group(function () {
+        Route::get('/', [BookingController::class, 'index']);
+        Route::get('/search', [BookingController::class, 'searchByKeyword']);
+        Route::get('/{booking}', [BookingController::class, 'show']);
+        Route::post('/', [BookingController::class, 'store']);
+        Route::put('/{booking}', [BookingController::class, 'update']);
+        Route::delete('/{booking}', [BookingController::class, 'destroy']);
+
+        // Route::get('/', [BookingController::class, 'index'])->middleware('permission:booking management read');
+        // Route::get('/{booking}', [BookingController::class, 'show'])->middleware('permission:booking management read');
+        // Route::post('/', [BookingController::class, 'store'])->middleware('permission:booking management create');
+        // Route::put('/{booking}', [BookingController::class, 'update'])->middleware('permission:booking management update');
+        // Route::delete('/{booking}', [BookingController::class, 'destroy'])->middleware('permission:booking management delete');
+        // Route::get('/search', [BookingController::class, 'searchByKeyword'])->middleware('permission:booking management read');
+    });
+
+    // Booked Passengers CRUD
+    Route::prefix('booked-passenger')->group(function () {
+        Route::get('/', [BookedPassengerController::class, 'index']);
+        Route::get('/search', [BookedPassengerController::class, 'searchByKeyword']);
+        Route::get('/{bookedPassenger}', [BookedPassengerController::class, 'show']);
+        Route::post('/', [BookedPassengerController::class, 'store']);
+        Route::put('/{bookedPassenger}', [BookedPassengerController::class, 'update']);
+        Route::delete('/{bookedPassenger}', [BookedPassengerController::class, 'destroy']);
+
+        // Route::get('/', [BookedPassengerController::class, 'index'])->middleware('permission:booked passenger management read');
+        // Route::get('/{bookedPassenger}', [BookedPassengerController::class, 'show'])->middleware('permission:booked passenger management read');
+        // Route::post('/', [BookedPassengerController::class, 'store'])->middleware('permission:booked passenger management create');
+        // Route::put('/{bookedPassenger}', [BookedPassengerController::class, 'update'])->middleware('permission:booked passenger management update');
+        // Route::delete('/{bookedPassenger}', [BookedPassengerController::class, 'destroy'])->middleware('permission:booked passenger management delete');
+        // Route::get('/search', [BookedPassengerController::class, 'searchByKeyword'])->middleware('permission:booked passenger management read'); // new
+    });
+
+    // Connecting Trips CRUD
+    Route::prefix('connecting-trips')->group(function () {
+        Route::get('/', [ConnectingTripController::class, 'index']);
+        Route::get('/search', [ConnectingTripController::class, 'searchByKeyword']);
+        Route::get('/{connectingTrip}', [ConnectingTripController::class, 'show']);
+        Route::post('/', [ConnectingTripController::class, 'store']);
+        Route::put('/{connectingTrip}', [ConnectingTripController::class, 'update']);
+        Route::delete('/{connectingTrip}', [ConnectingTripController::class, 'destroy']);
+
+        // Route::get('/', [ConnectingTripController::class, 'index'])->middleware('permission:connecting trip management read');
+        // Route::get('/{connectingTrip}', [ConnectingTripController::class, 'show'])->middleware('permission:connecting trip management read');
+        // Route::post('/', [ConnectingTripController::class, 'store'])->middleware('permission:connecting trip management create');
+        // Route::put('/{connectingTrip}', [ConnectingTripController::class, 'update'])->middleware('permission:connecting trip management update');
+        // Route::delete('/{connectingTrip}', [ConnectingTripController::class, 'destroy'])->middleware('permission:connecting trip management delete');
+        // Route::get('/search', [ConnectingTripController::class, 'searchByKeyword'])->middleware('permission:connecting trip management read');
     });
 
 });

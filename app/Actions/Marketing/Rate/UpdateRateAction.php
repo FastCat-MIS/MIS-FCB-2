@@ -1,5 +1,4 @@
 <?php
-// app/Actions/Marketing/Rate/UpdateRateAction.php
 
 namespace App\Actions\Marketing\Rate;
 
@@ -14,41 +13,38 @@ class UpdateRateAction extends Action
     public function execute(Rate $rate, array $data)
     {
         $validator = Validator::make($data, [
-            'route_id' => 'sometimes|required|exists:routes,route_id',
-            'base_fare' => 'sometimes|required|numeric|min:0',
-            'peak_surcharge' => 'nullable|numeric|min:0',
-            'holiday_surcharge' => 'nullable|numeric|min:0',
-            'child_discount' => 'nullable|numeric|min:0|max:100',
-            'senior_discount' => 'nullable|numeric|min:0|max:100',
-            'currency' => 'sometimes|required|string|size:3',
-            'effective_date' => 'sometimes|required|date',
-            'expiry_date' => 'nullable|date|after:effective_date',
-            'status' => 'sometimes|required|in:active,inactive',
+            'route_id' => 'nullable|exists:routes,route_id',
+            'seat_class' => 'sometimes|required|string|max:50',
+            'base_rate' => 'sometimes|required|numeric|min:0',
+            'effective_date' => 'nullable|date',
+            'status' => 'sometimes|in:active,inactive',
         ]);
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
 
-        // Check for conflicting active rate
-        if (isset($data['status']) && $data['status'] === 'active') {
-            $routeId = $data['route_id'] ?? $rate->route_id;
+        // Determine route_id to use for active check
+        $routeId = $data['route_id'] ?? $rate->route_id;
 
-            $existingActiveRate = Rate::where('route_id', $routeId)
+        // If activating this rate, check for existing active rate
+        if (isset($data['status']) && $data['status'] === 'active') {
+            $existingActive = Rate::where('route_id', $routeId)
                 ->where('status', 'active')
                 ->where('rate_id', '!=', $rate->rate_id)
                 ->first();
 
-            if ($existingActiveRate) {
+            if ($existingActive) {
                 throw new RuntimeException('An active rate already exists for this route.', 409);
             }
         }
 
-        // Update
+        // Update the rate
         $rate->update($data);
 
+        // Return updated rate with route relation
         return $this->success([
-            'rate' => $rate->fresh()->load(['route']),
+            'rate' => $rate->fresh()->load('route'),
         ], 'Rate updated successfully');
     }
 }

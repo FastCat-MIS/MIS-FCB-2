@@ -13,16 +13,9 @@ return new class extends Migration
             $table->string('discount_type', 100);
             $table->string('discount_code', 50)->unique();
             $table->decimal('discount_percentage', 5, 2);
-            $table->timestamp('start_date')->nullable();
-            $table->timestamp('end_date')->nullable();
-            $table->text('description')->nullable();
-            $table->integer('max_usage')->nullable();
-            $table->integer('current_usage')->default(0);
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
-
-            $table->index('discount_code');
-            $table->index('is_active');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->timestamps();      // created_at, updated_at
         });
     }
 

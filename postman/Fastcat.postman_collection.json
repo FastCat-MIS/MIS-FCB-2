@@ -158,7 +158,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"departure_time\": \"14:30:00\",\r\n    \"vessel_id\": 1,\r\n    \"route_id\": 1\r\n}",
+									"raw": "{\r\n    \"departure_time\": \"07:00:00\",\r\n    \"vessel_id\": 2,   // optional, can be null\r\n    \"route_id\": 3\r\n}\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -196,7 +196,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"departure_time\": \"16:45:00\",\r\n    \"vessel_id\": 2,\r\n    \"route_id\": 3\r\n}",
+									"raw": "{\r\n    \"status\": \"inactive\"  // optional, defaults to active\r\n}\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1093,6 +1093,282 @@
 									"response": []
 								}
 							]
+						},
+						{
+							"name": "Bookings (Individual)",
+							"item": [
+								{
+									"name": "Get Passenger Bookings",
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {
+											"accept": true
+										}
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{accessToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseurl}}/api/booked-passenger",
+											"host": [
+												"{{baseurl}}"
+											],
+											"path": [
+												"api",
+												"booked-passenger"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Passenger Booking by ID",
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {
+											"accept": true
+										}
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{accessToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseurl}}/api/booked-passenger/1",
+											"host": [
+												"{{baseurl}}"
+											],
+											"path": [
+												"api",
+												"booked-passenger",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Passenger Booking by Keyword",
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {
+											"accept": true
+										}
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{accessToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseurl}}/api/booked-passenger/search?keyword=WLK-000000001-1",
+											"host": [
+												"{{baseurl}}"
+											],
+											"path": [
+												"api",
+												"booked-passenger",
+												"search"
+											],
+											"query": [
+												{
+													"key": "keyword",
+													"value": "WLK-000000001-1"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Passenger Booking",
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {
+											"accept": true
+										}
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{accessToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"booking_id\": 3,\r\n  \"fullname\": \"Passenger 99\",\r\n  \"discount_id\": 1,            // optional, can be null\r\n  \"amount\": \"440.00\",\r\n  \"vehicle_amount\": null,       // optional\r\n  \"category\": \"Adult\",\r\n  \"type\": \"Regular\",\r\n  \"accommodation_id\": 2,\r\n  \"gender\": \"Female\",\r\n  \"seat\": \"A1\"\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseurl}}/api/booked-passenger",
+											"host": [
+												"{{baseurl}}"
+											],
+											"path": [
+												"api",
+												"booked-passenger"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Passenger Booking",
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {
+											"accept": true
+										}
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{accessToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n\r\n  \"gender\": \"Male\"\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseurl}}/api/booked-passenger/37",
+											"host": [
+												"{{baseurl}}"
+											],
+											"path": [
+												"api",
+												"booked-passenger",
+												"37"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Passenger Booking",
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {
+											"accept": true
+										}
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{accessToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n\r\n  \"gender\": \"Male\"\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseurl}}/api/booked-passenger/37",
+											"host": [
+												"{{baseurl}}"
+											],
+											"path": [
+												"api",
+												"booked-passenger",
+												"37"
+											]
+										}
+									},
+									"response": []
+								}
+							]
 						}
 					]
 				},
@@ -1838,6 +2114,495 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Bookings",
+					"item": [
+						{
+							"name": "Get Bookings",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/booking/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"booking",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Booking by ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/booking/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"booking",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Booking by Keyword",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/booking/search?keyword=WLK-000000001",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"booking",
+										"search"
+									],
+									"query": [
+										{
+											"key": "keyword",
+											"value": "WLK-000000001"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Booking",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"sched_id\": 1,\r\n    \"booking_number\": \"WLK-000000010-1\",\r\n    \"booking_date\": \"2025-12-02\",\r\n    \"booking_source\": \"Teller\",\r\n    \"vehicle_id\": null,\r\n    \"plate_number\": null,\r\n    \"is_connecting_trip\": false\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/booking",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"booking"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Booking",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"booking_date\": \"2025-12-03\",\r\n    \"booking_source\": \"Teller\",\r\n    \"plate_number\": \"101012-010\",\r\n    \"is_connecting_trip\": false\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/booking/3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"booking",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Booking",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"booking_date\": \"2025-12-03\",\r\n    \"booking_source\": \"Teller\",\r\n    \"plate_number\": \"101012-010\",\r\n    \"is_connecting_trip\": false\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/booking/5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"booking",
+										"5"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Connecting Trips",
+					"item": [
+						{
+							"name": "Get Connecting Trips",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseurl}}/api/connecting-trips/3",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"connecting-trips",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Connecting Trip By ID",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseurl}}/api/connecting-trips/3",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"connecting-trips",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Connecting Trip By Keyword",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseurl}}/api/connecting-trips/search?keyword=WLK-000000001",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"connecting-trips",
+										"search"
+									],
+									"query": [
+										{
+											"key": "keyword",
+											"value": "WLK-000000001"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Connecting Trip",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"booking_id\": 5,\r\n  \"schedule_id\": 6,\r\n  \"leg\": 2,\r\n  \"route_id\": 2\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/api/connecting-trips/",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"connecting-trips",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Connecting Trip",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"booking_id\": 11\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/api/connecting-trips/4",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"connecting-trips",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Connecting Trip",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"booking_id\": 11\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/api/connecting-trips/4",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"connecting-trips",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -2055,14 +2820,348 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseurl}}/api/marketing/rates",
+									"raw": "{{baseurl}}/api/rates",
 									"host": [
 										"{{baseurl}}"
 									],
 									"path": [
 										"api",
-										"marketing",
 										"rates"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Rate by ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseurl}}/api/rates/1",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"rates",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Rate",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"route_id\": 1,\r\n    \"seat_class\": \"Economy\",\r\n    \"base_rate\": 350.00,\r\n    \"effective_date\": \"2025-12-05\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/api/rates",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"rates"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Rate",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \r\n    \"status\": \"inactive\"\r\n    \r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/api/rates/1",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"rates",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Discounts",
+					"item": [
+						{
+							"name": "Get All Discounts",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseurl}}/api/discount",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"discount"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Discount By ID",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseurl}}/api/discount/1",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"discount",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Discount",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"discount_type\": \"Free Passenger\",\r\n    \"discount_code\": \"FP100\",\r\n    \"discount_percentage\": 100\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/api/discount/",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"discount",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Discount",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"start_date\": \"2025-12-05\",\r\n    \"end_date\": \"2026-01-01\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/api/discount/4",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"discount",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Discount",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"start_date\": \"2025-12-05\",\r\n    \"end_date\": \"2026-01-01\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/api/discount/3",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"discount",
+										"3"
 									]
 								}
 							},

@@ -4,8 +4,8 @@ namespace App\Models\Operations;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Account\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Booking extends Model
 {
     use HasFactory, SoftDeletes;
@@ -17,39 +17,18 @@ class Booking extends Model
         'booking_number',
         'booking_date',
         'booking_source',
-        'user_id',
         'vehicle_id',
         'plate_number',
         'is_connecting_trip',
-        'total_amount',
-        'status'
     ];
 
     protected $casts = [
-        'booking_date' => 'datetime',
-        'is_connecting_trip' => 'boolean'
+        'booking_date' => 'date',
+        'is_connecting_trip' => 'boolean',
     ];
 
     public function schedule()
     {
-        return $this->belongsTo(Schedule::class, 'sched_id');
+        return $this->belongsTo(Schedule::class, 'sched_id', 'sched_id');
     }
-
-    public function passengers()
-    {
-        return $this->hasMany(Passenger::class, 'booking_id');
-    }
-
-    public function connectingTrips()
-    {
-        return $this->hasMany(ConnectingTrip::class, 'booking_number', 'booking_number');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public $timestamps = true;
 }
-

@@ -13,11 +13,10 @@ class DeleteScheduleAction extends Action
         try {
             $schedule->delete();
 
-            return $this->success([], 'Schedule deleted successfully.');
-
+            // Return HTTP 204 No Content
+            return response()->noContent(); // Laravel helper for 204
         } catch (\Throwable $e) {
-            $code = is_numeric($e->getCode()) ? (int) $e->getCode() : 500;
-            throw new Exception('Failed to delete schedule: ' . $e->getMessage(), $code);
+            throw new Exception('Failed to delete schedule: ' . $e->getMessage(), 500);
         }
     }
 }

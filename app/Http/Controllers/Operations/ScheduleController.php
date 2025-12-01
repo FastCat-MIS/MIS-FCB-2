@@ -13,25 +13,16 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
-    /**
-     * Retrieve all schedules.
-     */
     public function index(GetSchedulesAction $getSchedulesAction)
     {
         return $getSchedulesAction->execute();
     }
 
-    /**
-     * Retrieve a specific schedule by ID.
-     */
     public function show(Schedule $schedule, GetScheduleAction $getScheduleAction)
     {
         return $getScheduleAction->execute($schedule);
     }
 
-    /**
-     * Create a new schedule.
-     */
     public function store(Request $request, CreateScheduleAction $createScheduleAction)
     {
         return $createScheduleAction->execute($request->only([
@@ -41,9 +32,6 @@ class ScheduleController extends Controller
         ]));
     }
 
-    /**
-     * Update an existing schedule.
-     */
     public function update(Request $request, Schedule $schedule, UpdateScheduleAction $updateScheduleAction)
     {
         return $updateScheduleAction->execute($schedule, $request->only([
@@ -53,9 +41,6 @@ class ScheduleController extends Controller
         ]));
     }
 
-    /**
-     * Delete a schedule.
-     */
     public function destroy(Schedule $schedule, DeleteScheduleAction $deleteScheduleAction)
     {
         return $deleteScheduleAction->execute($schedule);
