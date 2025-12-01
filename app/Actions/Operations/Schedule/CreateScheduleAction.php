@@ -15,7 +15,7 @@ class CreateScheduleAction extends Action
         try {
             $validator = Validator::make($data, [
                 'departure_time' => 'required|date_format:H:i:s',
-                'vessel_id'      => 'required|exists:vessels,id',
+                'vessel_id'      => 'nullable|exists:vessels,id',
                 'route_id'       => 'required|exists:routes,route_id',
             ]);
 
@@ -25,13 +25,16 @@ class CreateScheduleAction extends Action
 
             $schedule = Schedule::create([
                 'departure_time' => $data['departure_time'],
-                'vessel_id'      => $data['vessel_id'],
+                'vessel_id'      => $data['vessel_id'] ?? null,
                 'route_id'       => $data['route_id'],
             ]);
 
             $schedule->load(['route.portA', 'route.portB']);
 
-            $vessel = \DB::table('vessels')->where('id', $schedule->vessel_id)->first();
+            $vessel = null;
+            if (!empty($schedule->vessel_id)) {
+                $vessel = \DB::table('vessels')->where('id', $schedule->vessel_id)->first();
+            }
 
             $result = [
                 'sched_id'        => $schedule->sched_id,

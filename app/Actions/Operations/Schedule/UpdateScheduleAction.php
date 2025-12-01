@@ -15,7 +15,7 @@ class UpdateScheduleAction extends Action
         try {
             $validator = Validator::make($data, [
                 'departure_time' => 'sometimes|required|date_format:H:i:s',
-                'vessel_id'      => 'sometimes|required|exists:vessels,id',
+                'vessel_id'      => 'sometimes|nullable|exists:vessels,id',
                 'route_id'       => 'sometimes|required|exists:routes,route_id',
             ]);
 
@@ -27,7 +27,11 @@ class UpdateScheduleAction extends Action
 
             $schedule->load(['route.portA', 'route.portB']);
 
-            $vessel = \DB::table('vessels')->where('id', $schedule->vessel_id)->first();
+            // Only lookup vessel if vessel_id exists and is not null
+            $vessel = null;
+            if (!empty($schedule->vessel_id)) {
+                $vessel = \DB::table('vessels')->where('id', $schedule->vessel_id)->first();
+            }
 
             $result = [
                 'sched_id'        => $schedule->sched_id,
