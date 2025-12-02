@@ -18,7 +18,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 // SAFE dynamic API prefix
 // Laravel 11 requires a STRING, not null.
 // ---------------------------------------------
-$apiPrefix = (($_SERVER['APP_ENV'] ?? 'production') === 'local')
+$apiPrefix = (($_ENV['APP_ENV'] ?? 'production') === 'local')
     ? '/api'
     : '/';   // production must still be a string
 

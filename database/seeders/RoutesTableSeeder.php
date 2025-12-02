@@ -12,17 +12,24 @@ class RoutesTableSeeder extends Seeder
     {
         $ports = Port::all();
 
-        $routes = [
+        if ($ports->count() < 2) {
+            $this->command->warn('Not enough ports to create routes. Seed ports first.');
+            return;
+        }
+
+        $routesData = [
             ['port_a_id' => $ports[0]->port_id, 'port_b_id' => $ports[1]->port_id],
-            ['port_a_id' => $ports[0]->port_id, 'port_b_id' => $ports[2]->port_id],
-            ['port_a_id' => $ports[1]->port_id, 'port_b_id' => $ports[3]->port_id],
+            ['port_a_id' => $ports[0]->port_id, 'port_b_id' => $ports[2]->port_id ?? $ports[1]->port_id],
+            ['port_a_id' => $ports[1]->port_id, 'port_b_id' => $ports[3]->port_id ?? $ports[0]->port_id],
         ];
 
-        foreach ($routes as $route) {
+        foreach ($routesData as $data) {
             Route::updateOrCreate(
-                ['port_a_id' => $route['port_a_id'], 'port_b_id' => $route['port_b_id']],
-                $route
+                ['port_a_id' => $data['port_a_id'], 'port_b_id' => $data['port_b_id']],
+                $data
             );
         }
+
+        $this->command->info(count($routesData) . ' routes seeded successfully.');
     }
 }

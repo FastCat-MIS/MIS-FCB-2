@@ -19,5 +19,7 @@ class PortSeeder extends Seeder
         foreach ($ports as $port) {
             Port::updateOrCreate(['port_name' => $port['port_name']], $port);
         }
+
+        $this->command->info(count($ports) . ' ports seeded successfully.');
     }
 }

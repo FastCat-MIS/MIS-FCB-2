@@ -16,17 +16,16 @@ class UpdateScheduleAction extends Action
             $validator = Validator::make($data, [
                 'departure_time' => 'sometimes|required|date_format:H:i:s',
                 'vessel_id'      => 'sometimes|nullable|exists:vessels,id',
-                'route_id'       => 'sometimes|required|exists:routes,route_id',
+                'port_id'        => 'sometimes|required|exists:ports,port_id',
                 'status'         => 'sometimes|required|in:active,inactive',
             ]);
-
 
             if ($validator->fails()) {
                 throw new ValidationException($validator);
             }
 
-            $schedule->update($data);
-            $schedule->load(['route.portA', 'route.portB', 'vessel']);
+            $schedule->update($validator->validated());
+            $schedule->load(['port.route', 'vessel']);
 
             $result = [
                 'sched_id'       => $schedule->sched_id,
@@ -35,19 +34,20 @@ class UpdateScheduleAction extends Action
                     'id'   => $schedule->vessel->id,
                     'name' => $schedule->vessel->vessel_name,
                 ] : null,
-                'route' => [
-                    'id'     => $schedule->route_id,
-                    'name'   => $schedule->route?->route_name,
-                    'port_a' => $schedule->route?->portA?->port_name,
-                    'port_b' => $schedule->route?->portB?->port_name,
-                ],
+                'port' => $schedule->port ? [
+                    'id'   => $schedule->port->port_id,
+                    'name' => $schedule->port->port_name,
+                    'route' => $schedule->port->route ? [
+                        'id'   => $schedule->port->route->route_id,
+                        'name' => $schedule->port->route->route_name,
+                    ] : null,
+                ] : null,
+                'status'     => $schedule->status,
                 'created_at' => $schedule->created_at,
                 'updated_at' => $schedule->updated_at,
-                'status'     => $schedule->status,
             ];
 
             return $this->success(['schedule' => $result], 'Schedule updated successfully.');
-
         } catch (\Throwable $e) {
             throw new Exception('Failed to update schedule: ' . $e->getMessage(), 500);
         }

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Operations;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Actions\Operations\Schedule\GetSchedulesAction;
 use App\Actions\Operations\Schedule\GetScheduleAction;
 use App\Actions\Operations\Schedule\CreateScheduleAction;
 use App\Actions\Operations\Schedule\UpdateScheduleAction;
 use App\Actions\Operations\Schedule\DeleteScheduleAction;
 use App\Models\Operations\Schedule;
-use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
@@ -28,7 +28,8 @@ class ScheduleController extends Controller
         return $createScheduleAction->execute($request->only([
             'departure_time',
             'vessel_id',
-            'route_id'
+            'port_id',
+            'status'
         ]));
     }
 
@@ -37,7 +38,8 @@ class ScheduleController extends Controller
         return $updateScheduleAction->execute($schedule, $request->only([
             'departure_time',
             'vessel_id',
-            'route_id'
+            'port_id',
+            'status'
         ]));
     }
 

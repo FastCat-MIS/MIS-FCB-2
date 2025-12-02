@@ -28,10 +28,10 @@ class RatesAndDiscountsSeeder extends Seeder
             foreach ($routes as $route) {
                 foreach ($seatClasses as $seatClass => $baseRate) {
                     $rates[] = [
-                        'route_id' => $route->route_id,
+                        'route_id'   => $route->route_id,
                         'seat_class' => $seatClass,
-                        'base_rate' => $baseRate,
-                        'status' => 'active',
+                        'base_rate'  => $baseRate,
+                        'status'     => 'active',
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
@@ -39,7 +39,10 @@ class RatesAndDiscountsSeeder extends Seeder
             }
 
             foreach ($rates as $rate) {
-                Rate::create($rate);
+                Rate::updateOrCreate(
+                    ['route_id' => $rate['route_id'], 'seat_class' => $rate['seat_class']],
+                    $rate
+                );
             }
 
             $this->command->info(count($rates) . ' rates seeded successfully.');
@@ -48,36 +51,39 @@ class RatesAndDiscountsSeeder extends Seeder
         // --- SEED DISCOUNTS ---
         $discounts = [
             [
-                'discount_type' => 'Senior Citizen',
-                'discount_code' => 'SC20',
+                'discount_type'       => 'Senior Citizen',
+                'discount_code'       => 'SC20',
                 'discount_percentage' => 20,
-                'start_date' => null,
-                'end_date' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'start_date'          => null,
+                'end_date'            => null,
+                'created_at'          => now(),
+                'updated_at'          => now(),
             ],
             [
-                'discount_type' => 'Student',
-                'discount_code' => 'ST10',
+                'discount_type'       => 'Student',
+                'discount_code'       => 'ST10',
                 'discount_percentage' => 10,
-                'start_date' => null,
-                'end_date' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'start_date'          => null,
+                'end_date'            => null,
+                'created_at'          => now(),
+                'updated_at'          => now(),
             ],
             [
-                'discount_type' => 'PWD',
-                'discount_code' => 'PWD15',
+                'discount_type'       => 'PWD',
+                'discount_code'       => 'PWD15',
                 'discount_percentage' => 15,
-                'start_date' => null,
-                'end_date' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'start_date'          => null,
+                'end_date'            => null,
+                'created_at'          => now(),
+                'updated_at'          => now(),
             ],
         ];
 
         foreach ($discounts as $discount) {
-            Discount::create($discount);
+            Discount::updateOrCreate(
+                ['discount_code' => $discount['discount_code']],
+                $discount
+            );
         }
 
         $this->command->info(count($discounts) . ' discounts seeded successfully.');

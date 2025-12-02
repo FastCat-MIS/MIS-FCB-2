@@ -1,5 +1,4 @@
 <?php
-// app/Actions/Operations/Ports/GetPortsAction.php
 
 namespace App\Actions\Operations\Ports;
 
@@ -10,7 +9,7 @@ class GetPortsAction extends Action
 {
     public function execute()
     {
-        $ports = Port::all();
+        $ports = Port::with('route')->get(); // eager load route for all ports
 
         return $this->success([
             'ports' => $ports,

@@ -1,5 +1,4 @@
 <?php
-// app/Actions/Operations/Ports/UpdatePortAction.php
 
 namespace App\Actions\Operations\Ports;
 
@@ -18,14 +17,16 @@ class UpdatePortAction extends Action
             'facilities' => 'nullable|string|max:255',
             'last_update_by' => 'sometimes|required|string|max:255',
             'is_active' => 'boolean',
+            'route_id' => 'nullable|exists:routes,route_id',
         ]);
 
         $validator->validate();
 
         $port->update($validator->validated());
+        $port->load('route'); // reload route
 
         return $this->success([
-            'port' => $port->fresh(),
+            'port' => $port,
         ], 'Port updated successfully');
     }
 }
