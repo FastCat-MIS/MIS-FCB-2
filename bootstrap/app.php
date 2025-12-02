@@ -14,23 +14,32 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
+// ---------------------------------------------
+// SAFE dynamic API prefix
+// Laravel 11 requires a STRING, not null.
+// ---------------------------------------------
+$apiPrefix = (($_SERVER['APP_ENV'] ?? 'production') === 'local')
+    ? '/api'
+    : '/';   // production must still be a string
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
-        apiPrefix: ($_SERVER['APP_ENV'] ?? 'production') === 'local' ? '/api' : null,
 
-
+        // Dynamic prefix
+        apiPrefix: $apiPrefix,
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Configure basic API middleware without throttling for now
+
+        // Basic API middleware
         $middleware->group('api', [
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
 
-        // Add CORS middleware globally
+        // CORS
         $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
 
         // Middleware aliases
@@ -44,7 +53,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        // 🔐 JWT Exceptions
+
+        // JWT Exceptions
         $exceptions->render(function (TokenExpiredException $e, $request) {
             return response()->json([
                 'status' => 'error',
@@ -69,7 +79,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 401);
         });
 
-        // 👤 Authentication & Authorization
+        // Authentication & Authorization
         $exceptions->render(function (AuthenticationException $e, $request) {
             return response()->json([
                 'status' => 'error',
@@ -86,7 +96,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 403);
         });
 
-        // 📝 Validation
+        // Validation
         $exceptions->render(function (ValidationException $e, $request) {
             return response()->json([
                 'status' => 'error',
@@ -95,7 +105,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 422);
         });
 
-        // 🔎 Model / Route Errors
+        // Model not found
         $exceptions->render(function (ModelNotFoundException $e, $request) {
             return response()->json([
                 'status' => 'error',
@@ -103,6 +113,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 404);
         });
 
+        // Route not found
         $exceptions->render(function (NotFoundHttpException $e, $request) {
             return response()->json([
                 'status' => 'error',
@@ -110,6 +121,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 404);
         });
 
+        // Wrong HTTP method
         $exceptions->render(function (MethodNotAllowedHttpException $e, $request) {
             return response()->json([
                 'status' => 'error',
@@ -117,7 +129,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 405);
         });
 
-        // 🛑 Fallback
+        // Fallback
         $exceptions->render(function (\Throwable $e, $request) {
             return response()->json([
                 'status' => 'error',
@@ -125,5 +137,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 'error' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         });
+
     })
     ->create();
