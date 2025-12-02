@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('route_id')->constrained('routes', 'route_id')->onDelete('cascade');
             $table->string('seat_class', 50);
             $table->decimal('base_rate', 10, 2);
-            $table->timestamp('effective_date');
+            $table->timestamp('effective_date')->nullable();
             $table->string('status')->default('active');
             $table->timestamps();
 
