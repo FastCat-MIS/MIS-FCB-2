@@ -12,21 +12,20 @@ class UpdatePassengerTypeAction extends Action
     public function execute(PassengerType $passengerType, array $data)
     {
         try {
-            // Validate input
             $validator = Validator::make($data, [
-                'type' => 'required|string|max:255|unique:passenger_types,type,' . $passengerType->p_id . ',p_id',
+                'type' => 'nullable|string|max:255|unique:passenger_types,type,'
+                    . $passengerType->p_id . ',p_id',
+                'discount_id' => 'nullable|integer|exists:discounts,discount_id',
             ]);
 
             if ($validator->fails()) {
-                // Throw ValidationException for global handler
                 throw new ValidationException($validator);
             }
 
-            // Update model
-            $passengerType->update($data);
+            $passengerType->update($validator->validated());
 
             return $this->success([
-                'type' => $passengerType->fresh(),
+                'type' => $passengerType->fresh()->load('discount'),
             ], 'Passenger type updated successfully.');
         } catch (\Throwable $e) {
             throw new \Exception('Failed to update passenger type: ' . $e->getMessage(), 500);

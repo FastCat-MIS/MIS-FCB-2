@@ -11,7 +11,7 @@ class GetPassengerTypeAction extends Action
     {
         try {
             return $this->success([
-                'type' => $passengerType,
+                'type' => $passengerType->load('discount'),
             ], 'Passenger type retrieved successfully.');
         } catch (\Throwable $e) {
             throw new \Exception('Failed to retrieve passenger type: ' . $e->getMessage(), 500);

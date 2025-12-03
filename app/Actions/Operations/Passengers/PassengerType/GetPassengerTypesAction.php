@@ -10,7 +10,7 @@ class GetPassengerTypesAction extends Action
     public function execute(array $data = [])
     {
         try {
-            $types = PassengerType::all();
+            $types = PassengerType::with('discount')->get();
 
             return $this->success([
                 'types' => $types,

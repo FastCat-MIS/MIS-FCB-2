@@ -8,6 +8,9 @@ class Route extends Model
 {
     protected $primaryKey = 'route_id';
 
+    // Auto-load full port data
+    protected $with = ['portA', 'portB'];
+
     public function portA()
     {
         return $this->belongsTo(Port::class, 'port_a_id', 'port_id');
@@ -18,4 +21,3 @@ class Route extends Model
         return $this->belongsTo(Port::class, 'port_b_id', 'port_id');
     }
 }
-

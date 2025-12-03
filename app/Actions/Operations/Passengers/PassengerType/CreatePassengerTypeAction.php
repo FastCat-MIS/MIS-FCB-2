@@ -12,12 +12,13 @@ class CreatePassengerTypeAction extends Action
     {
         $validated = Validator::make($data, [
             'type' => 'required|string|max:255|unique:passenger_types,type',
-        ])->validate(); // Will throw ValidationException if invalid
+            'discount_id' => 'nullable|integer|exists:discounts,discount_id',
+        ])->validate();
 
         $type = PassengerType::create($validated);
 
         return $this->success([
-            'type' => $type,
+            'type' => $type->load('discount'),
         ], 'Passenger type created successfully', 201);
     }
 }
