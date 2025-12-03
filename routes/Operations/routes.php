@@ -14,6 +14,7 @@ use App\Http\Controllers\Operations\PortController;
 use App\Http\Controllers\Operations\BookingController;
 use App\Http\Controllers\Operations\BookedPassengerController;
 use App\Http\Controllers\Operations\ConnectingTripController;
+use App\Http\Controllers\Operations\VesselController;
 
 // Operations domain routes
 Route::middleware('jwt.auth')->group(function () {
@@ -52,19 +53,19 @@ Route::middleware('jwt.auth')->group(function () {
     });
 
     // Vessels CRUD
-    // Route::prefix('vessels')->group(function () {
-    //     Route::get('/', [VesselController::class, 'index']);
-    //     Route::get('/{vessel}', [VesselController::class, 'show']);
-    //     Route::post('/', [VesselController::class, 'store']);
-    //     Route::put('/{vessel}', [VesselController::class, 'update']);
-    //     Route::delete('/{vessel}', [VesselController::class, 'destroy']);
+    Route::prefix('vessels')->group(function () {
+        Route::get('/', [VesselController::class, 'index']);
+        Route::get('/{vessel}', [VesselController::class, 'show']);
+        Route::post('/', [VesselController::class, 'store']);
+        Route::put('/{vessel}', [VesselController::class, 'update']);
+        Route::delete('/{vessel}', [VesselController::class, 'destroy']);
 
     //     // Route::get('/', [VesselController::class, 'index'])->middleware('permission:vessel management read');
     //     // Route::get('/{vessel}', [VesselController::class, 'show'])->middleware('permission:vessel management read');
     //     // Route::post('/', [VesselController::class, 'store'])->middleware('permission:vessel management create');
     //     // Route::put('/{vessel}', [VesselController::class, 'update'])->middleware('permission:vessel management update');
     //     // Route::delete('/{vessel}', [VesselController::class, 'destroy'])->middleware('permission:vessel management delete');
-    // });
+    });
 
     // Passenger Categories CRUD
     Route::prefix('passenger-categories')->group(function () {
