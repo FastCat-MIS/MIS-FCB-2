@@ -17,37 +17,49 @@ class CreateScheduleAction extends Action
                 'departure_time' => 'required|date_format:H:i:s',
                 'vessel_id'      => 'nullable|exists:vessels,id',
                 'port_id'        => 'required|exists:ports,port_id',
-                'status'         => 'sometimes|required|in:active,inactive',
+                'status'         => 'sometimes|in:active,inactive',
             ]);
 
             if ($validator->fails()) {
                 throw new ValidationException($validator);
             }
 
-            $schedule = Schedule::create($validator->validated());
-            $schedule->load(['port.route', 'vessel']);
+            $validated = $validator->validated();
+
+            // ✅ Default status = active
+            if (!isset($validated['status'])) {
+                $validated['status'] = 'active';
+            }
+
+            $schedule = Schedule::create($validated);
+
+            $schedule->load(['port', 'vessel']);
 
             $result = [
                 'sched_id'       => $schedule->sched_id,
                 'departure_time' => $schedule->departure_time,
-                'vessel'         => $schedule->vessel ? [
+
+                'vessel' => $schedule->vessel ? [
                     'id'   => $schedule->vessel->id,
                     'name' => $schedule->vessel->vessel_name,
                 ] : null,
+
                 'port' => $schedule->port ? [
                     'id'   => $schedule->port->port_id,
                     'name' => $schedule->port->port_name,
-                    'route' => $schedule->port->route ? [
-                        'id'   => $schedule->port->route->route_id,
-                        'name' => $schedule->port->route->route_name,
-                    ] : null,
                 ] : null,
+
                 'status'     => $schedule->status,
                 'created_at' => $schedule->created_at,
                 'updated_at' => $schedule->updated_at,
             ];
 
-            return $this->success(['schedule' => $result], 'Schedule created successfully.', 201);
+            return $this->success(
+                ['schedule' => $result],
+                'Schedule created successfully.',
+                201
+            );
+
         } catch (\Throwable $e) {
             throw new Exception('Failed to create schedule: ' . $e->getMessage(), 500);
         }
