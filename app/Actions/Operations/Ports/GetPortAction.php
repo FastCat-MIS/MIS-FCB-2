@@ -9,8 +9,6 @@ class GetPortAction extends Action
 {
     public function execute(Port $port)
     {
-        $port->load('route'); // include associated route
-
         return $this->success([
             'port' => $port,
         ], 'Port retrieved successfully');

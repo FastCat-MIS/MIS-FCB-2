@@ -17,7 +17,6 @@ class CreatePortAction extends Action
             'facilities'     => 'nullable|string|max:255',
             'last_update_by' => 'required|string|max:255',
             'is_active'      => 'boolean',
-            // removed route_id because ports should not reference routes
         ]);
 
         if ($validator->fails()) {

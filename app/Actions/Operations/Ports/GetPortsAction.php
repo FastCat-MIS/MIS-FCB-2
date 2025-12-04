@@ -9,7 +9,7 @@ class GetPortsAction extends Action
 {
     public function execute()
     {
-        $ports = Port::with('route')->get(); // eager load route for all ports
+        $ports = Port::all();
 
         return $this->success([
             'ports' => $ports,
