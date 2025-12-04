@@ -14,13 +14,15 @@ class PassengerType extends Model
 
     protected $fillable = [
         'type',
-        'discount_id',
+        'discount',
+        'waived',
+        'status',
+    ];
+
+    protected $casts = [
+        'discount' => 'decimal:2',
+        'waived' => 'boolean',
     ];
 
     public $timestamps = true;
-
-    public function discount()
-    {
-        return $this->belongsTo(\App\Models\Marketing\Discount::class, 'discount_id', 'discount_id');
-    }
 }

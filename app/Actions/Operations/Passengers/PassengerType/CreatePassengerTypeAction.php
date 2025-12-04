@@ -5,20 +5,25 @@ namespace App\Actions\Operations\Passengers\PassengerType;
 use App\Actions\Action;
 use App\Models\Operations\PassengerType;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class CreatePassengerTypeAction extends Action
 {
     public function execute(array $data)
     {
-        $validated = Validator::make($data, [
-            'type' => 'required|string|max:255|unique:passenger_types,type',
-            'discount_id' => 'nullable|integer|exists:discounts,discount_id',
-        ])->validate();
+        $validator = Validator::make($data, [
+            'type' => 'required|string|max:255',
+            'discount'  => 'required|numeric|min:0|max:1',
+            'waived'    => 'required|boolean',
+            'status'    => 'required|string|in:active,inactive',
+        ]);
 
-        $type = PassengerType::create($validated);
+        $validator->validate();
+
+        $passengerType = PassengerType::create($validator->validated());
 
         return $this->success([
-            'type' => $type->load('discount'),
-        ], 'Passenger type created successfully', 201);
+            'passenger_type' => $passengerType,
+        ], 'Passenger type created successfully');
     }
 }
