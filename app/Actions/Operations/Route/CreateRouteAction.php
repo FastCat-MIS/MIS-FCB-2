@@ -15,32 +15,44 @@ class CreateRouteAction extends Action
         try {
             // Validate input
             $validator = Validator::make($data, [
-                'port_a' => 'required|string|max:100',
-                'port_b' => 'required|string|max:100|different:port_a',
+                'port_a_id' => 'required|integer|exists:ports,port_id',
+                'port_b_id' => 'required|integer|different:port_a_id|exists:ports,port_id',
             ]);
 
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
-            }
+            $validator->validate();
 
             // Check if route already exists
-            $existingRoute = Route::where('port_a', $data['port_a'])
-                ->where('port_b', $data['port_b'])
-                ->first();
+            $existingRoute = Route::where(function ($q) use ($data) {
+                $q->where('port_a_id', $data['port_a_id'])
+                  ->where('port_b_id', $data['port_b_id']);
+            })
+            ->orWhere(function ($q) use ($data) {
+                $q->where('port_a_id', $data['port_b_id'])
+                  ->where('port_b_id', $data['port_a_id']);
+            })
+            ->first();
 
             if ($existingRoute) {
                 throw new \Exception('Route already exists.', 409);
             }
 
             // Create route
-            $route = Route::create($data);
+            $route = Route::create([
+                'port_a_id' => $data['port_a_id'],
+                'port_b_id' => $data['port_b_id'],
+            ]);
+
+            $route->load(['portA', 'portB']);
 
             return $this->success([
                 'route' => $route,
             ], 'Route created successfully.', 201);
 
         } catch (\Throwable $e) {
-            throw new \Exception('Failed to create route: ' . $e->getMessage(), $e->getCode() ?: 500);
+            throw new \Exception(
+                'Failed to create route: ' . $e->getMessage(),
+                $e->getCode() ?: 500
+            );
         }
     }
 }

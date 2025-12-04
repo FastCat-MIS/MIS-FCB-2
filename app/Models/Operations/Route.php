@@ -8,7 +8,11 @@ class Route extends Model
 {
     protected $primaryKey = 'route_id';
 
-    // Auto-load full port data
+    protected $fillable = [
+        'port_a_id',
+        'port_b_id',
+    ];
+
     protected $with = ['portA', 'portB'];
 
     public function portA()
