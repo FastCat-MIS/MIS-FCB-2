@@ -4,6 +4,8 @@ namespace App\Models\Operations;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Marketing\Rate;
+
 class Route extends Model
 {
     protected $primaryKey = 'route_id';
@@ -23,5 +25,10 @@ class Route extends Model
     public function portB()
     {
         return $this->belongsTo(Port::class, 'port_b_id', 'port_id');
+    }
+
+    public function rates()
+    {
+        return $this->hasMany(Rate::class, 'route_id', 'route_id');
     }
 }

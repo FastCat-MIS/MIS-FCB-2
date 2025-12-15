@@ -28,7 +28,7 @@ class Rate extends Model
 
     public function route()
     {
-        return $this->belongsTo(Route::class, 'route_id');
+        return $this->belongsTo(Route::class, 'route_id', 'route_id');
     }
 
     public function getFormattedRateAttribute()
