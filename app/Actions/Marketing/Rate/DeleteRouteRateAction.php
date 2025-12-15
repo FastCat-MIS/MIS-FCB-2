@@ -16,14 +16,6 @@ class DeleteRouteRateAction extends Action
             throw new RuntimeException('Rate does not belong to this route.', 403);
         }
 
-        // ❗ Prevent deleting active rates
-        if (strtolower($rate->status) === 'active') {
-            throw new RuntimeException(
-                'Cannot delete active rate. Deactivate it first.',
-                409
-            );
-        }
-
         try {
             $rate->delete();
 
