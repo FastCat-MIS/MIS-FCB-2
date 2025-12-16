@@ -3052,6 +3052,166 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Vessel Seats",
+					"item": [
+						{
+							"name": "Get Vessel Seats",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n  {\r\n    \"name\": \"Economy\",\r\n    \"rows\": 5,\r\n    \"columns\": 4,\r\n    \"seats\": [\r\n      { \"seat_no\": \"1A\", \"row\": 0, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": \"Restroom\" },\r\n      { \"seat_no\": \"1B\", \"row\": 0, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": \"Restroom\" },\r\n      { \"seat_no\": \"1C\", \"row\": 0, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1D\", \"row\": 0, \"col\": 3, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2A\", \"row\": 1, \"col\": 0, \"blocked\": false, \"path\": true,  \"facility\": null },\r\n      { \"seat_no\": \"2B\", \"row\": 1, \"col\": 1, \"blocked\": false, \"path\": true,  \"facility\": null },\r\n      { \"seat_no\": \"2C\", \"row\": 1, \"col\": 2, \"blocked\": true,  \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2D\", \"row\": 1, \"col\": 3, \"blocked\": false, \"path\": false, \"facility\": null }\r\n    ],\r\n    \"aircon\": true,\r\n    \"wifi\": false,\r\n    \"facilityLabels\": [\r\n      { \"name\": \"Restroom\", \"top\": 0, \"left\": 0, \"width\": 80, \"height\": 40 }\r\n    ]\r\n  },\r\n  {\r\n    \"name\": \"Business\",\r\n    \"rows\": 3,\r\n    \"columns\": 3,\r\n    \"seats\": [\r\n      { \"seat_no\": \"1A\", \"row\": 0, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1B\", \"row\": 0, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1C\", \"row\": 0, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": \"Coffee Station\" },\r\n      { \"seat_no\": \"2A\", \"row\": 1, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2B\", \"row\": 1, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2C\", \"row\": 1, \"col\": 2, \"blocked\": true,  \"path\": false, \"facility\": null }\r\n    ],\r\n    \"aircon\": true,\r\n    \"wifi\": true,\r\n    \"facilityLabels\": [\r\n      { \"name\": \"Coffee Station\", \"top\": 0, \"left\": 80, \"width\": 40, \"height\": 40 }\r\n    ]\r\n  }\r\n]\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/vessels/6/layout",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"vessels",
+										"6",
+										"layout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Vessel Seats",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n  {\r\n    \"name\": \"Economy\",\r\n    \"rows\": 5,\r\n    \"columns\": 4,\r\n    \"seats\": [\r\n      { \"seat_no\": \"1A\", \"row\": 0, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": \"Restroom\" },\r\n      { \"seat_no\": \"1B\", \"row\": 0, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": \"Restroom\" },\r\n      { \"seat_no\": \"1C\", \"row\": 0, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1D\", \"row\": 0, \"col\": 3, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2A\", \"row\": 1, \"col\": 0, \"blocked\": false, \"path\": true,  \"facility\": null },\r\n      { \"seat_no\": \"2B\", \"row\": 1, \"col\": 1, \"blocked\": false, \"path\": true,  \"facility\": null },\r\n      { \"seat_no\": \"2C\", \"row\": 1, \"col\": 2, \"blocked\": true,  \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2D\", \"row\": 1, \"col\": 3, \"blocked\": false, \"path\": false, \"facility\": null }\r\n    ],\r\n    \"aircon\": true,\r\n    \"wifi\": false,\r\n    \"facilityLabels\": [\r\n      { \"name\": \"Restroom\", \"top\": 0, \"left\": 0, \"width\": 80, \"height\": 40 }\r\n    ]\r\n  },\r\n  {\r\n    \"name\": \"Business\",\r\n    \"rows\": 3,\r\n    \"columns\": 3,\r\n    \"seats\": [\r\n      { \"seat_no\": \"1A\", \"row\": 0, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1B\", \"row\": 0, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1C\", \"row\": 0, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": \"Coffee Station\" },\r\n      { \"seat_no\": \"2A\", \"row\": 1, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2B\", \"row\": 1, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2C\", \"row\": 1, \"col\": 2, \"blocked\": true,  \"path\": false, \"facility\": null }\r\n    ],\r\n    \"aircon\": true,\r\n    \"wifi\": true,\r\n    \"facilityLabels\": [\r\n      { \"name\": \"Coffee Station\", \"top\": 0, \"left\": 80, \"width\": 40, \"height\": 40 }\r\n    ]\r\n  }\r\n]\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/vessels/4/layout",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"vessels",
+										"4",
+										"layout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Vessel Seats",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n  {\r\n    \"name\": \"Economy\",\r\n    \"rows\": 5,\r\n    \"columns\": 4,\r\n    \"seats\": [\r\n      { \"seat_no\": \"1A\", \"row\": 0, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": \"Restroom\" },\r\n      { \"seat_no\": \"1B\", \"row\": 0, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": \"Restroom\" },\r\n      { \"seat_no\": \"1C\", \"row\": 0, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1D\", \"row\": 0, \"col\": 3, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2A\", \"row\": 1, \"col\": 0, \"blocked\": false, \"path\": true,  \"facility\": null },\r\n      { \"seat_no\": \"2B\", \"row\": 1, \"col\": 1, \"blocked\": false, \"path\": true,  \"facility\": null },\r\n      { \"seat_no\": \"2C\", \"row\": 1, \"col\": 2, \"blocked\": true,  \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2D\", \"row\": 1, \"col\": 3, \"blocked\": false, \"path\": false, \"facility\": null }\r\n    ],\r\n    \"aircon\": true,\r\n    \"wifi\": false,\r\n    \"facilityLabels\": [\r\n      { \"name\": \"Restroom\", \"top\": 0, \"left\": 0, \"width\": 80, \"height\": 40 }\r\n    ]\r\n  },\r\n  {\r\n    \"name\": \"Business\",\r\n    \"rows\": 3,\r\n    \"columns\": 3,\r\n    \"seats\": [\r\n      { \"seat_no\": \"1A\", \"row\": 0, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1B\", \"row\": 0, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1C\", \"row\": 0, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": \"Coffee Station\" },\r\n      { \"seat_no\": \"2A\", \"row\": 1, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2B\", \"row\": 1, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2C\", \"row\": 1, \"col\": 2, \"blocked\": true,  \"path\": false, \"facility\": null }\r\n    ],\r\n    \"aircon\": true,\r\n    \"wifi\": true,\r\n    \"facilityLabels\": [\r\n      { \"name\": \"Coffee Station\", \"top\": 0, \"left\": 80, \"width\": 40, \"height\": 40 }\r\n    ]\r\n  }\r\n]\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/vessels/4/layout",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"vessels",
+										"4",
+										"layout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Vessel Seats",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n  {\r\n    \"name\": \"Economy\",\r\n    \"rows\": 5,\r\n    \"columns\": 4,\r\n    \"aircon\": true,\r\n    \"wifi\": false,\r\n    \"seats\": [\r\n      { \"seat_no\": \"1A\", \"row\": 0, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": \"Restroom\" },\r\n      { \"seat_no\": \"1B\", \"row\": 0, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": \"Restroom\" },\r\n      { \"seat_no\": \"1C\", \"row\": 0, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1D\", \"row\": 0, \"col\": 3, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2A\", \"row\": 1, \"col\": 0, \"blocked\": false, \"path\": true, \"facility\": null },\r\n      { \"seat_no\": \"2B\", \"row\": 1, \"col\": 1, \"blocked\": false, \"path\": true, \"facility\": null },\r\n      { \"seat_no\": \"2C\", \"row\": 1, \"col\": 2, \"blocked\": true, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2D\", \"row\": 1, \"col\": 3, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"3A\", \"row\": 2, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"3B\", \"row\": 2, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"3C\", \"row\": 2, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"3D\", \"row\": 2, \"col\": 3, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"4A\", \"row\": 3, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"4B\", \"row\": 3, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"4C\", \"row\": 3, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"4D\", \"row\": 3, \"col\": 3, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"5A\", \"row\": 4, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"5B\", \"row\": 4, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"5C\", \"row\": 4, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"5D\", \"row\": 4, \"col\": 3, \"blocked\": false, \"path\": false, \"facility\": null }\r\n    ],\r\n    \"facilityLabels\": [\r\n      { \"name\": \"Restroom\", \"top\": 0, \"left\": 0, \"width\": 80, \"height\": 40 }\r\n    ]\r\n  },\r\n  {\r\n    \"name\": \"Business\",\r\n    \"rows\": 3,\r\n    \"columns\": 3,\r\n    \"aircon\": true,\r\n    \"wifi\": true,\r\n    \"seats\": [\r\n      { \"seat_no\": \"1A\", \"row\": 0, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1B\", \"row\": 0, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"1C\", \"row\": 0, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": \"Coffee Station\" },\r\n      { \"seat_no\": \"2A\", \"row\": 1, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2B\", \"row\": 1, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"2C\", \"row\": 1, \"col\": 2, \"blocked\": true, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"3A\", \"row\": 2, \"col\": 0, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"3B\", \"row\": 2, \"col\": 1, \"blocked\": false, \"path\": false, \"facility\": null },\r\n      { \"seat_no\": \"3C\", \"row\": 2, \"col\": 2, \"blocked\": false, \"path\": false, \"facility\": null }\r\n    ],\r\n    \"facilityLabels\": [\r\n      { \"name\": \"Coffee Station\", \"top\": 0, \"left\": 80, \"width\": 40, \"height\": 40 }\r\n    ]\r\n  }\r\n]\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/vessels/6/layout",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"vessels",
+										"6",
+										"layout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},

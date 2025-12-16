@@ -15,6 +15,7 @@ use App\Http\Controllers\Operations\BookingController;
 use App\Http\Controllers\Operations\BookedPassengerController;
 use App\Http\Controllers\Operations\ConnectingTripController;
 use App\Http\Controllers\Operations\VesselController;
+use App\Http\Controllers\Operations\VesselLayoutController;
 use App\Http\Controllers\Marketing\RouteRateController;
 
 // Operations domain routes
@@ -66,6 +67,13 @@ Route::middleware('jwt.auth')->group(function () {
         Route::put('/{vessel}', [VesselController::class, 'update']);
         Route::delete('/{vessel}', [VesselController::class, 'destroy']);
 
+    Route::prefix('{vessel}/layout')->group(function () {
+        Route::get('/', [VesselLayoutController::class, 'show']);
+        Route::post('/', [VesselLayoutController::class, 'store']);
+        Route::put('/', [VesselLayoutController::class, 'update']);
+        Route::patch('/', [VesselLayoutController::class, 'update']); // partial update
+        Route::delete('/', [VesselLayoutController::class, 'destroy']);
+    });
     //     // Route::get('/', [VesselController::class, 'index'])->middleware('permission:vessel management read');
     //     // Route::get('/{vessel}', [VesselController::class, 'show'])->middleware('permission:vessel management read');
     //     // Route::post('/', [VesselController::class, 'store'])->middleware('permission:vessel management create');
