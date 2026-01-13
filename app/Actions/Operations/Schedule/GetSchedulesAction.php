@@ -41,5 +41,3 @@ class GetSchedulesAction extends Action
         }
     }
 }
-
-
