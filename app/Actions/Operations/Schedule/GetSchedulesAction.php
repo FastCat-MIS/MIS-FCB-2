@@ -11,7 +11,7 @@ class GetSchedulesAction extends Action
     public function execute(array $data = [])
     {
         try {
-            $schedules = Schedule::with(['port.route', 'vessel'])->get();
+            $schedules = Schedule::with(['port', 'vessel'])->get();
 
             $result = $schedules->map(function ($schedule) {
                 return [
@@ -41,3 +41,4 @@ class GetSchedulesAction extends Action
         }
     }
 }
+
