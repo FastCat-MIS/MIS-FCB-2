@@ -37,4 +37,11 @@ class Port extends Model
     {
         return $this->hasMany(Route::class, 'port_b_id', 'port_id');
     }
-}
+
+    // Added this line of code for vessel update to work
+    public function route()
+    {
+        return $this->belongsTo(\App\Models\Operations\Route::class, 'route_id', 'route_id');
+    }
+
+    }
