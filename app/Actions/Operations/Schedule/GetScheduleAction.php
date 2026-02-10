@@ -32,6 +32,7 @@ class GetScheduleAction extends Action
                     'status'     => $schedule->status,
                     'created_at' => $schedule->created_at,
                     'updated_at' => $schedule->updated_at,
+                    'visibility' => $schedule->visibility,
                 ]
             ], 'Schedule retrieved successfully.');
         } catch (\Throwable $e) {
