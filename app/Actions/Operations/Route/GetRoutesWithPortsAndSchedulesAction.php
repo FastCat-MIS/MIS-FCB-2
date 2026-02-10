@@ -32,6 +32,7 @@ class GetRoutesWithPortsAndSchedulesAction extends Action
                                     'name' => $sched->vessel->vessel_name,
                                 ] : null,
                                 'status' => $sched->status,
+                                'visibility' => $sched->visibility,
                             ];
                         })->values(),
                     ],
@@ -47,6 +48,7 @@ class GetRoutesWithPortsAndSchedulesAction extends Action
                                     'name' => $sched->vessel->vessel_name,
                                 ] : null,
                                 'status' => $sched->status,
+                                'visibility' => $sched->visibility,
                             ];
                         })->values(),
                     ],
