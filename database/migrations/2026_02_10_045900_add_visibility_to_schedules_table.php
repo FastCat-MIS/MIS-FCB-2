@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::table('schedules', function (Blueprint $table) {
             $table->unsignedTinyInteger('visibility')
                   ->default(7)
-                  ->comment('1=Online, 2=Walk-in, 3=Merchant, 4=Online/Walk-in, 5=Online/Merchant, 6=Walk-in/Merchant, 7=All');
+                  ->comment('0=None, 1=Online, 2=Walk-in, 3=Online/Walk-in, 4=Merchant, 5=Online/Merchant, 6=Merchant/Walk-in, 7=All');
         });
     }
 
