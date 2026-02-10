@@ -19,7 +19,7 @@ class CreateVesselAction extends Action
             'status' => 'sometimes|nullable|string|max:20',
             'accommodations' => 'sometimes|array',
             'accommodations.*.accommodation_id' => 'required_with:accommodations|exists:passenger_accommodations,accommodation_id',
-            'accommodations.*.seats' => 'sometimes|nullable|integer|min:0',
+            'accommodations.*.capacity' => 'sometimes|nullable|integer|min:0',
             'accommodations.*.aircon' => 'sometimes|nullable|boolean',
             'accommodations.*.wifi' => 'sometimes|nullable|boolean',
             'route_id' => 'sometimes|nullable|exists:routes,id',

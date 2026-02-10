@@ -54,7 +54,7 @@ class UpdateVesselAction extends Action
                     'accommodation_id' => $acc['accommodation_id'],
                 ]);
                 $vesselAcc->fill([
-                    'seats' => $acc['seats'] ?? $vesselAcc->seats ?? 0,
+                    'capacity' => $acc['capacity'] ?? $vesselAcc->capacity ?? 0,
                     'aircon' => $acc['aircon'] ?? $vesselAcc->aircon ?? false,
                     'wifi' => $acc['wifi'] ?? $vesselAcc->wifi ?? false,
                 ]);
