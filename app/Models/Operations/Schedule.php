@@ -16,6 +16,7 @@ class Schedule extends Model
         'vessel_id',
         'port_id', // link to port
         'status',
+        'visibility',
     ];
 
     // Schedule belongs to a vessel

@@ -26,9 +26,12 @@ class CreateScheduleAction extends Action
 
             $validated = $validator->validated();
 
-            // ✅ Default status = active
             if (!isset($validated['status'])) {
                 $validated['status'] = 'active';
+            }
+
+            if (!isset($validated['visibility'])) {
+                $validated['visibility'] = 7;
             }
 
             $schedule = Schedule::create($validated);
@@ -50,6 +53,7 @@ class CreateScheduleAction extends Action
                 ] : null,
 
                 'status'     => $schedule->status,
+                'visibility' => $schedule->visibility,
                 'created_at' => $schedule->created_at,
                 'updated_at' => $schedule->updated_at,
             ];

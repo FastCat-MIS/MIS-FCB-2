@@ -22,6 +22,7 @@ class CreateVesselAction extends Action
             'accommodations.*.seats' => 'sometimes|nullable|integer|min:0',
             'accommodations.*.aircon' => 'sometimes|nullable|boolean',
             'accommodations.*.wifi' => 'sometimes|nullable|boolean',
+            'route_id' => 'sometimes|nullable|exists:routes,id',
         ]);
 
         if ($validator->fails()) {
