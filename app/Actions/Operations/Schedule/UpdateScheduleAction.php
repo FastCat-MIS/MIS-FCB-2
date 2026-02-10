@@ -18,7 +18,7 @@ class UpdateScheduleAction extends Action
                 'vessel_id'      => 'sometimes|nullable|exists:vessels,id',
                 'port_id'        => 'sometimes|required|exists:ports,port_id',
                 'status'         => 'sometimes|required|in:active,inactive',
-                'visibility' => 'sometimes|nullable|integer',
+                'visibility' => 'sometimes|nullable',
             ]);
 
             if ($validator->fails()) {

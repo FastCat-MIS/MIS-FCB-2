@@ -29,7 +29,8 @@ class ScheduleController extends Controller
             'departure_time',
             'vessel_id',
             'port_id',
-            'status'
+            'status',
+            'visibility'
         ]));
     }
 
@@ -39,7 +40,8 @@ class ScheduleController extends Controller
             'departure_time',
             'vessel_id',
             'port_id',
-            'status'
+            'status',
+            'visibility'
         ]));
     }
 
