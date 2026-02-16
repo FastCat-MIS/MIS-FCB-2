@@ -6,6 +6,8 @@ use App\Http\Controllers\Marketing\PromoController;
 use App\Http\Controllers\Marketing\BookingController;
 use App\Http\Controllers\Marketing\InstitutionalAccountController; // ✅ Add this line
 use App\Http\Controllers\Marketing\DiscountController;
+use App\Http\Controllers\Marketing\AddOnController;
+
 
 // Marketing domain routes (Rates, Promos, Bookings, Institutional Accounts)
 Route::middleware('jwt.auth')->group(function () {
@@ -18,12 +20,24 @@ Route::middleware('jwt.auth')->group(function () {
         Route::put('/{rate}', [RateController::class, 'update']);
         Route::delete('/{rate}', [RateController::class, 'destroy']);
 
+
+        
     //     // Route::get('/', [RateController::class, 'index'])->middleware('permission:rate management read');
     //     // Route::get('/{rate}', [RateController::class, 'show'])->middleware('permission:rate management read');
     //     // Route::post('/', [RateController::class, 'store'])->middleware('permission:rate management create');
     //     // Route::put('/{rate}', [RateController::class, 'update'])->middleware('permission:rate management update');
     //     // Route::delete('/{rate}', [RateController::class, 'destroy'])->middleware('permission:rate management delete');
     });
+
+    Route::prefix('add-ons')->group(function () {
+        Route::get('/', [AddOnController::class, 'index']);
+        Route::get('/{addOn}', [AddOnController::class, 'show']);
+        Route::post('/', [AddOnController::class, 'store']);
+        Route::put('/{addOn}', [AddOnController::class, 'update']);
+        Route::delete('/{addOn}', [AddOnController::class, 'destroy']);
+    });
+
+
 
     // // Promotions CRUD
     // Route::prefix('promos')->group(function () {

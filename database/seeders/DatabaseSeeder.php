@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             BookingsSeeder::class,
             BookedPassengersSeeder::class,
             ConnectingTripSeeder::class,
+            AddOnsSeeder::class,
         ]);
 
     }
