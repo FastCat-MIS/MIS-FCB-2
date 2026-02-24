@@ -52,24 +52,16 @@ return new class extends Migration {
             $table->softDeletes();
         });
 
-        Schema::table('vehicle_brands', function (Blueprint $table) {
-            $table->softDeletes();
-        });
-
-        Schema::table('vehicle_groups', function (Blueprint $table) {
-            $table->softDeletes();
-        });
-
-        Schema::table('vehicle_types', function (Blueprint $table) {
-            $table->softDeletes();
-        });
-
         Schema::table('vessels', function (Blueprint $table) {
             $table->softDeletes();
         });
         Schema::table('add_ons', function (Blueprint $table) {
             $table->softDeletes();
         });
+        Schema::table('vehicles', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+
     }
 
     public function down(): void
@@ -120,22 +112,13 @@ return new class extends Migration {
             $table->dropSoftDeletes();
         });
 
-        Schema::table('vehicle_brands', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
-
-        Schema::table('vehicle_groups', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
-
-        Schema::table('vehicle_types', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
-
         Schema::table('vessels', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-         Schema::table('add_ons', function (Blueprint $table) {
+        Schema::table('add_ons', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+        Schema::table('vehicles', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
     }

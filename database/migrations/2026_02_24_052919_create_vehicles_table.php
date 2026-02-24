@@ -11,20 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicle_brands', function (Blueprint $table) {
-            $table->id('brand_id');
-            $table->foreignId('type_id')->constrained('vehicle_types', 'type_id')->onDelete('cascade');
-            $table->string('label', 100); // e.g., "Yamaha", "Honda"
+        Schema::create('vehicles', function (Blueprint $table) {
+            $table->id('vehicle_id');
+            $table->tinyInteger('vehicle_type');
+            $table->string('vehicle_class');
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicle_brands');
+        Schema::dropIfExists('vehicles');
     }
 };
