@@ -52,18 +52,6 @@ return new class extends Migration {
             $table->softDeletes();
         });
 
-        Schema::table('vehicle_brands', function (Blueprint $table) {
-            $table->softDeletes();
-        });
-
-        Schema::table('vehicle_groups', function (Blueprint $table) {
-            $table->softDeletes();
-        });
-
-        Schema::table('vehicle_types', function (Blueprint $table) {
-            $table->softDeletes();
-        });
-
         Schema::table('vessels', function (Blueprint $table) {
             $table->softDeletes();
         });
@@ -117,18 +105,6 @@ return new class extends Migration {
         });
 
         Schema::table('schedules', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
-
-        Schema::table('vehicle_brands', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
-
-        Schema::table('vehicle_groups', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
-
-        Schema::table('vehicle_types', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
 
