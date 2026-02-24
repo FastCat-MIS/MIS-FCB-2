@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Operations\RouteController;
 use App\Http\Controllers\Operations\ScheduleController;
+use App\Http\Controllers\Operations\VehicleController;
 // use App\Http\Controllers\Operations\Vehicles\VesselController;
 use App\Http\Controllers\Operations\Passengers\PassengerCategoryController;
 use App\Http\Controllers\Operations\Passengers\PassengerAccommodationController;
@@ -124,19 +125,19 @@ Route::middleware('jwt.auth')->group(function () {
     });
 
     // Vehicle  CRUD
-    // Route::prefix('vehicle-groups')->group(function () {
-    //     Route::get('/', [VehicleGroupController::class, 'index']);
-    //     Route::get('/{vehicleGroup}', [VehicleGroupController::class, 'show']);
-    //     Route::post('/', [VehicleGroupController::class, 'store']);
-    //     Route::put('/{vehicleGroup}', [VehicleGroupController::class, 'update']);
-    //     Route::delete('/{vehicleGroup}', [VehicleGroupController::class, 'destroy']);
+    Route::prefix('vehicle')->group(function () {
+        Route::get('/', [VehicleController::class, 'index']);
+        Route::get('/{vehicleId}', [VehicleController::class, 'show']);
+        Route::post('/', [VehicleController::class, 'store']);
+        Route::put('/{vehicleId}', [VehicleController::class, 'update']);
+        Route::delete('/{vehicleId}', [VehicleController::class, 'destroy']);
 
-        // Route::get('/', [VehicleGroupController::class, 'index'])->middleware('permission:vehicle group read');
-        // Route::get('/{vehicleGroup}', [VehicleGroupController::class, 'show'])->middleware('permission:vehicle group read');
-        // Route::post('/', [VehicleGroupController::class, 'store'])->middleware('permission:vehicle group create');
-        // Route::put('/{vehicleGroup}', [VehicleGroupController::class, 'update'])->middleware('permission:vehicle group update');
-        // Route::delete('/{vehicleGroup}', [VehicleGroupController::class, 'destroy'])->middleware('permission:vehicle group delete');
-    // });
+        // Route::get('/', [VehicleController::class, 'index'])->middleware('permission:vehicle read');
+        // Route::get('/{vehicleId}', [VehicleController::class, 'show'])->middleware('permission:vehicle read');
+        // Route::post('/', [VehicleController::class, 'store'])->middleware('permission:vehicle create');
+        // Route::put('/{vehicleId}', [VehicleController::class, 'update'])->middleware('permission:vehicle update');
+        // Route::delete('/{vehicleId}', [VehicleController::class, 'destroy'])->middleware('permission:vehicle delete');
+    });
 
 
 
