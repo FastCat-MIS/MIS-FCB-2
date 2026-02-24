@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id('vehicle_id');
-            $table->string('vehicle_type');
+            $table->tinyInteger('vehicle_type');
             $table->string('vehicle_class');
             $table->timestamps();
         });

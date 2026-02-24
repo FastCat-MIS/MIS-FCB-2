@@ -17,7 +17,7 @@ Tables
 
 Variables
   1. vehicle_id => int
-  2. vehicle_type => string
+  2. vehicle_type => tinyInteger
   3. vehicle_class => string
 
 Model

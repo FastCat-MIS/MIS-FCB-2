@@ -13,7 +13,7 @@ class UpdateVehicleAction extends Action
     public function execute(int $vehicleId, array $data)
     {
         $validator = Validator::make($data, [
-            'vehicle_type'  => 'required|string|max:50',
+            "vehicle_type" => 'required|integer|min:1',
             'vehicle_class' => 'required|string|max:50',
         ]);
 
