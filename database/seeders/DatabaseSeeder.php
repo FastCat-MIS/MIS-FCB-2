@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             BookedPassengersSeeder::class,
             ConnectingTripSeeder::class,
             AddOnsSeeder::class,
+            VehiclesSeeder::class,
+            VehicleRatesSeeder::class,
         ]);
 
     }

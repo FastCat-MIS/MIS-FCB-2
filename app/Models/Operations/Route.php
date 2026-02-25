@@ -5,6 +5,7 @@ namespace App\Models\Operations;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Marketing\Rate;
+use App\Models\Marketing\VehicleRate;
 
 class Route extends Model
 {
@@ -30,5 +31,10 @@ class Route extends Model
     public function rates()
     {
         return $this->hasMany(Rate::class, 'route_id', 'route_id');
+    }
+
+    public function vehicleRates()
+    {
+        return $this->hasMany(VehicleRate::class,'route_id','route_id');
     }
 }
