@@ -7,7 +7,7 @@ use App\Http\Controllers\Marketing\BookingController;
 use App\Http\Controllers\Marketing\InstitutionalAccountController; // ✅ Add this line
 use App\Http\Controllers\Marketing\DiscountController;
 use App\Http\Controllers\Marketing\AddOnController;
-
+use App\Http\Controllers\Marketing\VehicleRateController;
 
 // Marketing domain routes (Rates, Promos, Bookings, Institutional Accounts)
 Route::middleware('jwt.auth')->group(function () {
@@ -29,6 +29,24 @@ Route::middleware('jwt.auth')->group(function () {
     //     // Route::delete('/{rate}', [RateController::class, 'destroy'])->middleware('permission:rate management delete');
     });
 
+    // Vehicle Rates CRUD
+
+    Route::prefix('vehicle-rates')->group(function () {
+        Route::get('/', [VehicleRateController::class, 'index']);
+        Route::get('/{vehicleRateId}', [VehicleRateController::class, 'show']);
+        Route::post('/', [VehicleRateController::class, 'store']);
+        Route::put('/{vehicleRateId}', [VehicleRateController::class, 'update']);
+        Route::delete('/{vehicleRateId}', [VehicleRateController::class, 'destroy']);
+
+    //     // Route::get('/', [VehicleRateController::class, 'index'])->middleware('permission:vehicle rate management read');
+    //     // Route::get('/{vehicleRateId}', [VehicleRateController::class, 'show'])->middleware('permission:vehicle rate management read');
+    //     // Route::post('/', [VehicleRateController::class, 'store'])->middleware('permission:vehicle rate management create');
+    //     // Route::put('/{vehicleRateId}', [VehicleRateController::class, 'update'])->middleware('permission:vehicle rate management update');
+    //     // Route::delete('/{vehicleRateId}', [VehicleRateController::class, 'destroy'])->middleware('permission:vehicle rate management delete');
+    });
+
+    // Add Ons CRUD 
+
     Route::prefix('add-ons')->group(function () {
         Route::get('/', [AddOnController::class, 'index']);
         Route::get('/{addOn}', [AddOnController::class, 'show']);
@@ -36,7 +54,6 @@ Route::middleware('jwt.auth')->group(function () {
         Route::put('/{addOn}', [AddOnController::class, 'update']);
         Route::delete('/{addOn}', [AddOnController::class, 'destroy']);
     });
-
 
 
     // // Promotions CRUD
