@@ -125,7 +125,7 @@ Route::middleware('jwt.auth')->group(function () {
     });
 
     // Vehicle  CRUD
-    Route::prefix('vehicle')->group(function () {
+    Route::prefix('vehicles')->group(function () {
         Route::get('/', [VehicleController::class, 'index']);
         Route::get('/{vehicleId}', [VehicleController::class, 'show']);
         Route::post('/', [VehicleController::class, 'store']);
