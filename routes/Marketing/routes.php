@@ -49,6 +49,7 @@ Route::middleware('jwt.auth')->group(function () {
     Route::prefix('accommodation-rates')->group(function () {
         Route::get('/', [AccommodationRateController::class, 'index']);
         Route::get('/{accRateId}', [AccommodationRateController::class, 'show']);
+        Route::get('/route/{routeId}', [AccommodationRateController::class, 'showRoute']);
         Route::post('/', [AccommodationRateController::class, 'store']);
         Route::put('/{accRateId}', [AccommodationRateController::class, 'update']);
         Route::delete('/{accRateId}', [AccommodationRateController::class, 'destroy']);

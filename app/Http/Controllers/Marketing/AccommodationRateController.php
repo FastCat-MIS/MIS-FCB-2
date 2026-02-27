@@ -1,57 +1,62 @@
 <?php
+// app/Http/Controllers/Marketing/RateController.php
 
 namespace App\Http\Controllers\Marketing;
 
+use App\Actions\Marketing\Rate\AccommodationRates\GetAccommodationRatesAction;
+use App\Actions\Marketing\Rate\AccommodationRates\GetAccommodationRateAction;
+use App\Actions\Marketing\Rate\AccommodationRates\GetRouteAccRatesAction;
+use App\Actions\Marketing\Rate\AccommodationRates\UpdateAccommodationRateAction;
 use App\Http\Controllers\Controller;
+
 use App\Models\Marketing\AccommodationRate;
-use App\Actions\Marketing\Rate\AccommodationRates\CreateAccommodationRateAction;
 use Illuminate\Http\Request;
 
 class AccommodationRateController extends Controller
 {
-      /**
-     * Display a listing of addOns.
+    /**
+     * Display a listing of rates.
      */
-    // public function index(GetAddOnsAction $getAddOnsAction)
+    public function index(GetAccommodationRatesAction $action)
+    {
+        return $action->execute();
+    }
+
+    /**
+     * Display the specified rate.
+     */
+    public function show($accRateId, GetAccommodationRateAction $action)
+    {
+        return $action->execute($accRateId);
+    }
+
+    public function showRoute($routeId, GetRouteAccRatesAction $action)
+    {
+        return $action->execute($routeId);
+    }
+
+    /**
+     * Store a newly created rate.
+     */
+    
+    // public function store(Request $request, CreateRateAction $createRateAction)
     // {
-    //     return $getAddOnsAction->execute();
+    //     return $createRateAction->execute($request->all());
     // }
 
     /**
-     * Display the specified addOn.
+     * Update the specified rate.
      */
-
-    // public function show(AddOn $addOn, GetAddOnAction $getAddOnAction)
-    // {
-    //     return $getAddOnAction->execute($addOn);
-    // }
-
-    // /**
-    //  * Store a newly created addOn.
-    //  */
-
-    public function store(Request $request, CreateAccommodationRateAction $action)
+    public function update(Request $request, $accRate, UpdateAccommodationRateAction $action)
     {
-        return $action->execute($request->all());
+        return $action->execute($accRate, $request->all());
     }
 
-    // /**
-    //  * Update the specified addOn.
-    //  */
-
-    // public function update(Request $request, AddOn $addOn, UpdateAddOnAction $updateAddOnAction)
+    /**
+     * Remove the specified rate.
+     */
+    // public function destroy(Rate $rate, DeleteRateAction $deleteRateAction)
     // {
-    //     return $updateAddOnAction->execute($addOn, $request->all());
+    //     return $deleteRateAction->execute($rate);
     // }
-
-    // /**
-    //  * Remove the specified addOn.
-    //  */
-
-
-    // public function destroy(AddOn $addOn, DeleteAddOnAction $deleteAddOnAction)
-    // {
-    //     return $deleteAddOnAction->execute($addOn);
-    // }
-
 }
