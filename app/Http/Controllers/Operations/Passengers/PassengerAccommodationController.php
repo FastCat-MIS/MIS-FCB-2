@@ -4,66 +4,39 @@ namespace App\Http\Controllers\Operations\Passengers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Operations\PassengerAccommodation;
+use App\Actions\Operations\Passengers\PassengerAccommodation\CreatePassengerAccommodationAction;
 use App\Actions\Operations\Passengers\PassengerAccommodation\GetPassengerAccommodationsAction;
 use App\Actions\Operations\Passengers\PassengerAccommodation\GetPassengerAccommodationAction;
-use App\Actions\Operations\Passengers\PassengerAccommodation\CreatePassengerAccommodationAction;
 use App\Actions\Operations\Passengers\PassengerAccommodation\UpdatePassengerAccommodationAction;
-use App\Actions\Operations\Passengers\PassengerAccommodation\DeletePassengerAccommodationAction;
 
 class PassengerAccommodationController extends Controller
 {
-    public function index()
+    public function index(GetPassengerAccommodationsAction $action )
     {
-        $accommodations = PassengerAccommodation::all();
-        return response()->json([
-            'data' => $accommodations,
-            'message' => 'Passenger accommodations retrieved successfully.',
-        ]);
+        return $action->execute();
     }
 
-    public function show(PassengerAccommodation $passengerAccommodation)
+    public function show($accommodationId, GetPassengerAccommodationAction $action)
     {
-        return response()->json([
-            'data' => $passengerAccommodation,
-            'message' => 'Passenger accommodation retrieved successfully.',
-        ]);
+        return $action->execute($accommodationId);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, CreatePassengerAccommodationAction $action)
     {
-        $validated = $request->validate([
-            'accommodation_name' => 'required|string|max:255',
-        ]);
-
-        $accommodation = PassengerAccommodation::create($validated);
-
-        return response()->json([
-            'data' => $accommodation,
-            'message' => 'Passenger accommodation created successfully.',
-        ], 201);
+        return $action->execute($request->all());
     }
 
-    public function update(Request $request, PassengerAccommodation $passengerAccommodation)
+    public function update(Request $request, int $accommodationId, UpdatePassengerAccommodationAction $action)
     {
-        $validated = $request->validate([
-            'accommodation_name' => 'required|string|max:255',
-        ]);
-
-        $passengerAccommodation->update($validated);
-
-        return response()->json([
-            'data' => $passengerAccommodation,
-            'message' => 'Passenger accommodation updated successfully.',
-        ]);
+        return $action->execute($accommodationId, $request->all());
     }
 
-    public function destroy(PassengerAccommodation $passengerAccommodation)
-    {
-        $passengerAccommodation->delete();
+    // public function destroy(PassengerAccommodation $passengerAccommodation)
+    // {
+    //     $passengerAccommodation->delete();
 
-        return response()->json([
-            'message' => 'Passenger accommodation deleted successfully.',
-        ]);
-    }
+    //     return response()->json([
+    //         'message' => 'Passenger accommodation deleted successfully.',
+    //     ]);
+    // }
 }

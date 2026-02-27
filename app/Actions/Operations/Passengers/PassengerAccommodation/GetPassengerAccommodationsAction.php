@@ -1,19 +1,21 @@
 <?php
-// app/Actions/Operations/Passengers/PassengerAccommodation/GetPassengerAccommodationsAction.php
 
 namespace App\Actions\Operations\Passengers\PassengerAccommodation;
 
 use App\Actions\Action;
 use App\Models\Operations\PassengerAccommodation;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class GetPassengerAccommodationsAction extends Action
 {
     public function execute()
     {
         $accommodations = PassengerAccommodation::all();
-
-        return $this->success([
-            'passengerAccommodations' => $accommodations,
-        ], 'Passenger Accommodations retrieved successfully');
+        return response()->json([
+          'data' => $accommodations,
+          'message' => 'Passenger accommodations retrieved successfully.',
+        ]);
     }
 }

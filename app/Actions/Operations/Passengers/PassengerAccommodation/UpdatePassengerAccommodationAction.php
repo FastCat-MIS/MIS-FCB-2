@@ -1,26 +1,38 @@
 <?php
-// app/Actions/Operations/Passengers/PassengerAccommodation/UpdatePassengerAccommodationAction.php
 
 namespace App\Actions\Operations\Passengers\PassengerAccommodation;
 
 use App\Actions\Action;
 use App\Models\Operations\PassengerAccommodation;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use RuntimeException;
 
 class UpdatePassengerAccommodationAction extends Action
 {
-    public function execute(PassengerAccommodation $accommodation, array $data)
+    public function execute(int $accommodationId, array $data)
     {
         $validator = Validator::make($data, [
-            'accomodation_name' => 'sometimes|required|string|max:255',
+            "accommodation_name" => 'required|string',
         ]);
 
-        $validator->validate(); // Let global handler catch ValidationException
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
 
-        $accommodation->update($data);
+        try {
+            $accommodation = PassengerAccommodation::findOrFail($accommodationId);
 
-        return $this->success([
-            'passengerAccommodation' => $accommodation->fresh(),
-        ], 'Passenger Accommodation updated successfully');
+            $accommodation->update($validator->validated());
+
+            return $this->success([
+                'accommodation' => $accommodation
+            ], 'Accommodation updated successfully');
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw new RuntimeException("Accommodation with ID {$accommodationId} not found.");
+        } catch (\Exception $e) {
+            throw new RuntimeException('Failed to update accommodation.');
+        }
     }
 }
