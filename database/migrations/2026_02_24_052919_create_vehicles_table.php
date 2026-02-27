@@ -16,6 +16,8 @@ return new class extends Migration
             $table->tinyInteger('vehicle_type');
             $table->string('vehicle_class');
             $table->timestamps();
+
+             $table->unique(['vehicle_type', 'vehicle_class']);
         });
     }
 
