@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Marketing\AccommodationRateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Marketing\RateController;
 use App\Http\Controllers\Marketing\PromoController;
@@ -44,6 +45,22 @@ Route::middleware('jwt.auth')->group(function () {
     //     // Route::put('/{vehicleRateId}', [VehicleRateController::class, 'update'])->middleware('permission:vehicle rate management update');
     //     // Route::delete('/{vehicleRateId}', [VehicleRateController::class, 'destroy'])->middleware('permission:vehicle rate management delete');
     });
+
+    Route::prefix('accommodation-rates')->group(function () {
+        Route::get('/', [AccommodationRateController::class, 'index']);
+        Route::get('/{accRateId}', [AccommodationRateController::class, 'show']);
+        Route::post('/', [AccommodationRateController::class, 'store']);
+        Route::put('/{accRateId}', [AccommodationRateController::class, 'update']);
+        Route::delete('/{accRateId}', [AccommodationRateController::class, 'destroy']);
+
+    //     // Route::get('/', [AccommodationRateController::class, 'index'])->middleware('permission:accommodation rate management read');
+    //     // Route::get('/{accRateId}', [AccommodationRateController::class, 'show'])->middleware('permission:accommodation rate management read');
+    //     // Route::post('/', [AccommodationRateController::class, 'store'])->middleware('permission:accommodation rate management create');
+    //     // Route::put('/{accRateId}', [AccommodationRateController::class, 'update'])->middleware('permission:accommodation rate management update');
+    //     // Route::delete('/{accRateId}', [AccommodationRateController::class, 'destroy'])->middleware('permission:accommodation rate management delete');
+    });
+
+
 
     // Add Ons CRUD 
 

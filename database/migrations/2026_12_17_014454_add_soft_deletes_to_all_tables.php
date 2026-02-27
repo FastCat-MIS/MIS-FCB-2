@@ -64,6 +64,9 @@ return new class extends Migration {
         Schema::table('vehicle_rates', function (Blueprint $table) {
             $table->softDeletes();
         });
+        Schema::table('accommodation_rates', function (Blueprint $table) {
+            $table->softDeletes();
+        });
 
 
     }
@@ -126,6 +129,9 @@ return new class extends Migration {
             $table->dropSoftDeletes();
         });
         Schema::table('vehicle_rates', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+        Schema::table('accommodation_rates', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
 
