@@ -13,23 +13,6 @@ use App\Http\Controllers\Marketing\VehicleRateController;
 // Marketing domain routes (Rates, Promos, Bookings, Institutional Accounts)
 Route::middleware('jwt.auth')->group(function () {
 
-    // Rates CRUD
-    Route::prefix('rates')->group(function () {
-        Route::get('/', [RateController::class, 'index']);
-        Route::get('/{rate}', [RateController::class, 'show']);
-        Route::post('/', [RateController::class, 'store']);
-        Route::put('/{rate}', [RateController::class, 'update']);
-        Route::delete('/{rate}', [RateController::class, 'destroy']);
-
-
-        
-    //     // Route::get('/', [RateController::class, 'index'])->middleware('permission:rate management read');
-    //     // Route::get('/{rate}', [RateController::class, 'show'])->middleware('permission:rate management read');
-    //     // Route::post('/', [RateController::class, 'store'])->middleware('permission:rate management create');
-    //     // Route::put('/{rate}', [RateController::class, 'update'])->middleware('permission:rate management update');
-    //     // Route::delete('/{rate}', [RateController::class, 'destroy'])->middleware('permission:rate management delete');
-    });
-
     // Vehicle Rates CRUD
 
     Route::prefix('vehicle-rates')->group(function () {
@@ -46,6 +29,8 @@ Route::middleware('jwt.auth')->group(function () {
     //     // Route::delete('/{vehicleRateId}', [VehicleRateController::class, 'destroy'])->middleware('permission:vehicle rate management delete');
     });
 
+    // Accommodation Rates CRUD 
+
     Route::prefix('accommodation-rates')->group(function () {
         Route::get('/', [AccommodationRateController::class, 'index']);
         Route::get('/{accRateId}', [AccommodationRateController::class, 'show']);
@@ -60,7 +45,6 @@ Route::middleware('jwt.auth')->group(function () {
     //     // Route::put('/{accRateId}', [AccommodationRateController::class, 'update'])->middleware('permission:accommodation rate management update');
     //     // Route::delete('/{accRateId}', [AccommodationRateController::class, 'destroy'])->middleware('permission:accommodation rate management delete');
     });
-
 
 
     // Add Ons CRUD 
