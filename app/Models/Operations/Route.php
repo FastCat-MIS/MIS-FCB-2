@@ -29,11 +29,6 @@ class Route extends Model
         return $this->belongsTo(Port::class, 'port_b_id', 'port_id');
     }
 
-    public function rates()
-    {
-        return $this->hasMany(Rate::class, 'route_id', 'route_id');
-    }
-
     public function accommodationRates()
     {
         return $this->hasMany(AccommodationRate::class, 'route_id', 'route_id');
