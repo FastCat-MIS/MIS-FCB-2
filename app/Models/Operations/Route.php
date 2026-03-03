@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Marketing\Rate;
 use App\Models\Marketing\AccommodationRate;
+use App\Models\Marketing\Discounts\IADiscount;
 use App\Models\Marketing\VehicleRate;
 
 class Route extends Model
@@ -33,9 +34,13 @@ class Route extends Model
     {
         return $this->hasMany(AccommodationRate::class, 'route_id', 'route_id');
     }
-
     public function vehicleRates()
     {
         return $this->hasMany(VehicleRate::class,'route_id','route_id');
+    }
+
+    public function iaDiscounts()
+    {
+        return $this->hasMany(IADiscount::class, 'route_id', 'route_id');
     }
 }

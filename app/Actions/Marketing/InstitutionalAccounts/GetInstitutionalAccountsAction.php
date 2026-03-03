@@ -8,7 +8,7 @@ use Illuminate\Database\QueryException;
 
 class GetInstitutionalAccountsAction extends Action
 {
-    public function execute(array $data = [])
+    public function execute()
     {
         try {
             $accounts = InstitutionalAccount::all();

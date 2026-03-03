@@ -9,7 +9,6 @@ use App\Actions\Marketing\InstitutionalAccounts\GetInstitutionalAccountAction;
 use App\Actions\Marketing\InstitutionalAccounts\CreateInstitutionalAccountAction;
 use App\Actions\Marketing\InstitutionalAccounts\UpdateInstitutionalAccountAction;
 use App\Actions\Marketing\InstitutionalAccounts\DeleteInstitutionalAccountAction;
-use App\Models\Marketing\InstitutionalAccount;
 
 class InstitutionalAccountController extends Controller
 {
@@ -18,9 +17,9 @@ class InstitutionalAccountController extends Controller
         return $action->execute();
     }
 
-    public function show(InstitutionalAccount $institutionalAccount, GetInstitutionalAccountAction $action)
+    public function show($iaId, GetInstitutionalAccountAction $action)
     {
-        return $action->execute($institutionalAccount);
+        return $action->execute($iaId);
     }
 
     public function store(Request $request, CreateInstitutionalAccountAction $action)
@@ -28,13 +27,13 @@ class InstitutionalAccountController extends Controller
         return $action->execute($request->all());
     }
 
-    public function update(Request $request, InstitutionalAccount $institutionalAccount, UpdateInstitutionalAccountAction $action)
+    public function update(Request $request, $iaId, UpdateInstitutionalAccountAction $action)
     {
-        return $action->execute($institutionalAccount, $request->all());
+        return $action->execute($iaId, $request->all());
     }
 
-    public function destroy(InstitutionalAccount $institutionalAccount, DeleteInstitutionalAccountAction $action)
+    public function destroy($iaId, DeleteInstitutionalAccountAction $action)
     {
-        return $action->execute($institutionalAccount);
+        return $action->execute($iaId);
     }
 }

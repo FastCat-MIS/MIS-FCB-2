@@ -14,7 +14,6 @@ use App\Http\Controllers\Operations\BookedPassengerController;
 use App\Http\Controllers\Operations\ConnectingTripController;
 use App\Http\Controllers\Operations\VesselController;
 use App\Http\Controllers\Operations\VesselLayoutController;
-use App\Http\Controllers\Marketing\RouteRateController;
 
 // Operations domain routes
 Route::middleware('jwt.auth')->group(function () {
@@ -27,11 +26,6 @@ Route::middleware('jwt.auth')->group(function () {
         Route::post('/', [RouteController::class, 'store']);
         Route::put('/{route}', [RouteController::class, 'update']);
         Route::delete('/{route}', [RouteController::class, 'destroy']);
-
-        Route::get('{route}/rates', [RouteRateController::class, 'index']);
-        Route::post('{route}/rates', [RouteRateController::class, 'store']);
-        Route::put('{route}/rates', [RouteRateController::class, 'update']);
-        Route::delete('{route}/rates/{rate}', [RouteRateController::class, 'destroy']);
 
         // Middleware ready-to-enable comments
         // Route::get('/', [RouteController::class, 'index'])->middleware('permission:route management read');

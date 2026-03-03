@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             PassengerTypesTableSeeder::class,
             PassengerCategoriesTableSeeder::class,
             PassengerAccommodationSeeder::class,
-            InstitutionalAccountsTableSeeder::class,
+            InstitutionalAccountsSeeder::class,
             DiscountsSeeder::class,
             BookingsSeeder::class,
             BookedPassengersSeeder::class,
