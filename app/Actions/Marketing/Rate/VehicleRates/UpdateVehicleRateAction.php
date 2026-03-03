@@ -34,8 +34,6 @@ class UpdateVehicleRateAction extends Action
   private function validate(array $data): array
     {
         return Validator::make($data, [
-            'vehicle_id'     => 'required|integer|exists:vehicles,vehicle_id',
-            'route_id'       => 'required|integer|exists:routes,route_id',
             'vehicle_rate'   => 'required|numeric|min:0',
             'effective_date' => 'nullable|date',
             'status'         => 'nullable|in:active,inactive',

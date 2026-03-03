@@ -18,6 +18,7 @@ Route::middleware('jwt.auth')->group(function () {
     Route::prefix('vehicle-rates')->group(function () {
         Route::get('/', [VehicleRateController::class, 'index']);
         Route::get('/{vehicleRateId}', [VehicleRateController::class, 'show']);
+        Route::get('/route/{routeId}', [VehicleRateController::class, 'showRoute']);
         Route::post('/', [VehicleRateController::class, 'store']);
         Route::put('/{vehicleRateId}', [VehicleRateController::class, 'update']);
         Route::delete('/{vehicleRateId}', [VehicleRateController::class, 'destroy']);

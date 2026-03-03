@@ -9,6 +9,7 @@ use App\Actions\Marketing\Rate\VehicleRates\GetVehicleRateAction;
 use App\Actions\Marketing\Rate\VehicleRates\GetVehicleRatesAction;
 use App\Actions\Marketing\Rate\VehicleRates\UpdateVehicleRateAction;
 use App\Actions\Marketing\Rate\VehicleRates\DeleteVehicleRateAction;
+use App\Actions\Marketing\Rate\VehicleRates\GetRouteVehicleRatesAction;
 use Illuminate\Http\Request;
 
 class VehicleRateController extends Controller
@@ -27,6 +28,12 @@ class VehicleRateController extends Controller
     public function show($vehicleRateId, GetVehicleRateAction $getVehicleRateAction)
     {
         return $getVehicleRateAction->execute($vehicleRateId);
+    }
+
+
+    public function showRoute($routeId, GetRouteVehicleRatesAction $action)
+    {
+        return $action->execute($routeId);
     }
 
     /**
