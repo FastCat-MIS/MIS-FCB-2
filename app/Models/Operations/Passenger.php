@@ -4,7 +4,7 @@ namespace App\Models\Operations;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Marketing\Discount;
+use App\Models\Marketing\Discounts\Discount;
 use Illuminate\Database\Eloquent\SoftDeletes;
 class Passenger extends Model
 {

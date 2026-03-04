@@ -2,6 +2,7 @@
 
 namespace App\Models\Operations;
 
+use App\Models\Marketing\Discounts\Discount;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -32,11 +33,11 @@ class BookedPassenger extends Model
 
     public function discount()
     {
-        return $this->belongsTo(\App\Models\Marketing\Discount::class, 'discount_id', 'discount_id');
+        return $this->belongsTo(Discount::class, 'discount_id', 'discount_id');
     }
 
     public function accommodation()
     {
-        return $this->belongsTo(\App\Models\Operations\PassengerAccommodation::class, 'accommodation_id', 'accommodation_id');
+        return $this->belongsTo(PassengerAccommodation::class, 'accommodation_id', 'accommodation_id');
     }
 }

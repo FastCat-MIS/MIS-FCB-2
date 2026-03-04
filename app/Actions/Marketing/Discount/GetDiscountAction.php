@@ -3,7 +3,7 @@
 namespace App\Actions\Marketing\Discount;
 
 use App\Actions\Action;
-use App\Models\Marketing\Discount;
+use App\Models\Marketing\Discounts\Discount;
 use RuntimeException;
 
 class GetDiscountAction extends Action

@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Operations\BookedPassenger;
 use App\Models\Operations\Booking;
-use App\Models\Marketing\Discount;
+use App\Models\Marketing\Discounts\Discount;
 use App\Models\Operations\PassengerAccommodation;
 
 class BookedPassengersSeeder extends Seeder
