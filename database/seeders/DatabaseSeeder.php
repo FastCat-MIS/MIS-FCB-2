@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             AddOnsSeeder::class,
             VehiclesSeeder::class,
             VehicleRatesSeeder::class,
-            AccommodationRatesSeeder::class
+            AccommodationRatesSeeder::class,
+            IADiscountsSeeder::class,
         ]);
 
     }

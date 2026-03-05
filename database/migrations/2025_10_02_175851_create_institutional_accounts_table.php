@@ -24,7 +24,6 @@ return new class extends Migration
             $table->timestamp('effective_date')->nullable();
             $table->timestamp('eoc_date')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Marketing;
 
 use App\Http\Controllers\Controller;
-use App\Models\Marketing\Discount;
+use App\Models\Marketing\Discounts\Discount;
 use Illuminate\Http\Request;
 use App\Actions\Marketing\Discount\GetDiscountsAction;
 use App\Actions\Marketing\Discount\GetDiscountAction;
