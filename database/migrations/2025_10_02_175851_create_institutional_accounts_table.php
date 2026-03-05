@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('contact_number', 20)->nullable();
             $table->string('contact_person', 20)->nullable();
             $table->string('area', 150)->nullable();
-            $table->string('mode_of_payment', 20)->nullable();
-            $table->string('type_of_payment', 100)->nullable();
+            $table->string('payment_mode', 20)->nullable();
+            $table->string('payment_type', 100)->nullable();
             $table->string('status', 100)->default('inactive')->nullable();
             $table->timestamp('effective_date')->nullable();
             $table->timestamp('eoc_date')->nullable();

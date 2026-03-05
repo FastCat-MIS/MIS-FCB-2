@@ -117,7 +117,6 @@ Route::middleware('jwt.auth')->group(function () {
     //     // Route::post('/', [InstitutionalAccountController::class, 'store'])->middleware('permission:institutional account management create');
     //     // Route::put('/{institutionalAccount}', [InstitutionalAccountController::class, 'update'])->middleware('permission:institutional account management update');
     //     // Route::delete('/{institutionalAccount}', [InstitutionalAccountController::class, 'destroy'])->middleware('permission:institutional account management delete');
-
     });
 
 });

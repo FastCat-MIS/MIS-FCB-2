@@ -12,7 +12,7 @@ class CreateInstitutionalAccountAction extends Action
     public function execute(array $data)
     {
         $validated = $this->validate($data);
-        $validated['password'] = Hash::make($validated['password']);
+        $validated['password'] = Hash::make('Fastcat_01');
         $institutionalAccount = InstitutionalAccount::create($validated);
 
         return $this->success([
@@ -27,12 +27,11 @@ class CreateInstitutionalAccountAction extends Action
             'image' => 'nullable|string|max:255',
             'address'=> 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:institutional_accounts,email',
-            'password' => 'required|string|min:8|confirmed',
             'contact_number' => 'nullable|string|max:255',
             'contact_person' => 'nullable|string|max:255',
             'area' => 'nullable|string|max:255',
-            'mode_of_payment' => 'required|string|max:255',
-            'type_of_payment' => 'required|string|max:255',
+            'payment_mode' => 'required|string|max:255',
+            'payment_type' => 'required|string|max:255',
             'status' => 'nullable|in:active,inactive',
             'effective_date' => 'nullable|date',
             'eoc_date' => 'nullable|date',
