@@ -9,6 +9,8 @@ use App\Actions\Marketing\InstitutionalAccounts\GetInstitutionalAccountAction;
 use App\Actions\Marketing\InstitutionalAccounts\CreateInstitutionalAccountAction;
 use App\Actions\Marketing\InstitutionalAccounts\UpdateInstitutionalAccountAction;
 use App\Actions\Marketing\InstitutionalAccounts\DeleteInstitutionalAccountAction;
+use App\Actions\Marketing\InstitutionalAccounts\ResetIAPasswordAction;
+
 
 class InstitutionalAccountController extends Controller
 {
@@ -33,6 +35,11 @@ class InstitutionalAccountController extends Controller
     }
 
     public function destroy($iaId, DeleteInstitutionalAccountAction $action)
+    {
+        return $action->execute($iaId);
+    }
+
+    public function reset($iaId, ResetIAPasswordAction $action)
     {
         return $action->execute($iaId);
     }

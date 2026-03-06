@@ -6,7 +6,7 @@ use App\Actions\Action;
 use App\Models\Marketing\Discounts\IADiscount;
 use Illuminate\Support\Facades\Validator;
 
-class CreateIADiscountsAction extends Action
+class CreateIADiscountAction extends Action
 {
     public function execute(array $data)
     {
@@ -14,17 +14,20 @@ class CreateIADiscountsAction extends Action
 
         $iaDiscount = IADiscount::create($validated);
 
-        return $this->success([
+          return $this->success([
             'data' => $iaDiscount,
-        ], 'IA discount created successfully', 201);
+        ], 'IA Discount created successfully', 201);
+
     }
 
     private function validate(array $data): array
     {
         return Validator::make($data, [
-            'vehicle_id'     => 'required|integer|exists:vehicles,vehicle_id',
+            'ia_id' => 'required|integer|exists:institutional_accounts,ia_id',
             'route_id'       => 'required|integer|exists:routes,route_id',
-            'vehicle_rate'   => 'required|numeric|min:0',
+            'discount_name'   => 'required|string|max:255',
+            'discount_value'   => 'required|numeric|min:0',
+            'discount_type'   => 'required|string|max:255',
             'effective_date' => 'nullable|date',
             'status'         => 'nullable|in:active,inactive',
         ])->validate();

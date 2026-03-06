@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Actions\Marketing\InstitutionalAccounts\Discounts\GetIADiscountsAction;
 use App\Actions\Marketing\InstitutionalAccounts\Discounts\GetIADiscountAction;
-use App\Actions\Marketing\InstitutionalAccounts\Discounts\CreateIADiscountsAction;
+use App\Actions\Marketing\InstitutionalAccounts\Discounts\CreateIADiscountAction;
 
 class IADiscountController extends Controller
 {
@@ -20,10 +20,10 @@ class IADiscountController extends Controller
     //     return $action->execute($iaDiscountId);
     // }
 
-    // public function store(Request $request, CreateIADiscountsAction $action)
-    // {
-    //     return $action->execute($request->all());
-    // }
+    public function store(Request $request, CreateIADiscountAction $action)
+    {
+        return $action->execute($request->all());
+    }
 
     // public function update(Request $request, Discount $discount, UpdateDiscountAction $updateDiscountAction)
     // {
