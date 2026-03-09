@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Actions\Marketing\Rate\VehicleRates\CreateVehicleRateAction;
 use App\Actions\Marketing\Rate\VehicleRates\GetVehicleRateAction;
 use App\Actions\Marketing\Rate\VehicleRates\GetVehicleRatesAction;
+
 use App\Actions\Marketing\Rate\VehicleRates\UpdateVehicleRateAction;
 use App\Actions\Marketing\Rate\VehicleRates\DeleteVehicleRateAction;
 use App\Actions\Marketing\Rate\VehicleRates\GetRouteVehicleRatesAction;

@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class GetInstitutionalAccountAction extends Action
 {
-    public function execute(InstitutionalAccount $account)
+    public function execute(int $iaId)
     {
         try {
-            $account->load([]); // Add relationships if needed
+            $institutionalAccount = InstitutionalAccount::findOrFail($iaId);
 
             return $this->success([
-                'institutional_account' => $account,
+                'institutional_account' => $institutionalAccount,
             ], 'Institutional account retrieved successfully');
         } catch (ModelNotFoundException $e) {
             throw new ModelNotFoundException('Institutional account not found.');

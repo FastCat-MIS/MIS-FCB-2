@@ -64,6 +64,12 @@ return new class extends Migration {
         Schema::table('accommodation_rates', function (Blueprint $table) {
             $table->softDeletes();
         });
+        Schema::table('institutional_accounts', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+        Schema::table('ia_discounts', function (Blueprint $table) {
+            $table->softDeletes();
+        });
 
 
     }
@@ -127,6 +133,14 @@ return new class extends Migration {
         Schema::table('accommodation_rates', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
+        Schema::table('institutional_accounts', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+        Schema::table('ia_discounts', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+
+
 
     }
 };

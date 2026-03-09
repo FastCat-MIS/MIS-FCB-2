@@ -4,6 +4,8 @@ namespace App\Actions\Operations\Vehicles;
 
 use App\Actions\Action;
 use App\Models\Operations\Vehicle;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 use RuntimeException;
 
 class GetVehicleAction extends Action
@@ -16,7 +18,7 @@ class GetVehicleAction extends Action
             return $this->success([
                 'vehicle' => $vehicle,
             ], 'Vehicle retrieved successfully');
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             throw new RuntimeException("Vehicle with ID {$vehicleId} not found.");
         } catch (\Exception $e) {
             throw new RuntimeException('Failed to retrieve vehicle.');

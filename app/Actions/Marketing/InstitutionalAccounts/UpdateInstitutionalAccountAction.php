@@ -5,34 +5,51 @@ namespace App\Actions\Marketing\InstitutionalAccounts;
 use App\Actions\Action;
 use App\Models\Marketing\InstitutionalAccount;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UpdateInstitutionalAccountAction extends Action
 {
-    public function execute(InstitutionalAccount $account, array $data)
+    public function execute(int $iaId, array $data)
     {
-        // Manual validation
-        $validator = Validator::make($data, [
+        $institutionalAccount = InstitutionalAccount::findOrFail($iaId);
+        $validated = $this->validate($data, $iaId);
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $institutionalAccount->update($validated);
+
+        return $this->success([
+            'data' => $institutionalAccount,
+        ], 'Institutional account updated successfully', 200);
+    }
+
+    private function validate(array $data, int $iaId): array
+    {
+        return Validator::make($data, [
             'ia_name' => 'sometimes|required|string|max:255',
-            'ia_image' => 'sometimes|required', // Blob or base64 string
-        ]);
-
-        if ($validator->fails()) {
-            // Let global handler catch this (422 response)
-            throw new ValidationException($validator);
-        }
-
-        try {
-            $account->update($data);
-
-            return $this->success([
-                'institutional_account' => $account->fresh(),
-            ], 'Institutional account updated successfully');
-        } catch (QueryException $e) {
-            throw new \RuntimeException('Database error while updating institutional account.');
-        } catch (\Exception $e) {
-            throw new \RuntimeException('Failed to update institutional account.');
-        }
+            'image' => 'nullable|string|max:255',
+            'address'=> 'nullable|string|max:255',
+            'email' => [
+                'sometimes',
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('institutional_accounts', 'email')->ignore($iaId, 'ia_id'),
+            ],
+            'password' => 'nullable|string|min:8|confirmed',
+            'contact_number' => 'nullable|string|max:255',
+            'contact_person' => 'nullable|string|max:255',
+            'area' => 'nullable|string|max:255',
+            'payment_mode' => 'sometimes|required|string|max:255',
+            'payment_type' => 'sometimes|required|string|max:255',
+            'status' => 'nullable|in:active,inactive',
+            'effective_date' => 'nullable|date',
+            'eoc_date' => 'nullable|date',
+        ])->validate();
     }
 }

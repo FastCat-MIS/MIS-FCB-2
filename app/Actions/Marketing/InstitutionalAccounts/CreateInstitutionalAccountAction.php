@@ -5,33 +5,36 @@ namespace App\Actions\Marketing\InstitutionalAccounts;
 use App\Actions\Action;
 use App\Models\Marketing\InstitutionalAccount;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Hash;
 
 class CreateInstitutionalAccountAction extends Action
 {
     public function execute(array $data)
     {
-        // Validate input
-        $validator = Validator::make($data, [
+        $validated = $this->validate($data);
+        $validated['password'] = Hash::make('Fastcat_01');
+        $institutionalAccount = InstitutionalAccount::create($validated);
+
+        return $this->success([
+            'data' => $institutionalAccount,
+        ], 'Institutional account created successfully', 201);
+    }
+
+    private function validate(array $data): array
+    {
+        return Validator::make($data, [
             'ia_name' => 'required|string|max:255',
-            'ia_image' => 'required', // Blob or base64 string
-        ]);
-
-        if ($validator->fails()) {
-            // Will be caught by global exception handler
-            throw new ValidationException($validator);
-        }
-
-        try {
-            $account = InstitutionalAccount::create($data);
-
-            return $this->success([
-                'institutional_account' => $account,
-            ], 'Institutional account created successfully', 201);
-        } catch (QueryException $e) {
-            // Will be caught by global fallback if not explicitly handled
-            throw new \RuntimeException('Failed to create institutional account.');
-        }
+            'image' => 'nullable|string|max:255',
+            'address'=> 'nullable|string|max:255',
+            'email' => 'required|string|email|max:255|unique:institutional_accounts,email',
+            'contact_number' => 'nullable|string|max:255',
+            'contact_person' => 'nullable|string|max:255',
+            'area' => 'nullable|string|max:255',
+            'payment_mode' => 'required|string|max:255',
+            'payment_type' => 'required|string|max:255',
+            'status' => 'nullable|in:active,inactive',
+            'effective_date' => 'nullable|date',
+            'eoc_date' => 'nullable|date',
+        ])->validate();
     }
 }

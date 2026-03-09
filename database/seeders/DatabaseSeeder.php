@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             PassengerTypesTableSeeder::class,
             PassengerCategoriesTableSeeder::class,
             PassengerAccommodationSeeder::class,
-            InstitutionalAccountsTableSeeder::class,
+            InstitutionalAccountsSeeder::class,
             DiscountsSeeder::class,
             BookingsSeeder::class,
             BookedPassengersSeeder::class,
@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             AddOnsSeeder::class,
             VehiclesSeeder::class,
             VehicleRatesSeeder::class,
-            AccommodationRatesSeeder::class
+            AccommodationRatesSeeder::class,
+            IADiscountsSeeder::class,
         ]);
 
     }

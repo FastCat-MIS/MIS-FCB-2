@@ -4,22 +4,23 @@ namespace App\Actions\Marketing\InstitutionalAccounts;
 
 use App\Actions\Action;
 use App\Models\Marketing\InstitutionalAccount;
-use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use RuntimeException;
 
 class DeleteInstitutionalAccountAction extends Action
 {
-    public function execute(InstitutionalAccount $account)
+    public function execute(int $iaId)
     {
         try {
-            $account->delete();
+            $institutionalAccount = InstitutionalAccount::findOrFail($iaId); 
 
-            return $this->success([], 'Institutional account deleted successfully', 204);
-        } catch (QueryException $e) {
-            // DB-related errors (e.g., FK constraints) can be handled specifically
-            throw new \RuntimeException('Failed to delete institutional account due to a database error.');
+            $institutionalAccount->delete();
+
+            return $this->success([], 'Institutional account deleted successfully', 204);        
+        } catch (ModelNotFoundException $e) {
+            throw new RuntimeException("Institutional account with ID {$iaId} not found.");
         } catch (\Exception $e) {
-            // Generic fallback exception
-            throw new \RuntimeException('Failed to delete institutional account.');
+            throw new RuntimeException('Failed to delete Institutional account.');
         }
     }
 }

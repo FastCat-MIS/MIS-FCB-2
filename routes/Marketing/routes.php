@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\Marketing\AccommodationRateController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Marketing\RateController;
 use App\Http\Controllers\Marketing\PromoController;
 use App\Http\Controllers\Marketing\BookingController;
-use App\Http\Controllers\Marketing\InstitutionalAccountController; // ✅ Add this line
+use App\Http\Controllers\Marketing\InstitutionalAccountController;
 use App\Http\Controllers\Marketing\DiscountController;
 use App\Http\Controllers\Marketing\AddOnController;
 use App\Http\Controllers\Marketing\VehicleRateController;
+use App\Http\Controllers\Marketing\IADiscountController;
 
 // Marketing domain routes (Rates, Promos, Bookings, Institutional Accounts)
 Route::middleware('jwt.auth')->group(function () {
@@ -105,19 +105,31 @@ Route::middleware('jwt.auth')->group(function () {
     //     // Route::delete('/{booking}', [BookingController::class, 'destroy'])->middleware('permission:booking management delete');
     // });
 
-    // // Institutional Accounts CRUD
-    // Route::prefix('institutional-accounts')->group(function () {
-    //     Route::get('/', [InstitutionalAccountController::class, 'index']);
-    //     Route::get('/{institutionalAccount}', [InstitutionalAccountController::class, 'show']);
-    //     Route::post('/', [InstitutionalAccountController::class, 'store']);
-    //     Route::put('/{institutionalAccount}', [InstitutionalAccountController::class, 'update']);
-    //     Route::delete('/{institutionalAccount}', [InstitutionalAccountController::class, 'destroy']);
+    // Institutional Accounts CRUD
 
-    //     // Route::get('/', [InstitutionalAccountController::class, 'index'])->middleware('permission:institutional account management read');
-    //     // Route::get('/{institutionalAccount}', [InstitutionalAccountController::class, 'show'])->middleware('permission:institutional account management read');
-    //     // Route::post('/', [InstitutionalAccountController::class, 'store'])->middleware('permission:institutional account management create');
-    //     // Route::put('/{institutionalAccount}', [InstitutionalAccountController::class, 'update'])->middleware('permission:institutional account management update');
-    //     // Route::delete('/{institutionalAccount}', [InstitutionalAccountController::class, 'destroy'])->middleware('permission:institutional account management delete');
-    // });
+    Route::prefix('institutional-accounts')->group(function () {
 
-});
+        // INSTITUTIONAL ACCOUNTS DISCOUNTS 
+
+        Route::put('/{iaDiscountId}/discounts/', [IADiscountController::class, 'update']);
+        Route::delete('/{iaDiscountId}/discounts/', [IADiscountController::class, 'destroy']);
+        Route::get('/{iaId}/discounts', [IADiscountController::class, 'index']);    
+        
+        Route::post('/discounts', [IADiscountController::class, 'store']);
+        
+        // INSTITUTIONAL ACCOUNTS 
+
+        Route::get('/', [InstitutionalAccountController::class, 'index']);
+        Route::get('/{iaId}', [InstitutionalAccountController::class, 'show']);
+        Route::post('/', [InstitutionalAccountController::class, 'store']);
+        Route::put('/{iaId}', [InstitutionalAccountController::class, 'update']);
+        Route::delete('/{iaId}', [InstitutionalAccountController::class, 'destroy']);
+        Route::post('/{iaId}/reset-password', [InstitutionalAccountController::class, 'reset']);
+        });
+        
+        // Route::get('/', [InstitutionalAccountController::class, 'index'])->middleware('permission:institutional account management read');
+        // Route::get('/{institutionalAccount}', [InstitutionalAccountController::class, 'show'])->middleware('permission:institutional account management read');
+        // Route::post('/', [InstitutionalAccountController::class, 'store'])->middleware('permission:institutional account management create');
+        // Route::put('/{institutionalAccount}', [InstitutionalAccountController::class, 'update'])->middleware('permission:institutional account management update');
+        // Route::delete('/{institutionalAccount}', [InstitutionalAccountController::class, 'destroy'])->middleware('permission:institutional account management delete');
+    });
