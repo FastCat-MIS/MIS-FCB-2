@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Actions\Marketing\InstitutionalAccounts\Discounts\GetIADiscountsAction;
 use App\Actions\Marketing\InstitutionalAccounts\Discounts\GetIADiscountAction;
 use App\Actions\Marketing\InstitutionalAccounts\Discounts\CreateIADiscountAction;
+use App\Actions\Marketing\InstitutionalAccounts\Discounts\DeleteIADiscountAction;
+use App\Actions\Marketing\InstitutionalAccounts\Discounts\UpdateIADiscountAction;
+
+
 
 class IADiscountController extends Controller
 {
@@ -25,13 +29,13 @@ class IADiscountController extends Controller
         return $action->execute($request->all());
     }
 
-    // public function update(Request $request, Discount $discount, UpdateDiscountAction $updateDiscountAction)
-    // {
-    //     return $updateDiscountAction->execute($discount, $request->all());
-    // }
+    public function update($iaDiscountId, Request $request,  UpdateIADiscountAction $action )
+    {
+        return $action->execute($iaDiscountId,  $request->all());
+    }
 
-    // public function destroy(Discount $discount, DeleteDiscountAction $deleteDiscountAction)
-    // {
-    //     return $deleteDiscountAction->execute($discount);
-    // }
+    public function destroy($iaDiscountId, DeleteIADiscountAction $action)
+    {
+        return $action->execute($iaDiscountId);
+    }
 }

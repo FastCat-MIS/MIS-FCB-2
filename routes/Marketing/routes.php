@@ -106,30 +106,28 @@ Route::middleware('jwt.auth')->group(function () {
     // });
 
     // Institutional Accounts CRUD
-  Route::prefix('institutional-accounts')->group(function () {
 
-    Route::prefix('discounts')->group(function () {
-        Route::get('/{iaId}', [IADiscountController::class, 'index']);
-        Route::post('/', [IADiscountController::class, 'store']);
+    Route::prefix('institutional-accounts')->group(function () {
+
+        // INSTITUTIONAL ACCOUNTS DISCOUNTS 
+
+        Route::put('/{iaDiscountId}/discounts/', [IADiscountController::class, 'update']);
+        Route::delete('/{iaDiscountId}/discounts/', [IADiscountController::class, 'destroy']);
+        Route::get('/{iaId}/discounts', [IADiscountController::class, 'index']);    
+        Route::post('/discounts', [IADiscountController::class, 'store']);
+        
+        // INSTITUTIONAL ACCOUNTS 
+
+        Route::get('/', [InstitutionalAccountController::class, 'index']);
+        Route::get('/{iaId}', [InstitutionalAccountController::class, 'show']);
+        Route::post('/', [InstitutionalAccountController::class, 'store']);
+        Route::put('/{iaId}', [InstitutionalAccountController::class, 'update']);
+        Route::post('/{iaId}/reset-password', [InstitutionalAccountController::class, 'reset']);
+        });
+        
+        // Route::get('/', [InstitutionalAccountController::class, 'index'])->middleware('permission:institutional account management read');
+        // Route::get('/{institutionalAccount}', [InstitutionalAccountController::class, 'show'])->middleware('permission:institutional account management read');
+        // Route::post('/', [InstitutionalAccountController::class, 'store'])->middleware('permission:institutional account management create');
+        // Route::put('/{institutionalAccount}', [InstitutionalAccountController::class, 'update'])->middleware('permission:institutional account management update');
+        // Route::delete('/{institutionalAccount}', [InstitutionalAccountController::class, 'destroy'])->middleware('permission:institutional account management delete');
     });
-
-    Route::get('/', [InstitutionalAccountController::class, 'index']);
-    Route::get('/{iaId}', [InstitutionalAccountController::class, 'show']);
-    Route::post('/', [InstitutionalAccountController::class, 'store']);
-    Route::put('/{iaId}', [InstitutionalAccountController::class, 'update']);
-    Route::post('/{iaId}/reset-password', [InstitutionalAccountController::class, 'reset']);
-
-    
-
-    //     // Route::get('/', [InstitutionalAccountController::class, 'index'])->middleware('permission:institutional account management read');
-    //     // Route::get('/{institutionalAccount}', [InstitutionalAccountController::class, 'show'])->middleware('permission:institutional account management read');
-    //     // Route::post('/', [InstitutionalAccountController::class, 'store'])->middleware('permission:institutional account management create');
-    //     // Route::put('/{institutionalAccount}', [InstitutionalAccountController::class, 'update'])->middleware('permission:institutional account management update');
-    //     // Route::delete('/{institutionalAccount}', [InstitutionalAccountController::class, 'destroy'])->middleware('permission:institutional account management delete');
-
-});
-
-    
-
-
-});

@@ -11,7 +11,7 @@ class GetIADiscountsAction extends Action
    public function execute($iaId)
     {
        try {
-            $iaDiscounts= IADiscount::where('ia_id', $iaId)->with('route')->get();
+            $iaDiscounts= IADiscount::where('ia_id', $iaId)->with('route')->orderBy('route_id')->get();
 
             return $this->success([
                 'iaDiscounts' => $iaDiscounts,
