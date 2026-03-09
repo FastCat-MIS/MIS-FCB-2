@@ -114,6 +114,7 @@ Route::middleware('jwt.auth')->group(function () {
         Route::put('/{iaDiscountId}/discounts/', [IADiscountController::class, 'update']);
         Route::delete('/{iaDiscountId}/discounts/', [IADiscountController::class, 'destroy']);
         Route::get('/{iaId}/discounts', [IADiscountController::class, 'index']);    
+        
         Route::post('/discounts', [IADiscountController::class, 'store']);
         
         // INSTITUTIONAL ACCOUNTS 
@@ -122,6 +123,7 @@ Route::middleware('jwt.auth')->group(function () {
         Route::get('/{iaId}', [InstitutionalAccountController::class, 'show']);
         Route::post('/', [InstitutionalAccountController::class, 'store']);
         Route::put('/{iaId}', [InstitutionalAccountController::class, 'update']);
+        Route::delete('/{iaId}', [InstitutionalAccountController::class, 'destroy']);
         Route::post('/{iaId}/reset-password', [InstitutionalAccountController::class, 'reset']);
         });
         

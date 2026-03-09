@@ -4,7 +4,7 @@ namespace App\Actions\Marketing\InstitutionalAccounts;
 
 use App\Actions\Action;
 use App\Models\Marketing\InstitutionalAccount;
-use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use RuntimeException;
 
 class DeleteInstitutionalAccountAction extends Action
@@ -17,7 +17,7 @@ class DeleteInstitutionalAccountAction extends Action
             $institutionalAccount->delete();
 
             return $this->success([], 'Institutional account deleted successfully', 204);        
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             throw new RuntimeException("Institutional account with ID {$iaId} not found.");
         } catch (\Exception $e) {
             throw new RuntimeException('Failed to delete Institutional account.');
