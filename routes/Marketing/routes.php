@@ -140,8 +140,8 @@ Route::middleware('jwt.auth')->group(function () {
 
         // MERCHANTS DISCOUNTS 
 
-        Route::put('/{merchantDiscountId}/discounts/', [MerchantDiscountController::class, 'update']);
-        Route::delete('/{merchantDiscountId}/discounts/', [MerchantDiscountController::class, 'destroy']);
+        Route::put('/{merchantDiscountId}/discounts', [MerchantDiscountController::class, 'update']);
+        Route::delete('/{merchantDiscountId}/discounts', [MerchantDiscountController::class, 'destroy']);
         Route::get('/{merchantId}/discounts', [MerchantDiscountController::class, 'index']);      
         Route::post('/discounts', [MerchantDiscountController::class, 'store']);
         

@@ -3,10 +3,9 @@
 namespace App\Models\Operations;
 
 use Illuminate\Database\Eloquent\Model;
-
-use App\Models\Marketing\Rate;
 use App\Models\Marketing\AccommodationRate;
 use App\Models\Marketing\Discounts\IADiscount;
+use App\Models\Marketing\Discounts\MerchantDiscount;
 use App\Models\Marketing\VehicleRate;
 
 class Route extends Model
@@ -42,5 +41,10 @@ class Route extends Model
     public function iaDiscounts()
     {
         return $this->hasMany(IADiscount::class, 'route_id', 'route_id');
+    }
+
+    public function merchantDiscounts()
+    {
+        return $this->hasMany(MerchantDiscount::class, 'route_id', 'route_id');
     }
 }
