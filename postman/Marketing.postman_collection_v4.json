@@ -438,7 +438,7 @@
       ]
     },
     {
-      "name": "InstitutionalAccounts",
+      "name": "Institutional Accounts",
       "item": [
         {
           "name": "IA Discount",
@@ -769,6 +769,290 @@
               "path": [
                 "institutional-accounts",
                 "1",
+                "reset-password"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Merchants",
+      "item": [
+        {
+          "name": "Merchant Discount",
+          "item": [
+            {
+              "name": "Get All Merchant Discounts",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"merchant_name\": \"ABC Travel Corporation\",\r\n    \"address\": \"123 Makati Avenue, Makati City\",\r\n    \"email\": \"ab23c@travelcorp.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"contact_number\": \"+639171234567\",\r\n    \"contact_person\": \"Juan Dela Cruz\",\r\n    \"area\": \"Metro Manila\",\r\n    \"payment_mode\": \"Bank Transfer\",\r\n    \"payment_type\": \"Credit\",\r\n    \"status\": \"active\",\r\n    \"effective_date\": \"2026-03-03\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/merchants/1/discounts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "merchants",
+                    "1",
+                    "discounts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Merchant Discount",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvbG9naW4iLCJpYXQiOjE3NzMxMjE2MjQsImV4cCI6MTc3MzEyNTIyNCwibmJmIjoxNzczMTIxNjI0LCJqdGkiOiJWR3NmNk95RHQ5aHphOVFRIiwic3ViIjoiMiIsInBydiI6IjE3MjY0OGU1MjVmNzhiODAwOTFjYjhjZjBjOWQ4NTE4MzM2OTk1YjYiLCJ1c2VyX2lkIjoyLCJmdWxsX25hbWUiOiJTZWFuIFBhdHJpY2sgUGF0cm9uIiwic2hvcnRfbmFtZSI6IlNlYW4gUGF0cm9uIiwiZW1haWwiOiJzZWFuQGV4YW1wbGUuY29tIiwicm9sZV9pZCI6bnVsbH0.XeLRA6c1ZrXOnH2ssw_md9e1452qR5yCFZQVIXuKYhE",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"merchant_id\":1,\r\n    \"route_id\": 1,\r\n    \"discount_name\":\"sample\",\r\n    \"discount_value\":23,\r\n    \"discount_type\": \"fixed\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/merchants/discounts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "merchants",
+                    "discounts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Merchant Discount",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvbG9naW4iLCJpYXQiOjE3NzMxMjE2MjQsImV4cCI6MTc3MzEyNTIyNCwibmJmIjoxNzczMTIxNjI0LCJqdGkiOiJWR3NmNk95RHQ5aHphOVFRIiwic3ViIjoiMiIsInBydiI6IjE3MjY0OGU1MjVmNzhiODAwOTFjYjhjZjBjOWQ4NTE4MzM2OTk1YjYiLCJ1c2VyX2lkIjoyLCJmdWxsX25hbWUiOiJTZWFuIFBhdHJpY2sgUGF0cm9uIiwic2hvcnRfbmFtZSI6IlNlYW4gUGF0cm9uIiwiZW1haWwiOiJzZWFuQGV4YW1wbGUuY29tIiwicm9sZV9pZCI6bnVsbH0.XeLRA6c1ZrXOnH2ssw_md9e1452qR5yCFZQVIXuKYhE",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"merchant_id\":1,\r\n    \"route_id\": 1,\r\n    \"discount_name\":\"sample\",\r\n    \"discount_value\":23,\r\n    \"discount_type\": \"fixed\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/merchants/1/discounts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "merchants",
+                    "1",
+                    "discounts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Merchant Discount",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvbG9naW4iLCJpYXQiOjE3NzMxMjE2MjQsImV4cCI6MTc3MzEyNTIyNCwibmJmIjoxNzczMTIxNjI0LCJqdGkiOiJWR3NmNk95RHQ5aHphOVFRIiwic3ViIjoiMiIsInBydiI6IjE3MjY0OGU1MjVmNzhiODAwOTFjYjhjZjBjOWQ4NTE4MzM2OTk1YjYiLCJ1c2VyX2lkIjoyLCJmdWxsX25hbWUiOiJTZWFuIFBhdHJpY2sgUGF0cm9uIiwic2hvcnRfbmFtZSI6IlNlYW4gUGF0cm9uIiwiZW1haWwiOiJzZWFuQGV4YW1wbGUuY29tIiwicm9sZV9pZCI6bnVsbH0.XeLRA6c1ZrXOnH2ssw_md9e1452qR5yCFZQVIXuKYhE",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"merchant_id\":1,\r\n    \"route_id\": 1,\r\n    \"discount_name\":\"sample\",\r\n    \"discount_value\":23,\r\n    \"discount_type\": \"fixed\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/merchants/1/discounts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "merchants",
+                    "1",
+                    "discounts"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Get All Merchants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/merchants",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Merchant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/merchants/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Merchant",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"merchant_name\": \"ABC Travel Corporation\",\r\n    \"address\": \"123 Makati Avenue, Makati City\",\r\n    \"email\": \"ab23c@travelcorp.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"contact_number\": \"+639171234567\",\r\n    \"contact_person\": \"Juan Dela Cruz\",\r\n    \"area\": \"Metro Manila\",\r\n    \"payment_mode\": \"Bank Transfer\",\r\n    \"payment_type\": \"Credit\",\r\n    \"status\": \"active\",\r\n    \"effective_date\": \"2026-03-03\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/merchants",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Merchant",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"merchant_name\": \"Updated Corp Name\",\r\n    \"email\": \"updated2@email.com\",\r\n    \"payment_mode\": \"Cash\",\r\n    \"payment_type\": \"Prepaid\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/merchants/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Merchant",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/merchants/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Merchant Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/merchants/2/reset-password",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants",
+                "2",
                 "reset-password"
               ]
             }

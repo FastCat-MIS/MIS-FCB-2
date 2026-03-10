@@ -30,6 +30,8 @@ class DatabaseSeeder extends Seeder
             VehicleRatesSeeder::class,
             AccommodationRatesSeeder::class,
             IADiscountsSeeder::class,
+            MerchantsSeeder::class,
+            MerchantDiscountsSeeder::class,
         ]);
 
     }
