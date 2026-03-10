@@ -9,6 +9,8 @@ use App\Http\Controllers\Marketing\DiscountController;
 use App\Http\Controllers\Marketing\AddOnController;
 use App\Http\Controllers\Marketing\VehicleRateController;
 use App\Http\Controllers\Marketing\IADiscountController;
+use App\Http\Controllers\Marketing\MerchantController;
+use App\Http\Controllers\Marketing\MerchantDiscountController;
 
 // Marketing domain routes (Rates, Promos, Bookings, Institutional Accounts)
 Route::middleware('jwt.auth')->group(function () {
@@ -114,7 +116,6 @@ Route::middleware('jwt.auth')->group(function () {
         Route::put('/{iaDiscountId}/discounts/', [IADiscountController::class, 'update']);
         Route::delete('/{iaDiscountId}/discounts/', [IADiscountController::class, 'destroy']);
         Route::get('/{iaId}/discounts', [IADiscountController::class, 'index']);    
-        
         Route::post('/discounts', [IADiscountController::class, 'store']);
         
         // INSTITUTIONAL ACCOUNTS 
@@ -125,11 +126,41 @@ Route::middleware('jwt.auth')->group(function () {
         Route::put('/{iaId}', [InstitutionalAccountController::class, 'update']);
         Route::delete('/{iaId}', [InstitutionalAccountController::class, 'destroy']);
         Route::post('/{iaId}/reset-password', [InstitutionalAccountController::class, 'reset']);
-        });
-        
+
         // Route::get('/', [InstitutionalAccountController::class, 'index'])->middleware('permission:institutional account management read');
         // Route::get('/{institutionalAccount}', [InstitutionalAccountController::class, 'show'])->middleware('permission:institutional account management read');
         // Route::post('/', [InstitutionalAccountController::class, 'store'])->middleware('permission:institutional account management create');
         // Route::put('/{institutionalAccount}', [InstitutionalAccountController::class, 'update'])->middleware('permission:institutional account management update');
         // Route::delete('/{institutionalAccount}', [InstitutionalAccountController::class, 'destroy'])->middleware('permission:institutional account management delete');
     });
+
+    // MERCHANTS CRUD ROUTES
+
+    Route::prefix('merchants')->group(function () {
+
+        // MERCHANTS DISCOUNTS 
+
+        Route::put('/{merchantDiscountId}/discounts/', [MerchantDiscountController::class, 'update']);
+        Route::delete('/{merchantDiscountId}/discounts/', [MerchantDiscountController::class, 'destroy']);
+        Route::get('/{merchantId}/discounts', [MerchantDiscountController::class, 'index']);      
+        Route::post('/discounts', [MerchantDiscountController::class, 'store']);
+        
+        // MERCHANTS 
+
+        Route::put('/{merchantId}', [MerchantController::class, 'update']);
+        Route::delete('/{merchantId}', [MerchantController::class, 'destroy']);
+        Route::post('/{merchantId}/reset-password', [MerchantController::class, 'reset']);
+        Route::get('/{merchantId}', [MerchantController::class, 'show']);
+        Route::get('/', [MerchantController::class, 'index']);
+        Route::post('/', [MerchantController::class, 'store']);
+
+        // Route::get('/', [MerchantController::class, 'index'])->middleware('permission:merchant management read');
+        // Route::get('/{merchantId}', [MerchantController::class, 'show'])->middleware('permission:merchant management read');
+        // Route::post('/', [MerchantController::class, 'store'])->middleware('permission:merchant management create');
+        // Route::put('/{merchantId}', [MerchantController::class, 'update'])->middleware('permission:merchant management update');
+        // Route::delete('/{merchantId}', [MerchantController::class, 'destroy'])->middleware('permission:merchant management delete');
+    });
+        
+});
+
+    
