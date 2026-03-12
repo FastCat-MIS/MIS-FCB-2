@@ -5,6 +5,7 @@ namespace App\Actions\Marketing\Discount;
 use App\Actions\Action;
 use App\Models\Marketing\Discounts\Discount;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UpdateDiscountAction extends Action
@@ -13,7 +14,7 @@ class UpdateDiscountAction extends Action
     {
       $discount = Discount::findOrFail($discountId);
 
-      $validated = $this->validate($data);
+      $validated = $this->validate($data, $discountId);
 
       $discount->update($validated);
 
@@ -22,11 +23,16 @@ class UpdateDiscountAction extends Action
         ], 'Discount updated successfully');
     }
 
-    private function validate(array $data): array
+    private function validate(array $data, int $discountId): array
     {
         return Validator::make($data, [
             'discount_name' => 'nullable|string|max:100',
-            'discount_code' => 'nullable|string|max:50|unique:discounts,discount_code',
+            'discount_code' => [
+                'nullable',
+                'string',
+                'max:50',
+                Rule::unique('discounts', 'discount_code')->ignore($discountId, 'discount_id')
+            ],            
             'discount_value' => 'nullable|numeric|min:0|max:100',
             'discount_type'   => 'nullable|string|max:255',
             'effective_date' => 'nullable|date',
