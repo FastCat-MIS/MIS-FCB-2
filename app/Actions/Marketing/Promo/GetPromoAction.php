@@ -11,7 +11,8 @@ class GetPromoAction extends Action
     public function execute(int $promoId)
     {
         try {
-             $promo = Promo::findOrFail($promoId);
+            $promo = Promo::findOrFail($promoId);
+
             return $this->success([
                 'promo' => $promo,
             ], 'promo retrieved successfully');

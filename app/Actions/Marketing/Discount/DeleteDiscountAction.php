@@ -11,7 +11,6 @@ class DeleteDiscountAction extends Action
     public function execute(int $discountId)
     {
         try {
-
             $discount = Discount::findOrFail($discountId);
             
             $discount->delete();

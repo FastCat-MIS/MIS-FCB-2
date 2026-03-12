@@ -11,7 +11,6 @@ class UpdatePromoAction extends Action
 {
     public function execute(int $promoId, array $data)
     {
-
       $promo = Promo::findOrFail($promoId);
 
       $validated = $this->validate($data);

@@ -11,7 +11,8 @@ class GetDiscountAction extends Action
     public function execute(int $discountId)
     {
         try {
-             $discount = Discount::findOrFail($discountId);
+            $discount = Discount::findOrFail($discountId);
+
             return $this->success([
                 'discount' => $discount,
             ], 'Discount retrieved successfully');

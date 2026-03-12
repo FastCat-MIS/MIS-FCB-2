@@ -11,7 +11,6 @@ class UpdateDiscountAction extends Action
 {
     public function execute(int $discountId, array $data)
     {
-
       $discount = Discount::findOrFail($discountId);
 
       $validated = $this->validate($data);
