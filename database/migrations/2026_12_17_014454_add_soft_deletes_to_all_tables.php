@@ -76,6 +76,9 @@ return new class extends Migration {
         Schema::table('merchants', function (Blueprint $table) {
             $table->softDeletes();
         });
+        Schema::table('promos', function (Blueprint $table) {
+            $table->softDeletes();
+        });
 
 
 
@@ -150,6 +153,9 @@ return new class extends Migration {
             $table->dropSoftDeletes();
         });
         Schema::table('merchants', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+        Schema::table('promos', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
 

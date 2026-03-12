@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             IADiscountsSeeder::class,
             MerchantsSeeder::class,
             MerchantDiscountsSeeder::class,
+            PromosSeeder::class,
         ]);
 
     }

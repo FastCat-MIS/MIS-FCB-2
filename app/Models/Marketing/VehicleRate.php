@@ -20,7 +20,6 @@ class VehicleRate extends Model
       'vehicle_rate',
       'effective_date',
       'status',
-      
     ];
 
     protected $casts = [
