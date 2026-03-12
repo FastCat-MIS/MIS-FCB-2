@@ -11,22 +11,25 @@ class CreateDiscountAction extends Action
 {
     public function execute(array $data)
     {
-        $validator = Validator::make($data, [
-            'discount_type' => 'required|string|max:100',
-            'discount_code' => 'required|string|max:50|unique:discounts,discount_code',
-            'discount_percentage' => 'required|numeric|min:0|max:100',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-        ]);
+        $validated = $this->validate($data);
 
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
-
-        $discount = Discount::create($data);
+        $discount = Discount::create($validated);
 
         return $this->success([
             'discount' => $discount,
         ], 'Discount created successfully', 201);
     }
+    private function validate(array $data): array
+    {
+        return Validator::make($data, [
+            'discount_name' => 'required|string|max:225',
+            'discount_code' => 'required|string|max:100|unique:discounts,discount_code',
+            'discount_value' => 'required|numeric|min:0',
+            'discount_type'   => 'required|string|max:100',
+            'effective_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:effective_date',
+            'status' => 'nullable|in:active,inactive',
+        ])->validate();
+    }
+
 }

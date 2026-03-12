@@ -13,15 +13,17 @@ class Discount extends Model
     protected $primaryKey = 'discount_id';
 
     protected $fillable = [
-        'discount_type',
+        'discount_name',
         'discount_code',
-        'discount_percentage',
-        'start_date',
+        'discount_value',
+        'discount_type',
+        'effective_date',
         'end_date',
+        'status',
     ];
 
     protected $casts = [
-        'start_date' => 'date',
+        'effective_date' => 'date',
         'end_date' => 'date',
     ];
 }
