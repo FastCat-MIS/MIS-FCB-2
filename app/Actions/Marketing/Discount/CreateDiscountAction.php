@@ -5,25 +5,41 @@ namespace App\Actions\Marketing\Discount;
 use App\Actions\Action;
 use App\Models\Marketing\Discounts\Discount;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class CreateDiscountAction extends Action
 {
     public function execute(array $data)
     {
-        $validated = $this->validate($data);
+        try{
 
-        $discount = Discount::create($validated);
+            $validated = $this->validate($data);
+    
+            $discount = Discount::create($validated);
+    
+            return $this->success([
+                'discount' => $discount,
+            ], 'Discount created successfully', 201);
+        } catch (ValidationException $e) {
 
-        return $this->success([
-            'discount' => $discount,
-        ], 'Discount created successfully', 201);
+            return $this->error(
+                'Validation failed',
+                422,
+                $e->errors()
+            );
+        }
     }
     private function validate(array $data): array
     {
         return Validator::make($data, [
             'discount_name' => 'required|string|max:225',
-            'discount_code' => 'required|string|max:100|unique:discounts,discount_code',
+            'discount_code' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('discounts', 'discount_code')->whereNull('deleted_at')
+            ], 
             'discount_value' => 'required|numeric|min:0',
             'discount_type'   => 'required|string|max:100',
             'effective_date' => 'nullable|date',

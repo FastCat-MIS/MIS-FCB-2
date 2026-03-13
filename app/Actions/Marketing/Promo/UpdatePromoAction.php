@@ -12,15 +12,24 @@ class UpdatePromoAction extends Action
 {
     public function execute(int $promoId, array $data)
     {
-      $promo = Promo::findOrFail($promoId);
+        try{
 
-      $validated = $this->validate($data, $promoId);
+            $promo = Promo::findOrFail($promoId);
 
-      $promo->update($validated);
+            $validated = $this->validate($data, $promoId);
 
-        return $this->success([
-            'promo' => $promo->fresh(),
-        ], 'Promo updated successfully');
+            $promo->update($validated);
+
+            return $this->success([
+                'promo' => $promo->fresh(),
+            ], 'Promo updated successfully');
+        } catch (ValidationException $e) {
+            return $this->error(
+                'Validation failed',
+                422,
+                $e->errors()
+            );
+        }
     }
 
     private function validate(array $data, int $promoId): array
@@ -31,9 +40,9 @@ class UpdatePromoAction extends Action
                 'nullable',
                 'string',
                 'max:50',
-                Rule::unique('promos', 'promo_code')->ignore($promoId, 'promo_id')
+                Rule::unique('promos', 'promo_code')->ignore($promoId, 'promo_id')->whereNull('deleted_at'),
             ],            
-            'promo_value' => 'nullable|numeric|min:0|max:100',
+            'promo_value' => 'nullable|numeric|min:0',
             'promo_type'   => 'nullable|string|max:255',
             'effective_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:effective_date',

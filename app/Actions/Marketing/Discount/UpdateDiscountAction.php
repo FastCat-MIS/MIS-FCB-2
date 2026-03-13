@@ -12,15 +12,25 @@ class UpdateDiscountAction extends Action
 {
     public function execute(int $discountId, array $data)
     {
-      $discount = Discount::findOrFail($discountId);
+        try{
+        
+            $discount = Discount::findOrFail($discountId);
+      
+            $validated = $this->validate($data, $discountId);
+      
+            $discount->update($validated);
+      
+              return $this->success([
+                  'discount' => $discount->fresh(),
+              ], 'Discount updated successfully');
+        } catch (ValidationException $e) {
 
-      $validated = $this->validate($data, $discountId);
-
-      $discount->update($validated);
-
-        return $this->success([
-            'discount' => $discount->fresh(),
-        ], 'Discount updated successfully');
+            return $this->error(
+                'Validation failed',
+                422,
+                $e->errors()
+            );
+        }
     }
 
     private function validate(array $data, int $discountId): array
@@ -30,10 +40,12 @@ class UpdateDiscountAction extends Action
             'discount_code' => [
                 'nullable',
                 'string',
-                'max:50',
-                Rule::unique('discounts', 'discount_code')->ignore($discountId, 'discount_id')
-            ],            
-            'discount_value' => 'nullable|numeric|min:0|max:100',
+                'max:100',
+                Rule::unique('discounts', 'discount_code')
+                    ->ignore($discountId, 'discount_id')
+                    ->whereNull('deleted_at'),
+            ],         
+            'discount_value' => 'nullable|numeric|min:0',
             'discount_type'   => 'nullable|string|max:255',
             'effective_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:effective_date',
