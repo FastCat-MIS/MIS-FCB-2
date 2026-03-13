@@ -12,11 +12,11 @@ return new class extends Migration
             $table->id('discount_id');
             $table->string('discount_name', 225);
             $table->string('discount_code', 100);
-            $table->decimal('discount_value', 5, 2)->default(0.00);
-            $table->enum('discount_type', ['percentage', 'fixed']);
+            $table->decimal('discount_value', 10, 2)->default(0.00);
+            $table->unsignedTinyInteger('value_type');
             $table->date("effective_date")->nullable();            
             $table->date('end_date')->nullable();
-            $table->string("status", 100)->nullable()->default('active');
+            $table->unsignedTinyInteger("status")->default(0);
             $table->timestamps();      
         });
     }

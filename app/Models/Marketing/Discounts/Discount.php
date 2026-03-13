@@ -16,7 +16,7 @@ class Discount extends Model
         'discount_name',
         'discount_code',
         'discount_value',
-        'discount_type',
+        'value_type',
         'effective_date',
         'end_date',
         'status',

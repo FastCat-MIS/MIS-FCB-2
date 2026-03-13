@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('promo_name', 100);
             $table->string('promo_code', 50);
             $table->decimal('promo_value', 10, 2);
-            $table->enum('promo_type', ['percentage', 'fixed']);
+            $table->unsignedTinyInteger('value_type');
             $table->date("effective_date")->nullable();            
             $table->date('end_date')->nullable();
-            $table->string("status", 100)->nullable()->default('active');
+            $table->unsignedTinyInteger("status")->default(0);
             $table->timestamps();   
         });
     }

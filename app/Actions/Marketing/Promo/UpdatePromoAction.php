@@ -43,7 +43,7 @@ class UpdatePromoAction extends Action
                 Rule::unique('promos', 'promo_code')->ignore($promoId, 'promo_id')->whereNull('deleted_at'),
             ],            
             'promo_value' => 'nullable|numeric|min:0',
-            'promo_type'   => 'nullable|string|max:255',
+            'value_type' => 'nullable|in:0,1',
             'effective_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:effective_date',
             'status' => 'nullable|in:active,inactive',

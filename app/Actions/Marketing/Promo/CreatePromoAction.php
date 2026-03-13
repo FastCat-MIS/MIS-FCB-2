@@ -43,7 +43,7 @@ class CreatePromoAction extends Action
                 Rule::unique('promos', 'promo_code')->whereNull('deleted_at')
             ], 
             'promo_value' => 'required|numeric|min:0',
-            'promo_type'   => 'required|string|max:100',
+            'value_type'   => 'required|in:0,1',
             'effective_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:effective_date',
             'status' => 'nullable|in:active,inactive',

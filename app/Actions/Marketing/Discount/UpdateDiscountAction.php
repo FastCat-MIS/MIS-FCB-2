@@ -46,7 +46,7 @@ class UpdateDiscountAction extends Action
                     ->whereNull('deleted_at'),
             ],         
             'discount_value' => 'nullable|numeric|min:0',
-            'discount_type'   => 'nullable|string|max:255',
+            'value_type' => 'required|in:0,1',
             'effective_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:effective_date',
             'status' => 'nullable|in:active,inactive',

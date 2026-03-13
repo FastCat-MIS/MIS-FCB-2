@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId("route_id")->constrained("routes", "route_id")->onDelete("cascade");
             $table->string("discount_name", 255)->nullable();
             $table->decimal('discount_value', 10, 2)->default(0.00)->nullable();            
-            $table->enum('discount_type', ['percentage', 'fixed']);
+            $table->unsignedTinyInteger('value_type');
             $table->timestamp("effective_date")->nullable();
             $table->string("status", 100)->nullable()->default('active');
             $table->timestamps();

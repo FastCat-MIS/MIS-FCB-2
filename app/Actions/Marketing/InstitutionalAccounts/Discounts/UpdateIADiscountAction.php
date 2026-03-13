@@ -29,7 +29,7 @@ class UpdateIADiscountAction extends Action
           'route_id'       => 'required|integer|exists:routes,route_id',
           'discount_name'   => 'required|string|max:255',
           'discount_value'   => 'required|numeric|min:0',
-          'discount_type'   => 'required|string|max:255',
+          'value_type' => 'required|in:0,1',
           'effective_date' => 'nullable|date',
           'status'         => 'nullable|in:active,inactive',
       ])->validate();
