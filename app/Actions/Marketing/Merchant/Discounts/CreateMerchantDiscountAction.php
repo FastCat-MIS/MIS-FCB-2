@@ -24,12 +24,12 @@ class CreateMerchantDiscountAction extends Action
     {
         return Validator::make($data, [
             'merchant_id' => 'required|integer|exists:merchants,merchant_id', 
-            'route_id'       => 'required|integer|exists:routes,route_id',
-            'discount_name'   => 'required|string|max:255',
-            'discount_value'   => 'required|numeric|min:0',
-            'discount_type'   => 'required|string|max:255',
+            'route_id' => 'required|integer|exists:routes,route_id',
+            'discount_name' => 'required|string|max:255',
+            'discount_value' => 'required|numeric|min:0',
+            'value_type' => 'required|string|max:100',
             'effective_date' => 'nullable|date',
-            'status'         => 'nullable|in:active,inactive',
+            'status' => 'nullable|in:active,inactive',
         ])->validate();
     }
 }

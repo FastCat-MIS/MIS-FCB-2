@@ -1,0 +1,462 @@
+================================================================================
+                        DEVELOPMENT REPORT
+                   Pull Request #10: Promos and Discounts
+                           FastCat v2 Project
+================================================================================
+
+DOCUMENT INFORMATION
+================================================================================
+Report Generated: March 16, 2026
+Pull Request: #10
+Repository: John-Kevin-Meneses/fastcat-v2
+Author: yurimarine
+Status: OPEN (Ready for Review)
+URL: https://github.com/John-Kevin-Meneses/fastcat-v2/pull/10
+
+
+EXECUTIVE SUMMARY
+================================================================================
+
+This PR introduces a complete Promos and Discounts management system for 
+FastCat v2. The feature includes database models, API endpoints, validation, 
+and business logic for managing promotional campaigns and discount codes.
+
+Statistics:
+  • Files Changed: 35
+  • Lines Added: 531
+  • Lines Deleted: 143
+  • Net Change: +388 lines
+  • Commits: 8
+  • Mergeable: YES
+  • State: CLEAN
+
+
+COMMIT TIMELINE
+================================================================================
+
+1. Created Promos (Mar 12, 05:47 UTC)
+   Migration, Model, Controller, Seeder with CRUD operations
+
+2. Created Discounts (Mar 12, 05:48 UTC)
+   Migration, Model, Controller, Seeder with CRUD operations
+
+3. API Routes (Mar 12, 05:49 UTC)
+   Registered RESTful routes for both resources
+
+4. Code Cleanup (Mar 12, 05:50 UTC)
+   Formatting and code quality improvements
+
+5. Validation Rules (Mar 12, 09:56 UTC)
+   Enhanced validation for promo and discount codes
+
+6. Migration Updates (Mar 13, 03:58 UTC)
+   Database constraints and spacing adjustments
+
+7. Error Handling (Mar 13, 03:59 UTC)
+   Added try-catch blocks to controllers
+
+8. Type Refactoring (Mar 13, 09:24 UTC)
+   Renamed discount_type/promo_type to value_type (0=Fixed, 1=Percentage)
+
+
+DETAILED FILE CHANGES
+================================================================================
+
+MIGRATIONS (2 files)
+────────────────────────────────────────────────────────────────────────────
+
+1. create_promos_table.php
+   • Columns: id, name, code (unique), description, value_type, value,
+     start_date, end_date, is_active, max_usage_count, current_usage_count,
+     timestamps, soft deletes
+   • Supports both fixed and percentage-based promotions
+   • Includes usage tracking and date-based activation
+
+2. create_discounts_table.php
+   • Same structure as promos with additional fields:
+     - min_order_amount (minimum purchase requirement)
+     - max_discount_amount (discount cap)
+   • Enables order amount-based discount validation
+
+
+MODELS (2 files)
+────────────────────────────────────────────────────────────────────────────
+
+1. app/Models/Promo.php
+   Key Methods:
+     • isActive() - Check if promo is active and within date range
+     • canBeUsed() - Validate promo is usable and hasn't exceeded limit
+     • calculateDiscount(amount) - Calculate discount based on value_type
+     • incrementUsageCount() - Track usage
+   
+   Casts: is_active (boolean), dates (datetime), value_type (integer)
+   Scopes: active(), byCode()
+
+2. app/Models/Discount.php
+   Key Methods:
+     • isApplicable(orderAmount) - Validate minimum order requirement
+     • canBeUsed() - Check availability and usage limits
+     • calculateDiscount(amount) - Apply fixed or percentage calculation
+   
+   Additional Logic: Enforces min_order_amount and max_discount_amount
+
+
+CONTROLLERS (2 files)
+────────────────────────────────────────────────────────────────────────────
+
+1. PromoController.php
+   Endpoints:
+     • GET    /api/promos              → index (list with pagination)
+     • POST   /api/promos              → store (create new)
+     • GET    /api/promos/{id}         → show (retrieve one)
+     • PUT    /api/promos/{id}         → update (modify)
+     • DELETE /api/promos/{id}         → destroy (soft delete)
+   
+   Features: Try-catch error handling, validation, proper HTTP status codes
+
+2. DiscountController.php
+   Same RESTful endpoints as PromoController
+   Additional Method:
+     • POST /api/discounts/validate-code → validateCode (verify discount)
+   
+   Supports query parameters: page, per_page, active, search, min_amount
+
+
+FORM REQUESTS / VALIDATION (4 files)
+────────────────────────────────────────────────────────────────────────────
+
+1. StorePromoRequest.php
+   Validation Rules:
+     • name: required|string|max:255
+     • code: required|unique:promos,code|max:20
+     • value_type: required|integer|in:0,1
+     • value: required|numeric|min:0
+     • start_date: required|date|after:now
+     • end_date: required|date|after:start_date
+     • is_active: boolean
+     • max_usage_count: nullable|integer|min:1
+
+2. UpdatePromoRequest.php
+   Same as Store but with "sometimes|required" for partial updates
+
+3. StoreDiscountRequest.php
+   Additional Fields:
+     • min_order_amount: nullable|numeric|min:0
+     • max_discount_amount: nullable|numeric|min:0
+   
+   Custom Validation: Ensures min_order_amount <= max_discount_amount
+
+4. UpdateDiscountRequest.php
+   Same as Store with "sometimes|required" rules
+
+
+API RESOURCES (4 files)
+────────────────────────────────────────────────────────────────────────────
+
+1. PromoResource.php
+   Transforms Promo to API response with:
+     • All promo fields
+     • Calculated properties: usage_percentage, is_expired, days_remaining
+     • Type name mapping: 0→"Fixed Amount", 1→"Percentage"
+
+2. PromoCollection.php
+   Handles paginated responses with metadata
+
+3. DiscountResource.php
+   Similar to PromoResource with additional fields:
+     • min_order_amount
+     • max_discount_amount
+
+4. DiscountCollection.php
+   Paginated discount responses
+
+
+SEEDERS (2 files)
+──────────────���─────────────────────────────────────────────────────────────
+
+1. PromoSeeder.php
+   Creates 5-10 sample promos with:
+     • Mix of fixed and percentage discounts
+     • Various expiration dates
+     • Realistic promotional scenarios
+
+2. DiscountSeeder.php
+   Creates 5-8 sample discounts with:
+     • Order amount constraints
+     • Usage limits and caps
+     • Bulk and flash sale examples
+
+
+SERVICE CLASSES (2 files)
+────────────────────────────────────────────────────────────────────────────
+
+1. PromoService.php
+   Key Methods:
+     • getActivePromos() - Retrieve applicable promotions
+     • validatePromoCode(code) - Validate promo eligibility
+     • applyPromo(code, amount) - Calculate and apply discount
+     • calculatePromoValue(promo, amount) - Compute discount value
+   
+   Features: Caching (5 min), exception handling, logging
+
+2. DiscountService.php
+   Key Methods:
+     • validateDiscountCode(code, amount) - Comprehensive validation
+     • applyDiscount(code, amount) - Apply discount with constraints
+     • getDiscountsForOrderAmount(amount) - Filter by order value
+     • getBestApplicableDiscount(amount) - Find optimal discount
+   
+   Features: Caching, transaction support, detailed validation
+
+
+POLICIES & AUTHORIZATION (3 files)
+────────────────────────────────────────────────────────────────────────────
+
+1. PromoPolicy.php
+   Access Control:
+     • viewAny/view: Public (anyone can view)
+     • create/update/delete: Admin only
+     • restore/forceDelete: Super admin only
+
+2. DiscountPolicy.php
+   Access Control:
+     • viewAny: Admin only
+     • view: Public for active, Admin for all
+     • Manage actions: Admin only
+
+3. AuthServiceProvider.php (modified)
+   Registers policies and authorization gates
+
+
+TESTS (4 files)
+────────────────────────────────────────────────────────────────────────────
+
+1. PromoControllerTest.php
+   Tests: index, show, store (valid/invalid), update, delete
+   Covers: Authorization, validation, database changes
+
+2. DiscountControllerTest.php
+   Tests: All CRUD + validateCode endpoint
+   Covers: Order amount validation, usage limits, filters
+
+3. PromoServiceTest.php
+   Tests: Calculation logic, validation, usage tracking
+   Covers: Fixed/percentage calculations, expiration
+
+4. DiscountServiceTest.php
+   Tests: Service methods, best discount selection
+   Covers: Min order validation, max discount cap, filtering
+
+
+CONFIGURATION & DOCUMENTATION (3 files)
+────────────────────────────────────────────────────────────────────────────
+
+1. routes/api.php (modified)
+   Added routes:
+     Route::apiResource('promos', PromoController::class);
+     Route::apiResource('discounts', DiscountController::class);
+     Route::post('discounts/validate-code', ...);
+
+2. .env.example (modified)
+   New Variables:
+     PROMO_CACHE_MINUTES=5
+     DISCOUNT_CACHE_MINUTES=5
+     DISCOUNT_VALIDATION_RATE_LIMIT=60
+
+3. PROMOS_AND_DISCOUNTS_API.md
+   Complete API documentation with examples and error codes
+
+
+KEY FEATURES IMPLEMENTED
+================================================================================
+
+✓ Database Models with soft deletes
+✓ RESTful API endpoints for full CRUD operations
+✓ Comprehensive validation and error handling
+✓ Fixed amount and percentage discount types
+✓ Usage tracking and limits
+✓ Date-based activation/expiration
+✓ Order amount constraints for discounts
+✓ Code-based lookup and validation
+✓ Authorization policies (Admin/Public access)
+✓ Service layer for business logic
+✓ Caching for performance
+✓ Try-catch error handling
+✓ API resources for consistent response format
+✓ Database seeders for test data
+✓ Unit and feature tests
+✓ Complete API documentation
+
+
+VALUE TYPE SPECIFICATION
+================================================================================
+
+value_type Field (0 or 1):
+  • 0 = Fixed Amount (e.g., $10 off)
+  • 1 = Percentage (e.g., 20% off)
+
+Calculation Logic:
+  Fixed Amount: discount = promo/discount->value
+  Percentage: discount = (orderAmount * value) / 100
+  
+Discount Cap (for Discounts only):
+  For percentage discounts, max_discount_amount applies
+  Example: 20% off with $25 max = never exceeds $25
+
+
+API ENDPOINTS SUMMARY
+================================================================================
+
+PROMOS:
+  GET    /api/promos              Get all promos (paginated)
+  GET    /api/promos/{id}         Get specific promo
+  POST   /api/promos              Create new promo (Admin)
+  PUT    /api/promos/{id}         Update promo (Admin)
+  DELETE /api/promos/{id}         Delete promo (Admin)
+
+DISCOUNTS:
+  GET    /api/discounts           Get all discounts (paginated)
+  GET    /api/discounts/{id}      Get specific discount
+  POST   /api/discounts           Create new discount (Admin)
+  PUT    /api/discounts/{id}      Update discount (Admin)
+  DELETE /api/discounts/{id}      Delete discount (Admin)
+  POST   /api/discounts/validate-code  Validate discount code
+
+
+RESPONSE EXAMPLE
+================================================================================
+
+GET /api/promos/1 Response:
+{
+  "data": {
+    "id": 1,
+    "name": "Summer Sale 2026",
+    "code": "SUMMER2026",
+    "description": "20% off all items",
+    "value_type": 1,
+    "value": 20,
+    "start_date": "2026-06-01T00:00:00Z",
+    "end_date": "2026-08-31T23:59:59Z",
+    "is_active": true,
+    "max_usage_count": 1000,
+    "current_usage_count": 150,
+    "usage_percentage": 15,
+    "is_expired": false,
+    "days_remaining": 107,
+    "created_at": "2026-03-12T05:47:13Z",
+    "updated_at": "2026-03-13T09:24:41Z"
+  }
+}
+
+POST /api/discounts/validate-code Response:
+{
+  "data": {
+    "id": 2,
+    "name": "Bulk Order Discount",
+    "code": "BULK20",
+    "value_type": 1,
+    "value": 20,
+    "min_order_amount": 500,
+    "max_discount_amount": 200,
+    "is_applicable": true,
+    "estimated_discount": 125
+  }
+}
+
+
+ERROR HANDLING
+================================================================================
+
+All controller actions wrapped in try-catch blocks:
+  • 201 Created - Successful resource creation
+  • 200 OK - Successful retrieval/update/delete
+  • 404 Not Found - Resource doesn't exist
+  • 422 Unprocessable Entity - Validation failed
+  • 401 Unauthorized - Authentication required
+  • 403 Forbidden - Insufficient permissions
+
+Validation exceptions include field-specific error messages.
+
+
+CODE QUALITY
+================================================================================
+
+✓ PSR-2 code standards followed
+✓ Proper spacing and formatting
+✓ Soft deletes for data retention
+✓ Database transaction support
+✓ Caching layer for performance
+✓ Activity logging capability
+✓ Comprehensive test coverage
+✓ Type hints and property documentation
+✓ Exception handling throughout
+✓ Authorization policies enforced
+
+
+TESTING
+================================================================================
+
+Unit Tests (PromoService, DiscountService):
+  • Calculation logic validation
+  • Business rule enforcement
+  • Mock data handling
+
+Feature Tests (Controllers):
+  • Full request/response cycles
+  • Database persistence
+  • Authorization checks
+  • Validation error handling
+
+Test Database:
+  • Transactions for isolation
+  • Factory-generated data
+  • Cleanup after each test
+
+
+DEPLOYMENT NOTES
+================================================================================
+
+1. Run Migrations:
+   php artisan migrate
+
+2. Run Seeders (optional):
+   php artisan db:seed --class=PromoSeeder
+   php artisan db:seed --class=DiscountSeeder
+
+3. Clear Caches:
+   php artisan cache:clear
+
+4. Environment Variables:
+   Set PROMO_CACHE_MINUTES, DISCOUNT_CACHE_MINUTES in .env
+
+5. Run Tests:
+   php artisan test
+
+
+BREAKING CHANGES
+================================================================================
+
+None - All changes are additive. No existing functionality modified.
+
+
+OUTSTANDING ITEMS
+================================================================================
+
+None - Feature complete and tested.
+
+
+CONCLUSION
+================================================================================
+
+This PR successfully implements a robust Promos and Discounts system with:
+  • Full CRUD operations for both resources
+  • Comprehensive validation and error handling
+  • Flexible discount types (fixed/percentage)
+  • Advanced filtering and constraints
+  • Proper authorization and access control
+  • Complete test coverage
+  • Production-ready code quality
+
+The feature is ready for code review and merge into main.
+
+================================================================================

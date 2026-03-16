@@ -10,12 +10,14 @@ return new class extends Migration
     {
         Schema::create('discounts', function (Blueprint $table) {
             $table->id('discount_id');
-            $table->string('discount_type', 100);
-            $table->string('discount_code', 50)->unique();
-            $table->decimal('discount_percentage', 5, 2);
-            $table->date('start_date')->nullable();
+            $table->string('discount_name', 225);
+            $table->string('discount_code', 100);
+            $table->decimal('discount_value', 10, 2)->default(0.00);
+            $table->unsignedTinyInteger('value_type');
+            $table->date("effective_date")->nullable();            
             $table->date('end_date')->nullable();
-            $table->timestamps();      // created_at, updated_at
+            $table->unsignedTinyInteger("status")->default(0);
+            $table->timestamps();      
         });
     }
 

@@ -21,7 +21,7 @@ class MerchantDiscount extends Model
         'route_id',
         'discount_name',
         'discount_value',
-        'discount_type',
+        'value_type',
         'effective_date',
         'status',
         ];

@@ -8,9 +8,11 @@ use RuntimeException;
 
 class GetDiscountAction extends Action
 {
-    public function execute(Discount $discount)
+    public function execute(int $discountId)
     {
         try {
+            $discount = Discount::findOrFail($discountId);
+
             return $this->success([
                 'discount' => $discount,
             ], 'Discount retrieved successfully');

@@ -62,27 +62,27 @@ Route::middleware('jwt.auth')->group(function () {
 
 
     // // Promotions CRUD
-    // Route::prefix('promos')->group(function () {
-    //     Route::get('/', [PromoController::class, 'index']);
-    //     Route::get('/{promo}', [PromoController::class, 'show']);
-    //     Route::post('/', [PromoController::class, 'store']);
-    //     Route::put('/{promo}', [PromoController::class, 'update']);
-    //     Route::delete('/{promo}', [PromoController::class, 'destroy']);
+    Route::prefix('promos')->group(function () {
+        Route::get('/', [PromoController::class, 'index']);
+        Route::get('/{promoId}', [PromoController::class, 'show']);
+        Route::post('/', [PromoController::class, 'store']);
+        Route::put('/{promoId}', [PromoController::class, 'update']);
+        Route::delete('/{promoId}', [PromoController::class, 'destroy']);
 
     //     // Route::get('/', [PromoController::class, 'index'])->middleware('permission:promo management read');
     //     // Route::get('/{promo}', [PromoController::class, 'show'])->middleware('permission:promo management read');
     //     // Route::post('/', [PromoController::class, 'store'])->middleware('permission:promo management create');
     //     // Route::put('/{promo}', [PromoController::class, 'update'])->middleware('permission:promo management update');
     //     // Route::delete('/{promo}', [PromoController::class, 'destroy'])->middleware('permission:promo management delete');
-    // });
+    });
 
     // // Discounts CRUD
-    Route::prefix('discount')->group(function () {
+    Route::prefix('discounts')->group(function () {
         Route::get('/', [DiscountController::class, 'index']);
-        Route::get('/{discount}', [DiscountController::class, 'show']);
+        Route::get('/{discountId}', [DiscountController::class, 'show']);
         Route::post('/', [DiscountController::class, 'store']);
-        Route::put('/{discount}', [DiscountController::class, 'update']);
-        Route::delete('/{discount}', [DiscountController::class, 'destroy']);
+        Route::put('/{discountId}', [DiscountController::class, 'update']);
+        Route::delete('/{discountId}', [DiscountController::class, 'destroy']);
 
         //     // Route::get('/', [DiscountController::class, 'index'])->middleware('permission:discount management read');
         //     // Route::get('/{discount}', [DiscountController::class, 'show'])->middleware('permission:discount management read');

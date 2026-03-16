@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('merchant_name', 150);
             $table->string('image')->nullable(); 
             $table->string('address', 150)->nullable();
-            $table->string('email', 150);
+            $table->string('email', 150)->unique();
             $table->string('password', 150);
             $table->string('contact_number', 20)->nullable();
             $table->string('contact_person', 20)->nullable();

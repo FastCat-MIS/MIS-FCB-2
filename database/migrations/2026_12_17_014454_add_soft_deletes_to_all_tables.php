@@ -7,48 +7,36 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-
         Schema::table('users', function (Blueprint $table) {
             $table->softDeletes();
         });
-
         Schema::table('discounts', function (Blueprint $table) {
             $table->softDeletes();
         });
-
-
         Schema::table('bookings', function (Blueprint $table) {
             $table->softDeletes();
         });
-
         Schema::table('connecting_trips', function (Blueprint $table) {
             $table->softDeletes();
         });
-
         Schema::table('passengers', function (Blueprint $table) {
             $table->softDeletes();
         });
-
         Schema::table('passenger_accommodations', function (Blueprint $table) {
             $table->softDeletes();
         });
-
         Schema::table('passenger_categories', function (Blueprint $table) {
             $table->softDeletes();
         });
-
         Schema::table('passenger_types', function (Blueprint $table) {
             $table->softDeletes();
         });
-
         Schema::table('routes', function (Blueprint $table) {
             $table->softDeletes();
         });
-
         Schema::table('schedules', function (Blueprint $table) {
             $table->softDeletes();
         });
-
         Schema::table('vessels', function (Blueprint $table) {
             $table->softDeletes();
         });
@@ -76,55 +64,43 @@ return new class extends Migration {
         Schema::table('merchants', function (Blueprint $table) {
             $table->softDeletes();
         });
-
-
-
+        Schema::table('promos', function (Blueprint $table) {
+            $table->softDeletes();
+        });
     }
 
     public function down(): void
     {
-
-
         Schema::table('users', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-
         Schema::table('discounts', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-
         Schema::table('bookings', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-
         Schema::table('connecting_trips', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-
         Schema::table('passengers', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-
         Schema::table('passenger_accommodations', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-
         Schema::table('passenger_categories', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-
         Schema::table('passenger_types', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-
         Schema::table('routes', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-
         Schema::table('schedules', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-
         Schema::table('vessels', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
@@ -152,8 +128,8 @@ return new class extends Migration {
         Schema::table('merchants', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
-
-
-
+        Schema::table('promos', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

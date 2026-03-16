@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Marketing;
 
 use App\Http\Controllers\Controller;
-use App\Models\Marketing\Discounts\Discount;
 use Illuminate\Http\Request;
 use App\Actions\Marketing\Discount\GetDiscountsAction;
 use App\Actions\Marketing\Discount\GetDiscountAction;
@@ -13,28 +12,28 @@ use App\Actions\Marketing\Discount\DeleteDiscountAction;
 
 class DiscountController extends Controller
 {
-    public function index(GetDiscountsAction $getDiscountsAction)
+    public function index(GetDiscountsAction $action)
     {
-        return $getDiscountsAction->execute();
+        return $action->execute();
     }
 
-    public function show(Discount $discount, GetDiscountAction $getDiscountAction)
+    public function show($discountId, GetDiscountAction $action)
     {
-        return $getDiscountAction->execute($discount);
+        return $action->execute($discountId);
     }
 
-    public function store(Request $request, CreateDiscountAction $createDiscountAction)
+    public function store(Request $request, CreateDiscountAction $action)
     {
-        return $createDiscountAction->execute($request->all());
+        return $action->execute($request->all());
     }
 
-    public function update(Request $request, Discount $discount, UpdateDiscountAction $updateDiscountAction)
+    public function update($discountId, Request $request, UpdateDiscountAction $action)
     {
-        return $updateDiscountAction->execute($discount, $request->all());
+        return $action->execute($discountId, $request->all());
     }
 
-    public function destroy(Discount $discount, DeleteDiscountAction $deleteDiscountAction)
+    public function destroy($discountId, DeleteDiscountAction $action)
     {
-        return $deleteDiscountAction->execute($discount);
+        return $action->execute($discountId);
     }
 }

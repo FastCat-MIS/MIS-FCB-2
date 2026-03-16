@@ -23,11 +23,10 @@ class MerchantDiscountsSeeder extends Seeder
                     'route_id' => $route->route_id,
                     'discount_name' => 'Standard Discount',
                     'discount_value' => rand(5, 20),
-                    'discount_type' => 'percentage', 
+                    'value_type' => 1, 
                     'effective_date' => Carbon::now(),
                     'status' => 'active',
                 ]);
-
             }
         }
     }
