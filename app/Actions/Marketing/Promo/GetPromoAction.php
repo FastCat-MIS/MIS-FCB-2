@@ -8,16 +8,24 @@ use RuntimeException;
 
 class GetPromoAction extends Action
 {
+
     public function execute(int $promoId)
     {
         try {
-            $promo = Promo::findOrFail($promoId);
+            $promo = Promo::with([
+                'promoConditions.vehicle:vehicle_id,vehicle_class',
+                'promoConditions.passengerType:p_id,type,discount',
+                'promoConditions.schedule:sched_id,departure_time',
+                'promoConditions.port:port_id,port_name',
+                'promoConditions.accommodation:accommodation_id,accommodation_name'
+            ])->findOrFail($promoId);
 
             return $this->success([
                 'promo' => $promo,
-            ], 'promo retrieved successfully');
+            ], 'Promo retrieved successfully');
+
         } catch (\Exception $e) {
-            throw new RuntimeException('Failed to retrieve promo.');
+            throw new RuntimeException('Failed to retrieve promo: ' . $e->getMessage());
         }
     }
 }
