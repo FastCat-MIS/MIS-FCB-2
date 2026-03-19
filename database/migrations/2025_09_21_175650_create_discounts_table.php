@@ -15,8 +15,8 @@ return new class extends Migration
             $table->string('discount_code', 100);
             $table->decimal('discount_value', 10, 2)->default(0.00);
             $table->unsignedTinyInteger('value_type');
-            $table->unsignedTinyInteger('round_trip')->default(0);
-            $table->unsignedTinyInteger('condition')->default(0);
+            $table->boolean('is_roundtrip')->default(0);
+            $table->boolean('with_condition')->default(0);
             $table->date("effective_date")->nullable();            
             $table->date('end_date')->nullable();
             $table->unsignedTinyInteger("status")->default(0);

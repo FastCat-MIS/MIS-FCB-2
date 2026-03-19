@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('promo_code', 50);
             $table->decimal('promo_value', 10, 2);
             $table->unsignedTinyInteger('value_type')->default(0);
-            $table->unsignedTinyInteger('round_trip')->default(0);
-            $table->unsignedTinyInteger('condition')->default(0);
+            $table->boolean('is_roundtrip')->default(0);
+            $table->boolean('with_condition')->default(0);
             $table->date("effective_date")->nullable();            
             $table->date('end_date')->nullable();
             $table->unsignedTinyInteger("status")->default(0);

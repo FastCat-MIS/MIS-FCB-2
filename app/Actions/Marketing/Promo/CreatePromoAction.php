@@ -24,7 +24,7 @@ class CreatePromoAction extends Action
                 
                 $promo = Promo::create($validated);
 
-                if ($data['condition'] === 1) {
+                if ($data['with_condition'] === 1) {
                     $this->generateConditions($promo->promo_id, $data['promo_conditions'] ?? []);
                 }
 
@@ -67,8 +67,8 @@ class CreatePromoAction extends Action
             'effective_date' => 'nullable|date',
             'end_date'       => 'nullable|date|after_or_equal:effective_date',
             'status'         => 'nullable|in:0,1,2,3',
-            'round_trip'         => 'nullable|in:0,1',
-            'condition'         => 'nullable|in:0,1',
+            'is_roundtrip'         => 'nullable|boolean',
+            'with_condition'         => 'nullable|boolean',
 
             'promo_conditions'                    => 'nullable|array',
             'promo_conditions.vehicles'           => 'nullable|array',
