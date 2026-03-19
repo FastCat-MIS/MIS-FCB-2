@@ -13,10 +13,13 @@ class Discount extends Model
     protected $primaryKey = 'discount_id';
 
     protected $fillable = [
+        'discount_cn',
         'discount_name',
         'discount_code',
         'discount_value',
         'value_type',
+        'round_trip',
+        'condition',
         'effective_date',
         'end_date',
         'status',

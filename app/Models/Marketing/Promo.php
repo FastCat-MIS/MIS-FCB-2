@@ -14,9 +14,12 @@ class Promo extends Model
 
     protected $fillable = [
         'promo_name',
+        'promo_cn',
         'promo_code',
         'promo_value',
         'value_type',
+        'round_trip',
+        'condition',
         'effective_date',
         'end_date',
         'status',
@@ -26,4 +29,9 @@ class Promo extends Model
         'effective_date' => 'date',
         'end_date' => 'date',
     ];
+
+    public function promoConditions()
+    {
+    return $this->hasMany(PromoCondition::class, 'promo_id', 'promo_id');
+    }
 }

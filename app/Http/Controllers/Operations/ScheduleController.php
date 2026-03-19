@@ -13,19 +13,19 @@ use App\Models\Operations\Schedule;
 
 class ScheduleController extends Controller
 {
-    public function index(GetSchedulesAction $getSchedulesAction)
+    public function index(GetSchedulesAction $action)
     {
-        return $getSchedulesAction->execute();
+        return $action->execute();
+    }
+    
+    public function show(Schedule $schedule, GetScheduleAction $action)
+    {
+        return $action->execute($schedule);
     }
 
-    public function show(Schedule $schedule, GetScheduleAction $getScheduleAction)
+    public function store(Request $request, CreateScheduleAction $action)
     {
-        return $getScheduleAction->execute($schedule);
-    }
-
-    public function store(Request $request, CreateScheduleAction $createScheduleAction)
-    {
-        return $createScheduleAction->execute($request->only([
+        return $action->execute($request->only([
             'departure_time',
             'vessel_id',
             'port_id',
@@ -34,9 +34,9 @@ class ScheduleController extends Controller
         ]));
     }
 
-    public function update(Request $request, Schedule $schedule, UpdateScheduleAction $updateScheduleAction)
+    public function update(Request $request, Schedule $schedule, UpdateScheduleAction $action)
     {
-        return $updateScheduleAction->execute($schedule, $request->only([
+        return $action->execute($schedule, $request->only([
             'departure_time',
             'vessel_id',
             'port_id',
@@ -45,8 +45,8 @@ class ScheduleController extends Controller
         ]));
     }
 
-    public function destroy(Schedule $schedule, DeleteScheduleAction $deleteScheduleAction)
+    public function destroy(Schedule $schedule, DeleteScheduleAction $action)
     {
-        return $deleteScheduleAction->execute($schedule);
+        return $action->execute($schedule);
     }
 }

@@ -10,7 +10,13 @@ class DiscountsSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('discounts')->insert([
+
+        $now = Carbon::now();
+
+        $yearHex = strtoupper(dechex($now->year));
+        $monthHex = strtoupper(str_pad(dechex($now->month), STR_PAD_LEFT));
+
+        $discounts = [
             [
                 'discount_name' => 'Senior Citizen',
                 'discount_code' => 'SC20',
@@ -56,6 +62,17 @@ class DiscountsSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
-        ]);
+        ];
+
+        foreach ($discounts as $index => $discount) {
+
+            $decimal = str_pad($index, 2, '0', STR_PAD_LEFT);
+
+            $discount['discount_cn'] = $yearHex . $monthHex . '-' . $decimal;
+            $discount['created_at'] = now();
+            $discount['updated_at'] = now();
+
+            DB::table('discounts')->insert($discount);
+        }
     }
 }

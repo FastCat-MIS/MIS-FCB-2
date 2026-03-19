@@ -67,6 +67,13 @@ return new class extends Migration {
         Schema::table('promos', function (Blueprint $table) {
             $table->softDeletes();
         });
+        Schema::table('promo_conditions', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+        Schema::table('discount_conditions', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+
     }
 
     public function down(): void
@@ -131,5 +138,12 @@ return new class extends Migration {
         Schema::table('promos', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
+        Schema::table('promo_conditions', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+        Schema::table('discount_conditions', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+
     }
 };
