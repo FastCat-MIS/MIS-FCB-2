@@ -13,7 +13,7 @@ class PromosSeeder extends Seeder
         $now = Carbon::now();
 
         $yearHex = strtoupper(dechex($now->year));
-        $monthHex = strtoupper(str_pad(dechex($now->month), 2, '0', STR_PAD_LEFT));
+        $monthHex = strtoupper(str_pad(dechex($now->month), STR_PAD_LEFT));
 
         $promos = [
             [
