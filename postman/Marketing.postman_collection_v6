@@ -1,0 +1,1823 @@
+{
+  "info": {
+    "_postman_id": "11b8864f-d4ae-4b8b-80de-412d51a9b357",
+    "name": "Marketing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48106917",
+    "_collection_link": "https://go.postman.co/collection/48106917-11b8864f-d4ae-4b8b-80de-412d51a9b357?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Rates",
+      "item": [
+        {
+          "name": "VehicleRates",
+          "item": [
+            {
+              "name": "Create Vehicle Rate",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"vehicle_id\": 2,\r\n    \"route_id\": 2,\r\n    \"vehicle_rate\": 300\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/vehicle-rates/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "vehicle-rates",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Vehicle Rates",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"vehicle_id\": 1,\r\n    \"route_id\": 1,\r\n    \"vehicle_rate\": 200\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/vehicle-rates/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "vehicle-rates",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Vehicle Rate",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"vehicle_id\": 1,\r\n    \"route_id\": 1,\r\n    \"vehicle_rate\": 200\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/vehicle-rates/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "vehicle-rates",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Route Vehicle Rates",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"sean@example.com\",\n    \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/vehicle-rates/route/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "vehicle-rates",
+                    "route",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Vehicle Rate",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"vehicle_id\": 2,\r\n    \"route_id\": 2,\r\n    \"vehicle_rate\": 300\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/vehicle-rates/2",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "vehicle-rates",
+                    "2"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Vehicle Rate",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"vehicle_id\": 2,\r\n    \"route_id\": 2,\r\n    \"vehicle_rate\": 300\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/vehicle-rates/2",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "vehicle-rates",
+                    "2"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "AccommodationRates",
+          "item": [
+            {
+              "name": "Create Acc Rate",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"route_id\": 1,\r\n    \"accommodation_id\": 1,\r\n    \"base_rate\":300\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/accommodation-rates",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "accommodation-rates"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Acc Rate",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"base_rate\":100,\r\n    \"status\":\"active\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/accommodation-rates/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "accommodation-rates",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Acc Rate",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"sean@example.com\",\n    \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/accommodation-rates/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "accommodation-rates",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Route Acc Rates",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"route_id\": 1,\r\n    \"accommodation_id\": 1,\r\n    \"base_rate\":300\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/accommodation-rates/route/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "accommodation-rates",
+                    "route",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Acc Rate",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"base_rate\":100,\r\n    \"status\":\"active\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/accommodation-rates/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "accommodation-rates",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Acc Rate",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8000/accommodation-rates/1",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "accommodation-rates",
+                    "1"
+                  ]
+                },
+                "description": "Get a single accommodation rate by its ID. Route: GET /accommodation-rates/{accRateId}"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Institutional Accounts",
+      "item": [
+        {
+          "name": "IA Discount",
+          "item": [
+            {
+              "name": "Get All IA Discounts",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/institutional-accounts/1/discounts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "institutional-accounts",
+                    "1",
+                    "discounts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create IA Discount",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"ia_id\":1,\r\n    \"route_id\": 1,\r\n    \"discount_name\":\"sample\",\r\n    \"discount_value\":23,\r\n    \"discount_type\": \"fixed\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/institutional-accounts/discounts ",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "institutional-accounts",
+                    "discounts "
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update IA Discount",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"route_id\": 2,\r\n    \"discount_name\":\"updated sample\",\r\n    \"discount_value\":23,\r\n    \"discount_type\": \"fixed\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/institutional-accounts/1/discounts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "institutional-accounts",
+                    "1",
+                    "discounts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete IA Discount",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8000/institutional-accounts/14/discounts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "institutional-accounts",
+                    "14",
+                    "discounts"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Get All IA",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/institutional-accounts",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "institutional-accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get IA",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/institutional-accounts/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "institutional-accounts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create IA",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"ia_name\": \"ABC Travel Corporation\",\n    \"address\": \"123 Makati Avenue, Makati City\",\n    \"email\": \"ab23c@travelcorp.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"contact_number\": \"+639171234567\",\n    \"contact_person\": \"Juan Dela Cruz\",\n    \"area\": \"Metro Manila\",\n    \"payment_mode\": \"Bank Transfer\",\n    \"payment_type\": \"Credit\",\n    \"status\": \"active\",\n    \"effective_date\": \"2026-03-03\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/institutional-accounts",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "institutional-accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update IA",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"ia_name\": \"Updated Corp Name\",\n    \"email\": \"updated2@email.com\",\n    \"payment_mode\": \"Cash\",\n    \"payment_type\": \"Prepaid\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/institutional-accounts/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "institutional-accounts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete IA",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/institutional-accounts/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "institutional-accounts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset IA Password",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/institutional-accounts/1/reset-password",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "institutional-accounts",
+                "1",
+                "reset-password"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Merchants",
+      "item": [
+        {
+          "name": "Merchant Discount",
+          "item": [
+            {
+              "name": "Get All Merchant Discounts",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"merchant_name\": \"ABC Travel Corporation\",\r\n    \"address\": \"123 Makati Avenue, Makati City\",\r\n    \"email\": \"ab23c@travelcorp.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"contact_number\": \"+639171234567\",\r\n    \"contact_person\": \"Juan Dela Cruz\",\r\n    \"area\": \"Metro Manila\",\r\n    \"payment_mode\": \"Bank Transfer\",\r\n    \"payment_type\": \"Credit\",\r\n    \"status\": \"active\",\r\n    \"effective_date\": \"2026-03-03\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/merchants/1/discounts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "merchants",
+                    "1",
+                    "discounts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Merchant Discount",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"merchant_id\":1,\r\n    \"route_id\": 1,\r\n    \"discount_name\":\"sample\",\r\n    \"discount_value\":23,\r\n    \"discount_type\": \"fixed\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8000/merchants/discounts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "merchants",
+                    "discounts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Merchant Discount",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"merchant_id\":1,\r\n    \"route_id\": 1,\r\n    \"discount_name\":\"sample\",\r\n    \"discount_value\":23,\r\n    \"discount_type\": \"fixed\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/merchants/1/discounts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "merchants",
+                    "1",
+                    "discounts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Merchant Discount",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{accessToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"merchant_id\":1,\r\n    \"route_id\": 1,\r\n    \"discount_name\":\"sample\",\r\n    \"discount_value\":23,\r\n    \"discount_type\": \"fixed\"\r\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:8000/merchants/1/discounts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "merchants",
+                    "1",
+                    "discounts"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Get All Merchants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/merchants",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Merchant",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/merchants/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Merchant",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"merchant_name\": \"ABC Travel Corporation\",\r\n    \"address\": \"123 Makati Avenue, Makati City\",\r\n    \"email\": \"ab23c@travelcorp.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"contact_number\": \"+639171234567\",\r\n    \"contact_person\": \"Juan Dela Cruz\",\r\n    \"area\": \"Metro Manila\",\r\n    \"payment_mode\": \"Bank Transfer\",\r\n    \"payment_type\": \"Credit\",\r\n    \"status\": \"active\",\r\n    \"effective_date\": \"2026-03-03\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/merchants",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Merchant",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"merchant_name\": \"Updated Corp Name\",\r\n    \"email\": \"updated2@email.com\",\r\n    \"payment_mode\": \"Cash\",\r\n    \"payment_type\": \"Prepaid\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/merchants/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Merchant",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/merchants/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Merchant Password",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/merchants/2/reset-password",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "merchants",
+                "2",
+                "reset-password"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Discounts",
+      "item": [
+        {
+          "name": "Get All Discounts",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"merchant_name\": \"ABC Travel Corporation\",\r\n    \"address\": \"123 Makati Avenue, Makati City\",\r\n    \"email\": \"ab23c@travelcorp.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"contact_number\": \"+639171234567\",\r\n    \"contact_person\": \"Juan Dela Cruz\",\r\n    \"area\": \"Metro Manila\",\r\n    \"payment_mode\": \"Bank Transfer\",\r\n    \"payment_type\": \"Credit\",\r\n    \"status\": \"active\",\r\n    \"effective_date\": \"2026-03-03\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/discounts",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "discounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Discount",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"merchant_name\": \"ABC Travel Corporation\",\r\n    \"address\": \"123 Makati Avenue, Makati City\",\r\n    \"email\": \"ab23c@travelcorp.com\",\r\n    \"password\": \"password123\",\r\n    \"password_confirmation\": \"password123\",\r\n    \"contact_number\": \"+639171234567\",\r\n    \"contact_person\": \"Juan Dela Cruz\",\r\n    \"area\": \"Metro Manila\",\r\n    \"payment_mode\": \"Bank Transfer\",\r\n    \"payment_type\": \"Credit\",\r\n    \"status\": \"active\",\r\n    \"effective_date\": \"2026-03-03\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/discounts/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "discounts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Discount",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"discount_name\": \"1\",\r\n    \"discount_code\": \"1\",\r\n    \"discount_value\": 1,\r\n    \"value_type\": 0,\r\n    \"effective_date\": \"2026-03-04\",\r\n    \"end_date\": \"2026-03-27\",\r\n    \"round_trip\": 1,\r\n    \"condition\": 1,\r\n    \"discount_conditions\": {\r\n        \"vehicles\": [\r\n            1,\r\n            3\r\n        ],\r\n        \"passenger\": [\r\n            {\r\n                \"id\": 1,\r\n                \"pax\": 2\r\n            },\r\n            {\r\n                \"id\": 2,\r\n                \"pax\": 2\r\n            }\r\n        ],\r\n        \"accommodation\": [\r\n            1,\r\n            3\r\n        ],\r\n        \"ports\": [\r\n            2,\r\n            4\r\n        ],\r\n        \"schedules\": [\r\n            2,\r\n            4,\r\n            8\r\n        ]\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/discounts",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "discounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Discount",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"discount_name\": \"Updated Sample\",\r\n\"discount_code\": \"SD220\",\r\n\"discount_value\": 30,\r\n\"discount_type\":\"percentage\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/discounts/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "discounts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Discount",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"discount_name\": \"Updated Sample\",\r\n\"discount_code\": \"SD220\",\r\n\"discount_value\": 30,\r\n\"discount_type\":\"percentage\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/discounts/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "discounts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Promos",
+      "item": [
+        {
+          "name": "Get Promo",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"discount_name\": \"Updated Sample\",\r\n\"discount_code\": \"SD220\",\r\n\"discount_value\": 30,\r\n\"discount_type\":\"percentage\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/promos/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "promos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Promos",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"discount_name\": \"Updated Sample\",\r\n\"discount_code\": \"SD220\",\r\n\"discount_value\": 30,\r\n\"discount_type\":\"percentage\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/promos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "promos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Promo",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"promo_name\": \"1\",\r\n    \"promo_code\": \"1\",\r\n    \"promo_value\": 1,\r\n    \"value_type\": 0,\r\n    \"effective_date\": \"2026-03-04\",\r\n    \"end_date\": \"2026-03-27\",\r\n    \"round_trip\": 1,\r\n    \"condition\": 1,\r\n    \"promo_conditions\": {\r\n        \"vehicles\": [\r\n            1,\r\n            3\r\n        ],\r\n        \"passenger\": [\r\n            {\r\n                \"id\": 1,\r\n                \"pax\": 2\r\n            },\r\n            {\r\n                \"id\": 2,\r\n                \"pax\": 2\r\n            }\r\n        ],\r\n        \"accommodation\": [\r\n            1,\r\n            3\r\n        ],\r\n        \"ports\": [\r\n            2,\r\n            4\r\n        ],\r\n        \"schedules\": [\r\n            2,\r\n            4,\r\n            8\r\n        ]\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/promos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "promos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Promo",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"promo_name\": \"Updated Sample Promo\",\r\n    \"promo_code\": \"SD20\",\r\n    \"promo_value\":20.00,\r\n    \"promo_type\":\"percentage\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/promos/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "promos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Promo",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"discount_name\": \"Updated Sample\",\r\n\"discount_code\": \"SD220\",\r\n\"discount_value\": 30,\r\n\"discount_type\":\"percentage\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/promos/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "promos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Add Ons",
+      "item": [
+        {
+          "name": "Get All Add-Ons",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "value": "application/json",
+                "key": "Accept"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/add-ons/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "add-ons",
+                ""
+              ]
+            },
+            "description": "Get all add-ons. Route: GET /add-ons/"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Add-On",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "value": "application/json",
+                "key": "Accept"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/add-ons/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "add-ons",
+                "1"
+              ]
+            },
+            "description": "Get a single add-on by its ID. Route: GET /add-ons/{addOn}"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Add-On",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\\n    \\\"name\\\": \\\"Sample Add-On\\\",\\n    \\\"description\\\": \\\"Add-on description\\\",\\n    \\\"price\\\": 100,\\n    \\\"status\\\": \\\"active\\\"\\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/add-ons/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "add-ons",
+                ""
+              ]
+            },
+            "description": "Create a new add-on. Route: POST /add-ons/"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Add-On",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\\n    \\\"name\\\": \\\"Updated Add-On\\\",\\n    \\\"description\\\": \\\"Updated description\\\",\\n    \\\"price\\\": 150,\\n    \\\"status\\\": \\\"active\\\"\\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/add-ons/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "add-ons",
+                "1"
+              ]
+            },
+            "description": "Update an existing add-on by its ID. Route: PUT /add-ons/{addOn}"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Add-On",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/add-ons/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "add-ons",
+                "1"
+              ]
+            },
+            "description": "Delete an add-on by its ID. Route: DELETE /add-ons/{addOn}"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvbG9naW4iLCJpYXQiOjE3NzMyOTI0MTYsImV4cCI6MTc3MzI5NjAxNiwibmJmIjoxNzczMjkyNDE2LCJqdGkiOiJZaHdXeGxMUUI4R0NTSGRkIiwic3ViIjoiMiIsInBydiI6IjE3MjY0OGU1MjVmNzhiODAwOTFjYjhjZjBjOWQ4NTE4MzM2OTk1YjYiLCJ1c2VyX2lkIjoyLCJmdWxsX25hbWUiOiJTZWFuIFBhdHJpY2sgUGF0cm9uIiwic2hvcnRfbmFtZSI6IlNlYW4gUGF0cm9uIiwiZW1haWwiOiJzZWFuQGV4YW1wbGUuY29tIiwicm9sZV9pZCI6bnVsbH0.z1fhQoRVoBx5qEwzyMHXoMz8dXE53xciSsbthAwOD78",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"sean@example.com\",\n    \"password\": \"password123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8000/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
