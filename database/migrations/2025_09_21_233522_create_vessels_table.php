@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('vessel_name', 100);
             $table->integer('capacity');
             $table->text('description')->nullable();
-            $table->string('status', 20)->default('active');
+            $table->unsignedTinyInteger("status")->default(0);
             $table->timestamps();
         });
     }

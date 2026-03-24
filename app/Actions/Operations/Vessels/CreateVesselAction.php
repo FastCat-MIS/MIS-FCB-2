@@ -16,7 +16,7 @@ class CreateVesselAction extends Action
             'vessel_name' => 'required|string|max:100|unique:vessels,vessel_name',
             'capacity' => 'sometimes|nullable|integer|min:0',
             'description' => 'sometimes|nullable|string',
-            'status' => 'sometimes|nullable|string|max:20',
+            'status'         => 'nullable|in:0,1,2,3',
             'accommodations' => 'sometimes|array',
             'accommodations.*.accommodation_id' => 'required_with:accommodations|exists:passenger_accommodations,accommodation_id',
             'accommodations.*.capacity' => 'sometimes|nullable|integer|min:0',

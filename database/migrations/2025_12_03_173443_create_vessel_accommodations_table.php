@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreign('accommodation_id')->references('accommodation_id')->on('passenger_accommodations')->onDelete('cascade');
 
             // Additional attributes
-            $table->integer('seats')->default(0);
+            $table->unsignedInteger('seats')->default(0);
             $table->boolean('aircon')->default(false);
             $table->boolean('wifi')->default(false);
 
