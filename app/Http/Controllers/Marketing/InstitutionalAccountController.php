@@ -26,12 +26,29 @@ class InstitutionalAccountController extends Controller
 
     public function store(Request $request, CreateInstitutionalAccountAction $action)
     {
-        return $action->execute($request->all());
+        $request->validate([
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $data = array_merge($request->except('logo'), [
+            'logo' => $request->file('logo'), 
+        ]);
+
+        return $action->execute($data);
     }
 
     public function update(Request $request, $iaId, UpdateInstitutionalAccountAction $action)
     {
-        return $action->execute($iaId, $request->all());
+
+        $request->validate([
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $data = array_merge($request->except('logo'), [
+            'logo' => $request->file('logo'), 
+        ]);
+
+        return $action->execute($iaId, $data);
     }
 
     public function destroy($iaId, DeleteInstitutionalAccountAction $action)

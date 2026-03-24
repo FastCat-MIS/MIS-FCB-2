@@ -14,6 +14,10 @@ class UpdateMerchantAction extends Action
         $merchant = Merchant::findOrFail($merchantId);
         $validated = $this->validate($data, $merchantId); 
 
+        if (isset($data['logo']) && $data['logo'] instanceof \Illuminate\Http\UploadedFile) {
+            $validated['image'] = $data['logo']->store('ia-logos', 'public');
+        }
+
 
         $merchant->update($validated);
 

@@ -13,6 +13,11 @@ class CreateMerchantAction extends Action
     {
         $validated = $this->validate($data);
         $validated['password'] = Hash::make('Fastcat_01');
+        
+        if (isset($data['logo']) && $data['logo'] instanceof \Illuminate\Http\UploadedFile) {
+            $validated['image'] = $data['logo']->store('merchant-logos', 'public');
+        }
+
         $merchant = Merchant::create($validated);
 
         return $this->success([
@@ -23,18 +28,18 @@ class CreateMerchantAction extends Action
     private function validate(array $data): array
     {
         return Validator::make($data, [
-            'merchant_name' => 'required|string|max:255',
-            'image' => 'nullable|string|max:255',
-            'address'=> 'nullable|string|max:255',
-            'email' => 'required|string|email|max:255|unique:merchants,email',
+            'merchant_name'  => 'required|string|max:255',
+            'image'          => 'nullable|string|max:255',
+            'address'        => 'nullable|string|max:255',
+            'email'          => 'required|string|email|max:255|unique:merchants,email',
             'contact_number' => 'nullable|string|max:255',
             'contact_person' => 'nullable|string|max:255',
-            'area' => 'nullable|string|max:255',
-            'payment_mode' => 'required|string|max:255',
-            'payment_type' => 'required|string|max:255',
-            'status' => 'nullable|in:active,inactive',
+            'area'           => 'nullable|string|max:255',
+            'payment_mode'   => 'required|string|max:255',
+            'payment_type'   => 'required|string|max:255',
+            'status'         => 'nullable|in:active,inactive',
             'effective_date' => 'nullable|date',
-            'eoc_date' => 'nullable|date',
+            'eoc_date'       => 'nullable|date',
         ])->validate();
     }
 }

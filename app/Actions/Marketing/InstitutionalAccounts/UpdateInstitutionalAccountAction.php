@@ -20,6 +20,11 @@ class UpdateInstitutionalAccountAction extends Action
             unset($validated['password']);
         }
 
+        if (isset($data['logo']) && $data['logo'] instanceof \Illuminate\Http\UploadedFile) {
+            $validated['image'] = $data['logo']->store('ia-logos', 'public');
+        }
+
+
         $institutionalAccount->update($validated);
 
         return $this->success([
