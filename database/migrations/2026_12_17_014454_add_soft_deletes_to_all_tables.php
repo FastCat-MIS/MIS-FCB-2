@@ -40,6 +40,12 @@ return new class extends Migration {
         Schema::table('vessels', function (Blueprint $table) {
             $table->softDeletes();
         });
+        Schema::table('vessel_seats', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+        Schema::table('vessel_facility_labels', function (Blueprint $table) {
+            $table->softDeletes();
+        });
         Schema::table('add_ons', function (Blueprint $table) {
             $table->softDeletes();
         });
@@ -109,6 +115,12 @@ return new class extends Migration {
             $table->dropSoftDeletes();
         });
         Schema::table('vessels', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+        Schema::table('vessel_seats', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+        Schema::table('vessel_facility_labels', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
         Schema::table('add_ons', function (Blueprint $table) {

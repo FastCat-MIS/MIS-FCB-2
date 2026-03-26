@@ -9,9 +9,10 @@ class CreateRoutesTable extends Migration
     public function up()
     {
         Schema::create('routes', function (Blueprint $table) {
-            $table->id('route_id'); // Custom PK
-            $table->string('port_a', 100);
-            $table->string('port_b', 100);
+            $table->id('route_id'); 
+            $table->foreignId('port_a_id')->constrained('ports', 'port_id')->onDelete('cascade');
+            $table->foreignId('port_b_id')->constrained('ports', 'port_id')->onDelete('cascade');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

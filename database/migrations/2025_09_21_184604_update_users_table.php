@@ -16,6 +16,11 @@ return new class extends Migration
             if (!Schema::hasColumn('users', 'first_name')) {
                 $table->string('first_name')->after('id')->nullable();
             }
+
+            if (!Schema::hasColumn('users', 'middle_name')) {
+                $table->string('middle_name')->after('id')->nullable();
+            }
+
             if (!Schema::hasColumn('users', 'last_name')) {
                 $table->string('last_name')->after('first_name')->nullable();
             }
@@ -30,7 +35,7 @@ return new class extends Migration
 
             // Add status field
             if (!Schema::hasColumn('users', 'status')) {
-                $table->string('status')->default('active')->after('address');
+                $table->boolean('status')->default(true)->after('address');
             }
 
             // Add role_id foreign key
