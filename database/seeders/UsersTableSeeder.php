@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'phone' => '+1234567890',
                 'address' => '123 Main St',
-                'status' => 'active',
+                'status' => true,
                 'email_verified_at' => now(),
             ],
             [
@@ -30,7 +30,7 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'phone' => '+1234567891',
                 'address' => '456 Oak St',
-                'status' => 'active',
+                'status' => true,
                 'email_verified_at' => now(),
             ],
             [
@@ -41,7 +41,7 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'phone' => '+1234567892',
                 'address' => '789 Pine St',
-                'status' => 'active',
+                'status' => true,
                 'email_verified_at' => now(),
             ],
             // God Admin user
@@ -53,7 +53,7 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('godadmin123'),
                 'phone' => '+1000000000',
                 'address' => 'System Headquarters',
-                'status' => 'active',
+                'status' => true,
                 'email_verified_at' => now(),
             ],
             // Customer user
@@ -65,7 +65,7 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('customer123'),
                 'phone' => '+1234567899',
                 'address' => 'Customer Street',
-                'status' => 'active',
+                'status' => true,
                 'email_verified_at' => now(),
             ]
         ];

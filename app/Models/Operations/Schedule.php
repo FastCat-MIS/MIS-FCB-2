@@ -13,13 +13,14 @@ class Schedule extends Model
 
     protected $fillable = [
         'departure_time',
+        'arrival_time',
         'vessel_id',
-        'port_id', // link to port
+        'port_id',
+        'is_active',
         'status',
         'visibility',
     ];
 
-    // Schedule belongs to a vessel
     public function vessel()
     {
         return $this->belongsTo(Vessel::class, 'vessel_id', 'id');

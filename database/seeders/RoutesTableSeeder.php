@@ -10,26 +10,43 @@ class RoutesTableSeeder extends Seeder
 {
     public function run(): void
     {
-        $ports = Port::all();
+        // Get ports indexed by name for easy lookup
+        $ports = Port::pluck('port_id', 'port_name');
 
-        if ($ports->count() < 2) {
-            $this->command->warn('Not enough ports to create routes. Seed ports first.');
-            return;
-        }
-
-        $routesData = [
-            ['port_a_id' => $ports[0]->port_id, 'port_b_id' => $ports[1]->port_id],
-            ['port_a_id' => $ports[0]->port_id, 'port_b_id' => $ports[2]->port_id ?? $ports[1]->port_id],
-            ['port_a_id' => $ports[1]->port_id, 'port_b_id' => $ports[3]->port_id ?? $ports[0]->port_id],
+        $routes = [
+            ['Batangas Port', 'Calapan Port'],
+            ['Bulalacao Port', 'Caticlan Port'],
+            ['Dumangas Port', 'Banago Port'],
+            ['Dumaguete Port', 'Dapitan Port'],
+            ['San Carlos Port', 'Toledo Port'],
+            ['Cebu Port', 'Tubigon Port'],
+            ['Matnog Port', 'Dap Dap Port'],
+            ['Maasin Port', 'Surigao Port'],
+            ['Zamboanga Port', 'Basilan Port'],
         ];
 
-        foreach ($routesData as $data) {
+        $created = 0;
+
+        foreach ($routes as [$portA, $portB]) {
+            if (!isset($ports[$portA]) || !isset($ports[$portB])) {
+                $this->command->warn("Skipping route: $portA - $portB (port not found)");
+                continue;
+            }
+
             Route::updateOrCreate(
-                ['port_a_id' => $data['port_a_id'], 'port_b_id' => $data['port_b_id']],
-                $data
+                [
+                    'port_a_id' => $ports[$portA],
+                    'port_b_id' => $ports[$portB],
+                ],
+                [
+                    'port_a_id' => $ports[$portA],
+                    'port_b_id' => $ports[$portB],
+                ]
             );
+
+            $created++;
         }
 
-        $this->command->info(count($routesData) . ' routes seeded successfully.');
+        $this->command->info($created . ' routes seeded successfully.');
     }
 }

@@ -14,6 +14,7 @@ class Route extends Model
 
     protected $fillable = [
         'port_a_id',
+        'is_active',
         'port_b_id',
     ];
 
