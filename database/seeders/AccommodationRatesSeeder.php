@@ -27,7 +27,7 @@ class AccommodationRatesSeeder extends Seeder
                         'accommodation_id' => $accommodation->accommodation_id,
                         'base_rate' => rand(500, 2000), 
 
-                        'status' => 'active',
+                        'status' => 1,
                     ]);
                 }
             }

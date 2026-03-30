@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('route_id')->constrained('routes', 'route_id')->onDelete('cascade');
             $table->decimal('vehicle_rate',10,2)->default(0);
             $table->timestamp('effective_date')->nullable();
-            $table->string('status')->default('active');
+            $table->unsignedTinyInteger('status')
+                  ->default(0); 
             $table->timestamps();
         });
     }

@@ -14,8 +14,8 @@ return new class extends Migration {
                   ->default(0);
             $table->boolean('waived')
                   ->default(false);
-            $table->string('status')
-                  ->default('active');
+            $table->unsignedTinyInteger('status')
+                  ->default(0); 
             $table->timestamps();
         });
     }

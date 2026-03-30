@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('area', 150)->nullable();
             $table->string('payment_mode', 20)->nullable();
             $table->string('payment_type', 100)->nullable();
-            $table->string('status', 100)->default('inactive')->nullable();
+            $table->unsignedTinyInteger('status')->default(0);
             $table->timestamp('effective_date')->nullable();
             $table->timestamp('eoc_date')->nullable();
             $table->timestamps();

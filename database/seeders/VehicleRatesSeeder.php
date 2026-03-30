@@ -26,7 +26,7 @@ class VehicleRatesSeeder extends Seeder
                     'vehicle_id'     => $vehicle->vehicle_id,
                     'route_id'       => $route->route_id,
                     'vehicle_rate'   => rand(1000, 5000), 
-                    'status'         => 'active',
+                    'status'         => 1,
                 ]);
             }
         }

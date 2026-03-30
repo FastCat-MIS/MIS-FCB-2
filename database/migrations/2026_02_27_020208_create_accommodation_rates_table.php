@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('accommodation_id')->constrained('passenger_accommodations', 'accommodation_id'); 
             $table->decimal('base_rate', 10, 2);
             $table->timestamp('effective_date')->nullable();
-            $table->string('status')->default('active');
+            $table->unsignedTinyInteger('status')
+                  ->default(0); 
             $table->timestamps();
 
             $table->index('route_id');
