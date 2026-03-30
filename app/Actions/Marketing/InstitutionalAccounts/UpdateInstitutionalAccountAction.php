@@ -52,7 +52,7 @@ class UpdateInstitutionalAccountAction extends Action
             'area' => 'nullable|string|max:255',
             'payment_mode' => 'sometimes|required|string|max:255',
             'payment_type' => 'sometimes|required|string|max:255',
-            'status' => 'nullable|in:active,inactive',
+            'status'         => 'nullable|in:0,1,2,3',
             'effective_date' => 'nullable|date',
             'eoc_date' => 'nullable|date',
         ])->validate();
