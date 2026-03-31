@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('wifi')->default(false);
             $table->timestamps();
             $table->softDeletes();
+            $table->unique(['vessel_id', 'accommodation_id']);
         });
     }
 

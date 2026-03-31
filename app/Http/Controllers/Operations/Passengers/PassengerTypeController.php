@@ -13,43 +13,29 @@ use Illuminate\Http\Request;
 
 class PassengerTypeController extends Controller
 {
-    /**
-     * Display a listing of the passenger types.
-     */
-    public function index(GetPassengerTypesAction $getPassengerTypesAction)
+
+    public function index(GetPassengerTypesAction $action)
     {
-        return $getPassengerTypesAction->execute();
+        return $action->execute();
     }
 
-    /**
-     * Display the specified passenger type.
-     */
-    public function show(PassengerType $passengerType, GetPassengerTypeAction $getPassengerTypeAction)
+    public function show(PassengerType $passengerType, GetPassengerTypeAction $action)
     {
-        return $getPassengerTypeAction->execute($passengerType);
+        return $action->execute($passengerType);
     }
 
-    /**
-     * Store a newly created passenger type.
-     */
-    public function store(Request $request, CreatePassengerTypeAction $createPassengerTypeAction)
+    public function store(Request $request, CreatePassengerTypeAction $action)
     {
-        return $createPassengerTypeAction->execute($request->all());
+        return $action->execute($request->all());
     }
 
-    /**
-     * Update the specified passenger type.
-     */
-    public function update(Request $request, PassengerType $passengerType, UpdatePassengerTypeAction $updatePassengerTypeAction)
+    public function update(Request $request, PassengerType $passengerType, UpdatePassengerTypeAction $action)
     {
-        return $updatePassengerTypeAction->execute($passengerType, $request->all());
+        return $action->execute($passengerType, $request->all());
     }
 
-    /**
-     * Remove the specified passenger type.
-     */
-    public function destroy(PassengerType $passengerType, DeletePassengerTypeAction $deletePassengerTypeAction)
+    public function destroy(PassengerType $passengerType, DeletePassengerTypeAction $action)
     {
-        return $deletePassengerTypeAction->execute($passengerType);
+        return $action->execute($passengerType);
     }
 }
