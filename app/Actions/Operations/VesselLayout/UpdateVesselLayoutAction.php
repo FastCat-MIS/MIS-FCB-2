@@ -53,6 +53,7 @@ class UpdateVesselLayoutAction
                         'col' => $seat['col'],
                         'blocked' => $seat['blocked'],
                         'path' => $seat['path'],
+                        'pwd' => $seat['pwd'],
                         'facility' => $seat['facility'],
                     ]);
                 }
