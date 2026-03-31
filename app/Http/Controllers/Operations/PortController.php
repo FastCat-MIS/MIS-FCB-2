@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Operations;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Operations\Port;
 use App\Actions\Operations\Ports\{
     GetPortsAction,
     GetPortAction,
@@ -20,9 +19,9 @@ class PortController extends Controller
         return $action->execute();
     }
 
-    public function show(Port $port, GetPortAction $action)
+    public function show($portId, GetPortAction $action)
     {
-        return $action->execute($port);
+        return $action->execute($portId);
     }
 
     public function store(Request $request, CreatePortAction $action)
@@ -30,13 +29,13 @@ class PortController extends Controller
         return $action->execute($request->all());
     }
 
-    public function update(Request $request, Port $port, UpdatePortAction $action)
+    public function update(Request $request, $portId, UpdatePortAction $action)
     {
-        return $action->execute($port, $request->all());
+        return $action->execute($portId, $request->all());
     }
 
-    public function destroy(Port $port, DeletePortAction $action)
+    public function destroy($portId, DeletePortAction $action)
     {
-        return $action->execute($port);
+        return $action->execute($portId);
     }
 }

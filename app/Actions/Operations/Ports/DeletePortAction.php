@@ -8,8 +8,10 @@ use App\Models\Operations\Port;
 
 class DeletePortAction extends Action
 {
-    public function execute(Port $port)
+    public function execute(int $portId)
     {
+        $port = Port::findOrFail($portId);
+            
         $port->delete();
 
         return $this->success([], 'Port deleted successfully', 204);

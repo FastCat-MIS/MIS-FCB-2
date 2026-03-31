@@ -28,6 +28,7 @@ class GetRoutesWithPortsAndSchedulesAction extends Action
                             return [
                                 'sched_id'       => $sched->sched_id,
                                 'departure_time' => $sched->departure_time,
+                                'arrival_time' => $sched->arrival_time,
                                 'vessel' => $sched->vessel ? [
                                     'id'   => $sched->vessel->id,
                                     'name' => $sched->vessel->vessel_name,
@@ -45,6 +46,7 @@ class GetRoutesWithPortsAndSchedulesAction extends Action
                             return [
                                 'sched_id'       => $sched->sched_id,
                                 'departure_time' => $sched->departure_time,
+                                'arrival_time' => $sched->arrival_time,
                                 'vessel' => $sched->vessel ? [
                                     'id'   => $sched->vessel->id,
                                     'name' => $sched->vessel->vessel_name,
