@@ -25,12 +25,29 @@ class MerchantController extends Controller
 
     public function store(Request $request, CreateMerchantAction $action)
     {
-        return $action->execute($request->all());
+        $request->validate([
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $data = array_merge($request->except('logo'), [
+            'logo' => $request->file('logo'), 
+        ]);
+
+        return $action->execute($data);
     }
 
     public function update(Request $request, $merchantId, UpdateMerchantAction $action)
     {
-        return $action->execute($merchantId, $request->all());
+
+        $request->validate([
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $data = array_merge($request->except('logo'), [
+            'logo' => $request->file('logo'), 
+        ]);
+
+        return $action->execute($merchantId, $data);
     }
 
     // public function destroy($merchantId, DeleteMerchantAction $action)

@@ -13,12 +13,14 @@ class VesselSeat extends Model
         'col',
         'blocked',
         'path',
+        'pwd',
         'facility',
     ];
 
     protected $casts = [
         'blocked' => 'boolean',
         'path' => 'boolean',
+        'pwd' => 'boolean',
     ];
 
     public function accommodation()

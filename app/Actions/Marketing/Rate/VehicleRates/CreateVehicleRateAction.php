@@ -26,7 +26,7 @@ class CreateVehicleRateAction extends Action
             'route_id'       => 'required|integer|exists:routes,route_id',
             'vehicle_rate'   => 'required|numeric|min:0',
             'effective_date' => 'nullable|date',
-            'status'         => 'nullable|in:active,inactive',
+            'status'         => 'nullable|in:0,1,2,3',
         ])->validate();
     }
 }

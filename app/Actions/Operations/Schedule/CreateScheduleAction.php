@@ -17,7 +17,8 @@ class CreateScheduleAction extends Action
                 'departure_time' => 'required|date_format:H:i:s',
                 'vessel_id'      => 'nullable|exists:vessels,id',
                 'port_id'        => 'required|exists:ports,port_id',
-                'status'         => 'sometimes|in:active,inactive',
+                'status'         => 'sometimes|required|in:0,1,2,3',
+                'is_active'      => 'sometimes|required|boolean',
             ]);
 
             if ($validator->fails()) {
@@ -27,7 +28,7 @@ class CreateScheduleAction extends Action
             $validated = $validator->validated();
 
             if (!isset($validated['status'])) {
-                $validated['status'] = 'active';
+                $validated['status'] = 1; 
             }
 
             if (!isset($validated['visibility'])) {

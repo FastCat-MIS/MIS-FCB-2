@@ -15,7 +15,7 @@ class UpdateAccommodationRateAction extends Action
     {
       $validator = Validator::make($data, [
         'base_rate' => 'sometimes|required|numeric|min:0',
-        'status' => 'sometimes|in:active,inactive',
+        'status'         => 'sometimes|required|in:0,1,2,3',
       ]);
        if ($validator->fails()) {
             throw new ValidationException($validator);

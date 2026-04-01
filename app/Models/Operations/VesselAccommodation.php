@@ -16,24 +16,21 @@ class VesselAccommodation extends Model
         'columns',
         'aircon',
         'wifi',
-        'seats', // optional, can remove from fillable if unused
+        'seats', 
     ];
 
-    protected $hidden = ['seats']; // hide the int column from JSON output
+    protected $hidden = ['seats']; 
 
-    // Seats relation
     public function seats()
     {
         return $this->hasMany(VesselSeat::class, 'vessel_accommodation_id', 'id');
     }
 
-    // Facility labels relation
     public function facilityLabels()
     {
         return $this->hasMany(VesselFacilityLabel::class, 'vessel_accommodation_id', 'id');
     }
 
-    // Accommodation (passenger type) relation
     public function accommodation()
     {
         return $this->belongsTo(PassengerAccommodation::class, 'accommodation_id', 'accommodation_id');

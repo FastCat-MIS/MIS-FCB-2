@@ -12,6 +12,7 @@ use App\Http\Controllers\Operations\PortController;
 use App\Http\Controllers\Operations\BookingController;
 use App\Http\Controllers\Operations\BookedPassengerController;
 use App\Http\Controllers\Operations\ConnectingTripController;
+use App\Http\Controllers\Operations\VesselAccommodationController;
 use App\Http\Controllers\Operations\VesselController;
 use App\Http\Controllers\Operations\VesselLayoutController;
 
@@ -58,6 +59,10 @@ Route::middleware('jwt.auth')->group(function () {
         Route::post('/', [VesselController::class, 'store']);
         Route::put('/{vessel}', [VesselController::class, 'update']);
         Route::delete('/{vessel}', [VesselController::class, 'destroy']);
+
+    Route::prefix('{vesselId}/accommodations')->group(function () {
+        Route::post('/', [VesselAccommodationController::class, 'store']);
+    });
 
     Route::prefix('{vessel}/layout')->group(function () {
         Route::get('/', [VesselLayoutController::class, 'show']);
@@ -138,10 +143,10 @@ Route::middleware('jwt.auth')->group(function () {
     // Port CRUD
     Route::prefix('ports')->group(function () {
         Route::get('/', [PortController::class, 'index']);
-        Route::get('/{port}', [PortController::class, 'show']);
+        Route::get('/{portId}', [PortController::class, 'show']);
         Route::post('/', [PortController::class, 'store']);
-        Route::put('/{port}', [PortController::class, 'update']);
-        Route::delete('/{port}', [PortController::class, 'destroy']);
+        Route::put('/{portId}', [PortController::class, 'update']);
+        Route::delete('/{portId}', [PortController::class, 'destroy']);
 
         // Route::get('/', [PortController::class, 'index'])->middleware('permission:port management read');
         // Route::get('/{port}', [PortController::class, 'show'])->middleware('permission:port management read');

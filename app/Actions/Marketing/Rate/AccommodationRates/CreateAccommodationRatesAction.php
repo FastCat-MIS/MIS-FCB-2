@@ -24,7 +24,7 @@ class CreateAccommodationRatesAction extends Action
                     'accommodation_id' => $accommodation->accommodation_id,
                     'base_rate' => 0,
                     'effective_date' => now(),
-                    'status' => 'active',
+                    'status' => 1,
                 ]);
             }
 

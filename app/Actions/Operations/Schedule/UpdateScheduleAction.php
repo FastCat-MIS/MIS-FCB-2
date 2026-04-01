@@ -17,7 +17,8 @@ class UpdateScheduleAction extends Action
                 'departure_time' => 'sometimes|required|date_format:H:i:s',
                 'vessel_id'      => 'sometimes|nullable|exists:vessels,id',
                 'port_id'        => 'sometimes|required|exists:ports,port_id',
-                'status'         => 'sometimes|required|in:active,inactive',
+                'status'         => 'sometimes|required|in:0,1,2,3',
+                'is_active'      => 'sometimes|required|boolean',
                 'visibility' => 'sometimes|nullable',
             ]);
 
@@ -44,6 +45,7 @@ class UpdateScheduleAction extends Action
                     ] : null,
                 ] : null,
                 'status'     => $schedule->status,
+                'is_active'     => $schedule->is_active,
                 'visibility' => $schedule->visibility,
                 'created_at' => $schedule->created_at,
                 'updated_at' => $schedule->updated_at,

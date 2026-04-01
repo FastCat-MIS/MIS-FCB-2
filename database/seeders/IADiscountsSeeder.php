@@ -25,7 +25,7 @@ class IADiscountsSeeder extends Seeder
                     'discount_value' => rand(5, 20),
                     'value_type' => 1, 
                     'effective_date' => Carbon::now(),
-                    'status' => 'active',
+                    'status' => 1,
                 ]);
 
             }

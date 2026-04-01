@@ -14,7 +14,7 @@ class CreatePassengerTypeAction extends Action
             'type'     => 'required|string|max:255',
             'discount' => 'required|numeric|min:0|max:1',
             'waived'   => 'nullable|boolean',
-            'status'   => 'nullable|string|in:active,inactive',
+            'status'         => 'nullable|in:0,1,2,3',
         ]);
 
         $validator->validate();

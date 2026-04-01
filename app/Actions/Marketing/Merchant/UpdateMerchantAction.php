@@ -14,6 +14,10 @@ class UpdateMerchantAction extends Action
         $merchant = Merchant::findOrFail($merchantId);
         $validated = $this->validate($data, $merchantId); 
 
+        if (isset($data['logo']) && $data['logo'] instanceof \Illuminate\Http\UploadedFile) {
+            $validated['image'] = $data['logo']->store('ia-logos', 'public');
+        }
+
 
         $merchant->update($validated);
 
@@ -41,7 +45,7 @@ class UpdateMerchantAction extends Action
             'area' => 'nullable|string|max:255',
             'payment_mode' => 'sometimes|required|string|max:255',
             'payment_type' => 'sometimes|required|string|max:255',
-            'status' => 'nullable|in:active,inactive',
+            'status'         => 'nullable|in:0,1,2,3',
             'effective_date' => 'nullable|date',
             'eoc_date' => 'nullable|date',
         ])->validate();

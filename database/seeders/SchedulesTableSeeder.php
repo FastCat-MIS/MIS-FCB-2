@@ -19,9 +19,9 @@ class SchedulesTableSeeder extends Seeder
 
         $schedules = [];
         foreach ($ports as $port) {
-            $schedules[] = ['departure_time' => '07:00:00', 'port_id' => $port->port_id, 'status' => 'active', 'created_at' => now(), 'updated_at' => now()];
-            $schedules[] = ['departure_time' => '12:00:00', 'port_id' => $port->port_id, 'status' => 'active', 'created_at' => now(), 'updated_at' => now()];
-            $schedules[] = ['departure_time' => '15:00:00', 'port_id' => $port->port_id, 'status' => 'active', 'created_at' => now(), 'updated_at' => now()];
+            $schedules[] = ['departure_time' => '07:00:00', 'arrival_time' => '08:00:00', 'port_id' => $port->port_id, 'status' => 1, 'is_active' => 1, 'created_at' => now(), 'updated_at' => now()];
+            $schedules[] = ['departure_time' => '12:00:00', 'arrival_time' => '13:00:00', 'port_id' => $port->port_id, 'status' => 1, 'is_active' => 1, 'created_at' => now(), 'updated_at' => now()];
+            $schedules[] = ['departure_time' => '15:00:00', 'arrival_time' => '16:00:00', 'port_id' => $port->port_id, 'status' => 1, 'is_active' => 1, 'created_at' => now(), 'updated_at' => now()];
         }
 
         foreach ($schedules as $sched) {

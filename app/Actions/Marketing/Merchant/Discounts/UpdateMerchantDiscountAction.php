@@ -23,12 +23,12 @@ class UpdateMerchantDiscountAction extends Action
     private function validate(array $data): array
     {
         return Validator::make($data, [
-            'route_id' => 'required|integer|exists:routes,route_id',
-            'discount_name' => 'required|string|max:255',
+            'route_id'       => 'required|integer|exists:routes,route_id',
+            'discount_name'  => 'required|string|max:255',
             'discount_value' => 'required|numeric|min:0',
-            'value_type' => 'required|in:0,1',
+            'value_type'     => 'required|in:0,1',
             'effective_date' => 'nullable|date',
-            'status' => 'nullable|in:active,inactive',
+            'status'         => 'nullable|in:0,1,2,3',
         ])->validate();
     }
 }

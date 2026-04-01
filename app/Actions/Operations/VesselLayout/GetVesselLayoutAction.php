@@ -25,6 +25,7 @@ class GetVesselLayoutAction
                             'col' => $seat->col,
                             'blocked' => (bool) $seat->blocked,
                             'path' => (bool) $seat->path,
+                            'pwd' => (bool) $seat->pwd,
                             'facility' => $seat->facility,
                         ];
                     }),

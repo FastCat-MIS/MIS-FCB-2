@@ -16,12 +16,12 @@ return new class extends Migration
             $table->foreignId('vessel_accommodation_id')
                 ->constrained()
                 ->cascadeOnDelete();
-
             $table->string('seat_no');
             $table->integer('row');
             $table->integer('col');
             $table->boolean('blocked')->default(false);
             $table->boolean('path')->default(false);
+            $table->boolean('pwd')->default(false);
             $table->string('facility')->nullable();
 
             $table->timestamps();

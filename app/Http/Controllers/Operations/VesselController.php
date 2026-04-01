@@ -14,28 +14,28 @@ use Illuminate\Http\Request;
 
 class VesselController extends Controller
 {
-    public function index(GetVesselsAction $getVesselsAction)
+    public function index(GetVesselsAction $action)
     {
-        return $getVesselsAction->execute();
+        return $action->execute();
     }
 
-    public function show(Vessel $vessel, GetVesselAction $getVesselAction)
+    public function show(Vessel $vessel, GetVesselAction $action)
     {
-        return $getVesselAction->execute($vessel);
+        return $action->execute($vessel);
     }
 
-    public function store(Request $request, CreateVesselAction $createVesselAction)
+    public function store(Request $request, CreateVesselAction $action)
     {
-        return $createVesselAction->execute($request->all());
+        return $action->execute($request->all());
     }
 
-    public function update(Request $request, Vessel $vessel, UpdateVesselAction $updateVesselAction)
+    public function update(Request $request, Vessel $vessel, UpdateVesselAction $action)
     {
-        return $updateVesselAction->execute($vessel, $request->all());
+        return $action->execute($vessel, $request->all());
     }
 
-    public function destroy(Vessel $vessel, DeleteVesselAction $deleteVesselAction)
+    public function destroy(Vessel $vessel, DeleteVesselAction $action)
     {
-        return $deleteVesselAction->execute($vessel);
+        return $action->execute($vessel);
     }
 }

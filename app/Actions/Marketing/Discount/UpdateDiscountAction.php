@@ -49,7 +49,7 @@ class UpdateDiscountAction extends Action
             'value_type' => 'required|in:0,1',
             'effective_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:effective_date',
-            'status' => 'nullable|in:active,inactive',
+            'status'         => 'nullable|in:0,1,2,3',
         ])->validate();
     }
 }

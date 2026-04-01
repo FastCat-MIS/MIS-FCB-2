@@ -45,8 +45,8 @@ class UpdatePromoAction extends Action
             'promo_value' => 'nullable|numeric|min:0',
             'value_type' => 'nullable|in:0,1',
             'effective_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:effective_date',
-            'status' => 'nullable|in:active,inactive',
+            'end_date'    => 'nullable|date|after_or_equal:effective_date',
+            'status'         => 'nullable|in:0,1,2,3',
         ])->validate();
     }
 }

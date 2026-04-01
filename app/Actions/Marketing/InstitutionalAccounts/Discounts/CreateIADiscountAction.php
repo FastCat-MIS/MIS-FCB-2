@@ -29,7 +29,7 @@ class CreateIADiscountAction extends Action
             'discount_value'   => 'required|numeric|min:0',
             'value_type' => 'required|in:0,1',
             'effective_date' => 'nullable|date',
-            'status'         => 'nullable|in:active,inactive',
+            'status'         => 'nullable|in:0,1,2,3',
         ])->validate();
     }
 }

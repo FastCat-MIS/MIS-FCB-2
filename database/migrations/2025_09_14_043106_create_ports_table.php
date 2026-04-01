@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('port_name');
             $table->string('corridor');
             $table->string('facilities')->nullable();
+            $table->string('ramp_status')->nullable();
             $table->string('last_update_by')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

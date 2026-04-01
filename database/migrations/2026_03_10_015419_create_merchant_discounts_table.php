@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('discount_value', 10, 2)->default(0.00)->nullable();            
             $table->unsignedTinyInteger('value_type');
             $table->timestamp("effective_date")->nullable();
-            $table->string("status", 100)->nullable()->default('active');
+            $table->unsignedTinyInteger("status")->default(0);
             $table->timestamps();
         });
     }

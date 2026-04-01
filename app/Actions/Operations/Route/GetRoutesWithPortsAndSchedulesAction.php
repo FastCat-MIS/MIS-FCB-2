@@ -20,6 +20,7 @@ class GetRoutesWithPortsAndSchedulesAction extends Action
             $result = $routes->map(function ($route) {
                 return [
                     'route_id'   => $route->route_id,
+                    'is_active' => $route->is_active,
                     'portA' => [
                         'port_id'   => $route->portA?->port_id,
                         'port_name' => $route->portA?->port_name,
@@ -27,11 +28,13 @@ class GetRoutesWithPortsAndSchedulesAction extends Action
                             return [
                                 'sched_id'       => $sched->sched_id,
                                 'departure_time' => $sched->departure_time,
+                                'arrival_time' => $sched->arrival_time,
                                 'vessel' => $sched->vessel ? [
                                     'id'   => $sched->vessel->id,
                                     'name' => $sched->vessel->vessel_name,
                                 ] : null,
                                 'status' => $sched->status,
+                                'is_active' => $sched->is_active,
                                 'visibility' => $sched->visibility,
                             ];
                         })->values(),
@@ -43,11 +46,13 @@ class GetRoutesWithPortsAndSchedulesAction extends Action
                             return [
                                 'sched_id'       => $sched->sched_id,
                                 'departure_time' => $sched->departure_time,
+                                'arrival_time' => $sched->arrival_time,
                                 'vessel' => $sched->vessel ? [
                                     'id'   => $sched->vessel->id,
                                     'name' => $sched->vessel->vessel_name,
                                 ] : null,
                                 'status' => $sched->status,
+                                'is_active' => $sched->is_active,
                                 'visibility' => $sched->visibility,
                             ];
                         })->values(),

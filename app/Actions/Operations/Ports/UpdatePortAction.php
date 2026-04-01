@@ -9,19 +9,22 @@ use Illuminate\Validation\ValidationException;
 
 class UpdatePortAction extends Action
 {
-    public function execute(Port $port, array $data)
+    public function execute(int $portId, array $data)
     {
+        $port = Port::findOrFail($portId);
+
         $validator = Validator::make($data, [
-            'port_name' => 'sometimes|required|string|max:255',
-            'corridor' => 'sometimes|required|string|max:255',
-            'facilities' => 'nullable|string|max:255',
+            'port_name'      => 'sometimes|required|string|max:255',
+            'corridor'       => 'sometimes|required|string|max:255',
+            'facilities'     => 'nullable|string|max:255',
             'last_update_by' => 'sometimes|required|string|max:255',
-            'is_active' => 'boolean',
+            'is_active'      => 'sometimes|required|boolean',
         ]);
 
         $validator->validate();
 
-        $port->update($validator->validated());
+        $port->fill($validator->validated()); 
+        $port->save();                        
 
         return $this->success([
             'port' => $port,
