@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Operations;
 
 use App\Http\Controllers\Controller;
 use App\Actions\Operations\Vessels\GetVesselsAction;
+use App\Actions\Operations\Vessels\GetVesselsWithSchedAction;
 use App\Actions\Operations\Vessels\GetVesselAction;
 use App\Actions\Operations\Vessels\CreateVesselAction;
 use App\Actions\Operations\Vessels\UpdateVesselAction;
@@ -15,6 +16,11 @@ use Illuminate\Http\Request;
 class VesselController extends Controller
 {
     public function index(GetVesselsAction $action)
+    {
+        return $action->execute();
+    }
+
+    public function indexWithSched(GetVesselsWithSchedAction $action)
     {
         return $action->execute();
     }

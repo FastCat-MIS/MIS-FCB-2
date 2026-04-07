@@ -10,8 +10,10 @@ class GetVesselsAction extends Action
     public function execute()
     {
         try {
-            $vessels = Vessel::with('accommodations.accommodation')->get();
-
+            $vessels = Vessel::with([
+                'accommodations.accommodation',
+            ])->get();
+            
             return $this->success([
                 'vessels' => $vessels
             ], 'Vessels retrieved successfully.');

@@ -54,6 +54,7 @@ Route::middleware('jwt.auth')->group(function () {
 
     // Vessels CRUD
     Route::prefix('vessels')->group(function () {
+        Route::get('/with-schedules', [VesselController::class, 'indexWithSched']);
         Route::get('/', [VesselController::class, 'index']);
         Route::get('/{vessel}', [VesselController::class, 'show']);
         Route::post('/', [VesselController::class, 'store']);

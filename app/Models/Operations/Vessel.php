@@ -17,7 +17,6 @@ class Vessel extends Model
         'status',
     ];
 
-    protected $with = ['accommodations'];
 
     public function accommodations()
     {
