@@ -22,10 +22,10 @@ return new class extends Migration
             $table->integer('water_consumption');
             $table->integer('fuel_rob');
             $table->string('reason_of_delay')->nullable();
-            $table->dateTime('actual_departure_time')->nullable();
-            $table->dateTime('actual_arrival_time')->nullable();
-            $table->dateTime('ram_disengage_time')->nullable();
-            $table->dateTime('undock_time')->nullable();
+            $table->time('actual_departure_time')->nullable();
+            $table->time('actual_arrival_time')->nullable();
+            $table->time('ram_disengage_time')->nullable();
+            $table->integer('undock_time')->nullable();
             $table->timestamps();
         });
     }

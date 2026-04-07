@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__claude_ai_Postman__getWorkspaces",
+      "mcp__claude_ai_Postman__getCollections",
+      "mcp__claude_ai_Postman__getCollection",
+      "mcp__claude_ai_Postman__putCollection",
+      "mcp__claude_ai_Postman__createCollectionRequest"
+    ]
+  }
+}

@@ -28,10 +28,10 @@ class Vdar extends Model
     ];
 
     protected $casts = [
-        'actual_departure_time' => 'datetime',
-        'actual_arrival_time'   => 'datetime',
-        'ram_disengage_time'    => 'datetime',
-        'undock_time'           => 'datetime',
+        'actual_departure_time' => 'string',
+        'actual_arrival_time'   => 'string',
+        'ram_disengage_time'    => 'string',
+        'undock_time'           => 'integer',
     ];
 
     public function vessel()
