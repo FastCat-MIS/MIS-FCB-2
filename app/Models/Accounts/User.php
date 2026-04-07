@@ -2,6 +2,7 @@
 
 namespace App\Models\Accounts;
 
+use App\Models\Operations\Vdar;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,6 +52,11 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTIdentifier()
     {
         return $this->getKey();
+    }
+
+    public function vdars()
+    {
+        return $this->hasMany(Vdar::class, 'vessel_master_id');
     }
 
     public function getJWTCustomClaims()

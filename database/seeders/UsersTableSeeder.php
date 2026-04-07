@@ -5,15 +5,18 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Accounts\User;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UsersTableSeeder extends Seeder
 {
     public function run(): void
     {
+        $vesselMasterRoleId = Role::where('name', 'Vessel Master')->where('guard_name', 'api')->value('id');
+
         $users = [
             [
                 'first_name' => 'Tovvy',
-                'middle_name' => 'M', // Added middle name
+                'middle_name' => 'M',
                 'last_name' => 'Dumaplin',
                 'email' => 'tovvy@example.com',
                 'password' => Hash::make('password123'),
@@ -24,7 +27,7 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'first_name' => 'Sean',
-                'middle_name' => 'Patrick', // Added middle name
+                'middle_name' => 'Patrick',
                 'last_name' => 'Patron',
                 'email' => 'sean@example.com',
                 'password' => Hash::make('password123'),
@@ -35,7 +38,7 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'first_name' => 'Laurence',
-                'middle_name' => 'James', // Added middle name
+                'middle_name' => 'James',
                 'last_name' => 'Baylon',
                 'email' => 'laurence@example.com',
                 'password' => Hash::make('password123'),
@@ -47,7 +50,7 @@ class UsersTableSeeder extends Seeder
             // God Admin user
             [
                 'first_name' => 'System',
-                'middle_name' => 'Admin', // Added middle name
+                'middle_name' => 'Admin',
                 'last_name' => 'Administrator',
                 'email' => 'godadmin@example.com',
                 'password' => Hash::make('godadmin123'),
@@ -59,7 +62,7 @@ class UsersTableSeeder extends Seeder
             // Customer user
             [
                 'first_name' => 'John',
-                'middle_name' => 'Michael', // Added middle name
+                'middle_name' => 'Michael',
                 'last_name' => 'Customer',
                 'email' => 'customer@example.com',
                 'password' => Hash::make('customer123'),
@@ -67,11 +70,48 @@ class UsersTableSeeder extends Seeder
                 'address' => 'Customer Street',
                 'status' => true,
                 'email_verified_at' => now(),
-            ]
+            ],
+            // Vessel Master users
+            [
+                'first_name' => 'Carlos',
+                'middle_name' => 'Rey',
+                'last_name' => 'Navarro',
+                'email' => 'vesselmaster@example.com',
+                'password' => Hash::make('vesselmaster123'),
+                'phone' => '+1234567898',
+                'address' => 'Port Headquarters',
+                'role_id' => $vesselMasterRoleId,
+                'status' => true,
+                'email_verified_at' => now(),
+            ],
+            [
+                'first_name' => 'Ramon',
+                'middle_name' => 'Cruz',
+                'last_name' => 'Dela Torre',
+                'email' => 'vesselmaster2@example.com',
+                'password' => Hash::make('vesselmaster123'),
+                'phone' => '+1234567897',
+                'address' => 'Port Headquarters',
+                'role_id' => $vesselMasterRoleId,
+                'status' => true,
+                'email_verified_at' => now(),
+            ],
+            [
+                'first_name' => 'Miguel',
+                'middle_name' => 'Santos',
+                'last_name' => 'Reyes',
+                'email' => 'vesselmaster3@example.com',
+                'password' => Hash::make('vesselmaster123'),
+                'phone' => '+1234567896',
+                'address' => 'Port Headquarters',
+                'role_id' => $vesselMasterRoleId,
+                'status' => true,
+                'email_verified_at' => now(),
+            ],
         ];
 
         foreach ($users as $userData) {
-            $user = User::create($userData);
+            User::create($userData);
         }
 
         $this->command->info('Users seeded successfully!');
