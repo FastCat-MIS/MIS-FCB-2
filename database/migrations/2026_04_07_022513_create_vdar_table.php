@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('schedule_id');
             $table->foreign('schedule_id')->references('sched_id')->on('schedules')->cascadeOnDelete();
             $table->foreignId('vessel_master_id')->constrained('users')->cascadeOnDelete();
-            $table->integer('voyage_number');
+            $table->string('voyage_number');
             $table->integer('recorded_sailing_speed');
             $table->integer('water_consumption');
             $table->integer('fuel_rob');

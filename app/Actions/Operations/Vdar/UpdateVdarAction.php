@@ -3,6 +3,7 @@
 namespace App\Actions\Operations\Vdar;
 
 use App\Actions\Action;
+use App\Models\Accounts\User;
 use App\Models\Operations\Vdar;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -14,7 +15,12 @@ class UpdateVdarAction extends Action
         $validator = Validator::make($data, [
             'vessel_id'              => 'sometimes|exists:vessels,id',
             'schedule_id'            => 'sometimes|exists:schedules,sched_id',
-            'vessel_master_id'       => 'sometimes|exists:users,id',
+            'vessel_master_id'       => ['sometimes', 'exists:users,id', function ($attribute, $value, $fail) {
+                $user = User::find($value);
+                if (!$user || !$user->hasRole('Vessel Master')) {
+                    $fail('The selected vessel master must have the Vessel Master role.');
+                }
+            }],
             'voyage_number'          => 'sometimes|integer|min:1',
             'recorded_sailing_speed' => 'sometimes|integer|min:0',
             'water_consumption'      => 'sometimes|integer|min:0',
