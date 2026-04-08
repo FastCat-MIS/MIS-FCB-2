@@ -79,6 +79,12 @@ return new class extends Migration {
         Schema::table('discount_conditions', function (Blueprint $table) {
             $table->softDeletes();
         });
+        Schema::table('vdar', function (Blueprint $table) {
+            $table->softDeletes();
+        });
+        Schema::table('cancellation_reports', function (Blueprint $table) {
+            $table->softDeletes();
+        });
 
     }
 
@@ -154,6 +160,12 @@ return new class extends Migration {
             $table->dropSoftDeletes();
         });
         Schema::table('discount_conditions', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+        Schema::table('vdar', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
+        Schema::table('cancellation_reports', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
 

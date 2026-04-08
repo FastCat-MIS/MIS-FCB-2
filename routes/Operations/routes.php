@@ -16,6 +16,7 @@ use App\Http\Controllers\Operations\VesselAccommodationController;
 use App\Http\Controllers\Operations\VesselController;
 use App\Http\Controllers\Operations\VesselLayoutController;
 use App\Http\Controllers\Operations\VdarController;
+use App\Http\Controllers\Operations\CancellationReportController;
 
 // Operations domain routes
 Route::middleware('jwt.auth')->group(function () {
@@ -200,6 +201,15 @@ Route::middleware('jwt.auth')->group(function () {
         Route::post('/', [VdarController::class, 'store']);
         Route::put('/{vdar}', [VdarController::class, 'update']);
         Route::delete('/{vdar}', [VdarController::class, 'destroy']);
+    });
+
+    // Cancellation Reports CRUD
+    Route::prefix('cancellation-reports')->group(function () {
+        Route::get('/', [CancellationReportController::class, 'index']);
+        Route::get('/{cancellationReport}', [CancellationReportController::class, 'show']);
+        Route::post('/', [CancellationReportController::class, 'store']);
+        Route::put('/{cancellationReport}', [CancellationReportController::class, 'update']);
+        Route::delete('/{cancellationReport}', [CancellationReportController::class, 'destroy']);
     });
 
     // Connecting Trips CRUD

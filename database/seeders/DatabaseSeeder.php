@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             MerchantDiscountsSeeder::class,
             PromosSeeder::class,
             VdarSeeder::class,
+            CancellationReportSeeder::class,
         ]);
 
     }
