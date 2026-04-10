@@ -14,6 +14,7 @@ class CreateCancellationReportAction extends Action
     public function execute(array $data)
     {
         $validator = Validator::make($data, [
+            'port_id'                 => 'required|exists:ports,port_id',
             'vessel_id'               => 'required|exists:vessels,id',
             'schedule_id'             => 'required|exists:schedules,sched_id',
             'vessel_master_id'        => ['required', 'exists:users,id', function ($_attribute, $value, $fail) {
@@ -39,6 +40,7 @@ class CreateCancellationReportAction extends Action
         }
 
         $validated = $validator->validated();
+        $validated['control_number'] = $this->generateControlNumber($validated['port_id']);
 
         if (!empty($validated['documents'])) {
             $year = now()->year;
@@ -60,9 +62,26 @@ class CreateCancellationReportAction extends Action
 
         return $this->success([
             'cancellation_report' => $report->load([
+                'port:port_id,port_name',
                 'schedule:sched_id,departure_time,arrival_time',
                 'vesselMaster:id,first_name,middle_name,last_name',
             ])
         ], 'Cancellation report created successfully.', 201);
+    }
+
+    private function generateControlNumber(int $portId): string
+    {
+        $now       = now();
+        $portPart  = str_pad($portId, 2, '0', STR_PAD_LEFT);
+        $yearHex   = strtoupper(dechex($now->year));
+        $monthHex  = strtoupper(dechex($now->month));
+
+        $count = CancellationReport::whereYear('created_at', $now->year)
+            ->whereMonth('created_at', $now->month)
+            ->count();
+
+        $countPart = str_pad($count, 4, '0', STR_PAD_LEFT);
+
+        return "{$portPart}{$yearHex}{$monthHex}-{$countPart}";
     }
 }

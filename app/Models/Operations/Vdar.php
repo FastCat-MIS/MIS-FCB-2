@@ -14,6 +14,8 @@ class Vdar extends Model
     protected $table = 'vdar';
 
     protected $fillable = [
+        'control_number',
+        'port_id',
         'vessel_id',
         'schedule_id',
         'vessel_master_id',
@@ -39,6 +41,12 @@ class Vdar extends Model
     {
         return $this->belongsTo(Vessel::class, 'vessel_id');
     }
+
+    public function port()
+    {
+        return $this->belongsTo(Port::class, 'port_id');
+    }
+
 
     public function schedule()
     {

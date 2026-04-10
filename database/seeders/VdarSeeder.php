@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Operations\Vdar;
 use App\Models\Operations\Vessel;
 use App\Models\Operations\Schedule;
+use App\Models\Operations\Port;
 use App\Models\Accounts\User;
 
 class VdarSeeder extends Seeder
@@ -14,15 +15,17 @@ class VdarSeeder extends Seeder
     {
         $vessel = Vessel::first();
         $schedule = Schedule::first();
+        $port = Port::first();
         $vesselMaster = User::where('email', 'vesselmaster@example.com')->first();
 
-        if (!$vessel || !$schedule || !$vesselMaster) {
-            $this->command->warn('Missing vessel, schedule, or vessel master. Please seed those first.');
+        if (!$vessel || !$schedule || !$port || !$vesselMaster) {
+            $this->command->warn('Missing vessel, schedule, port, or vessel master. Please seed those first.');
             return;
         }
 
         $records = [
             [
+                'port_id'                 => $port->port_id,
                 'vessel_id'               => $vessel->id,
                 'schedule_id'             => $schedule->sched_id,
                 'vessel_master_id'        => $vesselMaster->id,
@@ -37,6 +40,7 @@ class VdarSeeder extends Seeder
                 'undock_time'             => 4,
             ],
             [
+                'port_id'                 => $port->port_id,
                 'vessel_id'               => $vessel->id,
                 'schedule_id'             => $schedule->sched_id,
                 'vessel_master_id'        => $vesselMaster->id,
@@ -53,6 +57,17 @@ class VdarSeeder extends Seeder
         ];
 
         foreach ($records as $record) {
+            $now       = now();
+            $portPart  = str_pad($record['port_id'], 2, '0', STR_PAD_LEFT);
+            $yearHex   = strtoupper(dechex($now->year));
+            $monthHex  = strtoupper(dechex($now->month));
+            $count     = Vdar::whereYear('created_at', $now->year)
+                ->whereMonth('created_at', $now->month)
+                ->count();
+            $countPart = str_pad($count, 4, '0', STR_PAD_LEFT);
+
+            $record['control_number'] = "{$portPart}{$yearHex}{$monthHex}-{$countPart}";
+
             Vdar::create($record);
         }
 

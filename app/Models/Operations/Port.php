@@ -20,25 +20,26 @@ class Port extends Model
         'ramp_status',
     ];
 
-    // Port has many schedules
     public function schedules()
     {
         return $this->hasMany(Schedule::class, 'port_id', 'port_id');
     }
 
-    // Optional: Routes where this port is port_a
+    public function vdars()
+    {
+        return $this->hasMany(Vdar::class, 'port_id', 'port_id');
+    }
+
     public function routesAsPortA()
     {
         return $this->hasMany(Route::class, 'port_a_id', 'port_id');
     }
 
-    // Optional: Routes where this port is port_b
     public function routesAsPortB()
     {
         return $this->hasMany(Route::class, 'port_b_id', 'port_id');
     }
 
-    // Added this line of code for vessel update to work
     public function route()
     {
         return $this->belongsTo(\App\Models\Operations\Route::class, 'route_id', 'route_id');

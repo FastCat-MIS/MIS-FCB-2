@@ -11,7 +11,11 @@ class GetVesselsWithSchedAction extends Action
     {
         try {
             $vessels = Vessel::with([
-                'schedules:sched_id,vessel_id,departure_time,arrival_time'
+                'schedules' => function ($query) {
+                    $query->select('sched_id', 'vessel_id', 'port_id', 'departure_time', 'arrival_time')
+                          ->with('port:port_id,port_name')
+                          ->orderBy('departure_time');
+                }
             ])->get();
             
             return $this->success([

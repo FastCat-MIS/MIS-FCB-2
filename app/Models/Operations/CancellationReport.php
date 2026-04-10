@@ -14,6 +14,8 @@ class CancellationReport extends Model
     protected $table = 'cancellation_reports';
 
     protected $fillable = [
+        'control_number',
+        'port_id',
         'vessel_id',
         'schedule_id',
         'vessel_master_id',
@@ -34,6 +36,11 @@ class CancellationReport extends Model
         'est_revenue_loss'        => 'decimal:2',
         'documents'               => 'array',
     ];
+
+    public function port()
+    {
+        return $this->belongsTo(Port::class, 'port_id', 'port_id');
+    }
 
     public function vessel()
     {

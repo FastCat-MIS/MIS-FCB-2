@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('cancellation_reports', function (Blueprint $table) {
             $table->id();
+            $table->string('control_number', 100)->unique();
+            $table->unsignedBigInteger('port_id');
+            $table->foreign('port_id')->references('port_id')->on('ports')->cascadeOnDelete();
             $table->foreignId('vessel_id')->constrained('vessels')->cascadeOnDelete();
             $table->unsignedBigInteger('schedule_id');
             $table->foreign('schedule_id')->references('sched_id')->on('schedules')->cascadeOnDelete();

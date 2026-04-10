@@ -12,6 +12,7 @@ class GetCancellationReportAction extends Action
         try {
             return $this->success([
                 'cancellation_report' => $cancellationReport->load([
+                    'port:port_id,port_name',
                     'schedule:sched_id,departure_time,arrival_time',
                     'vesselMaster:id,first_name,middle_name,last_name',
                 ])

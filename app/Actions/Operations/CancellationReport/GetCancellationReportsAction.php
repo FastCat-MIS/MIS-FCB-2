@@ -11,6 +11,7 @@ class GetCancellationReportsAction extends Action
     {
         try {
             $reports = CancellationReport::with([
+                'port:port_id,port_name',
                 'schedule:sched_id,departure_time,arrival_time',
                 'vesselMaster:id,first_name,middle_name,last_name',
             ])->get();

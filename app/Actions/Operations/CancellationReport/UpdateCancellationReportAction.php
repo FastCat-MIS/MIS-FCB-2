@@ -15,6 +15,7 @@ class UpdateCancellationReportAction extends Action
     public function execute(CancellationReport $cancellationReport, array $data)
     {
         $validator = Validator::make($data, [
+            'port_id'                 => 'sometimes|exists:ports,port_id',
             'vessel_id'               => 'sometimes|exists:vessels,id',
             'schedule_id'             => 'sometimes|exists:schedules,sched_id',
             'vessel_master_id'        => ['sometimes', 'exists:users,id', function ($_, $value, $fail) {
@@ -59,6 +60,7 @@ class UpdateCancellationReportAction extends Action
 
         return $this->success([
             'cancellation_report' => $cancellationReport->fresh()->load([
+                'port:port_id,port_name',
                 'schedule:sched_id,departure_time,arrival_time',
                 'vesselMaster:id,first_name,middle_name,last_name',
             ])

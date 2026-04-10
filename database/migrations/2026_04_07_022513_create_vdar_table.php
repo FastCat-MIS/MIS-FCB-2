@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('vdar', function (Blueprint $table) {
             $table->id();
+            $table->string('control_number', 100)->unique();
+            $table->foreignId('port_id')->constrained('ports','port_id')->cascadeOnDelete();
             $table->foreignId('vessel_id')->constrained('vessels')->cascadeOnDelete();
             $table->unsignedBigInteger('schedule_id');
             $table->foreign('schedule_id')->references('sched_id')->on('schedules')->cascadeOnDelete();
