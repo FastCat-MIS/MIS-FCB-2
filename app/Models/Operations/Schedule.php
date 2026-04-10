@@ -31,4 +31,9 @@ class Schedule extends Model
     {
         return $this->belongsTo(Port::class, 'port_id', 'port_id');
     }
+
+    public function vdars()
+    {
+        return $this->hasMany(Vdar::class, 'schedule_id', 'sched_id');
+    }
 }

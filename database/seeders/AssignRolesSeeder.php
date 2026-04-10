@@ -15,6 +15,7 @@ class AssignRolesSeeder extends Seeder
             'Teller'             => ['tovvy@example.com', 'sean@example.com', 'laurence@example.com'],
             'Operation Manager'  => ['godadmin@example.com'],
             'Customer'           => ['customer@example.com'],
+            'Vessel Master'      => ['vesselmaster@example.com', 'vesselmaster2@example.com', 'vesselmaster3@example.com'],
         ];
 
         foreach ($roles as $roleName => $emails) {

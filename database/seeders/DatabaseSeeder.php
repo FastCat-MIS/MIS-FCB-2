@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             AssignRolesSeeder::class,
             PortSeeder::class,
             RoutesTableSeeder::class,
+            VesselSeeder::class,
             SchedulesTableSeeder::class,
             PassengerTypesTableSeeder::class,
             PassengerCategoriesTableSeeder::class,
@@ -33,6 +34,8 @@ class DatabaseSeeder extends Seeder
             MerchantsSeeder::class,
             MerchantDiscountsSeeder::class,
             PromosSeeder::class,
+            VdarSeeder::class,
+            CancellationReportSeeder::class,
         ]);
 
     }
