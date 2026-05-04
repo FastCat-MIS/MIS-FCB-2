@@ -113,6 +113,26 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'teller_booking' => [
+            'driver' => env('TELLER_DB_CONNECTION', 'mysql'),
+            'url' => env('TELLER_DB_URL'),
+            'host' => env('TELLER_DB_HOST', env('DB_HOST', '127.0.0.1')),
+            'port' => env('TELLER_DB_PORT', env('DB_PORT', '3306')),
+            'database' => env('TELLER_DB_DATABASE', 'fastcat_teller_booking'),
+            'username' => env('TELLER_DB_USERNAME', env('DB_USERNAME', 'root')),
+            'password' => env('TELLER_DB_PASSWORD', env('DB_PASSWORD', '')),
+            'unix_socket' => env('TELLER_DB_SOCKET', env('DB_SOCKET', '')),
+            'charset' => env('TELLER_DB_CHARSET', env('DB_CHARSET', 'utf8mb4')),
+            'collation' => env('TELLER_DB_COLLATION', env('DB_COLLATION', 'utf8mb4_unicode_ci')),
+            'prefix' => env('TELLER_DB_PREFIX', ''),
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
     ],
 
     /*
