@@ -137,6 +137,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 'error' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         });
-
+    })
+    ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
+        $schedule->command('teller:clear-expired')->everyFiveMinutes();
     })
     ->create();

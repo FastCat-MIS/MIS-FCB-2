@@ -8,6 +8,6 @@ class GetPaymentsAction
 {
     public function execute()
     {
-        return BookingPayment::all();
+        return BookingPayment::with(['bookedPassengers', 'bookedVehicles'])->get();
     }
 }
