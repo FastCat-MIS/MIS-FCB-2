@@ -14,6 +14,7 @@ class CreateBookedPassengerAction extends Action
         $data = $this->normalizeKeys($data);
 
         $validator = Validator::make($data, [
+            'serial_no' => 'required|string|max:50',
             'booking_id' => 'nullable|integer|min:1',
             'schedule_booking_id' => 'nullable|integer|min:1',
             'is_return_trip' => 'sometimes|boolean',
