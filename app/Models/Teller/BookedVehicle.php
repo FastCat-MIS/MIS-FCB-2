@@ -12,7 +12,7 @@ class BookedVehicle extends Model
 
     protected $connection = 'teller_booking';
 
-    protected $table = 'booked_vehicles';
+    protected $table = 'temp_booked_vehicles';
 
     protected $primaryKey = 'booked_vehicle_id';
 
@@ -33,6 +33,7 @@ class BookedVehicle extends Model
         'fare',
         'driver_passenger_booking_id',
         'institutional_account_id',
+        'expires_at',
     ];
 
     protected $casts = [

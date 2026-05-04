@@ -12,7 +12,7 @@ class BookedPassenger extends Model
 
     protected $connection = 'teller_booking';
 
-    protected $table = 'booked_passengers';
+    protected $table = 'temp_booked_passengers';
 
     protected $primaryKey = 'booked_passenger_id';
 
@@ -39,6 +39,7 @@ class BookedPassenger extends Model
         'discount_amount',
         'discount_id',
         'institutional_account_id',
+        'expires_at',
     ];
 
     protected $casts = [
