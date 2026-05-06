@@ -11,7 +11,10 @@ class MerchantsSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('merchants')->insert([
+        $year = now()->format('Y');
+        $counter = 1;
+
+        $data = [
             [
                 'merchant_name' => 'Merchant ABC Agency',
                 'image' => null,
@@ -26,8 +29,6 @@ class MerchantsSeeder extends Seeder
                 'status' => 1,
                 'effective_date' => Carbon::now(),
                 'eoc_date' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'merchant_name' => 'Merchant XYZ Agency',
@@ -43,9 +44,17 @@ class MerchantsSeeder extends Seeder
                 'status' => 1,
                 'effective_date' => Carbon::now()->subDays(10),
                 'eoc_date' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
-        ]);
+        ];
+
+        // Add merchant_code dynamically
+        $finalData = array_map(function ($item) use ($year, &$counter) {
+            $item['merchant_code'] = sprintf('MER-%s-%03d', $year, $counter++);
+            $item['created_at'] = now();
+            $item['updated_at'] = now();
+            return $item;
+        }, $data);
+
+        DB::table('merchants')->insert($finalData);
     }
 }

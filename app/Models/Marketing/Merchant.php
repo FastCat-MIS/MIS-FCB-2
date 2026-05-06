@@ -14,6 +14,7 @@ class Merchant extends Model
 
     protected $fillable = [
         'merchant_name',
+        'merchant_code',
         'image',
         'address',
         'email',

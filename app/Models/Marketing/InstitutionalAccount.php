@@ -14,6 +14,7 @@ class InstitutionalAccount extends Model
 
     protected $fillable = [
         'ia_name',
+        'ia_code',
         'image',
         'address',
         'email',
