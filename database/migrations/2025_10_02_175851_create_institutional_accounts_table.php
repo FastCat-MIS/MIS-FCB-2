@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('institutional_accounts', function (Blueprint $table) {
             $table->id('ia_id');
             $table->string('ia_name', 150);
+            $table->string('ia_code', 20)->unique();
             $table->string('image')->nullable(); 
             $table->string('address', 150)->nullable();
             $table->string('email', 150)->unique();
