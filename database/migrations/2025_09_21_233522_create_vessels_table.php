@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('vessel_name', 100);
             $table->integer('capacity')->nullable();
-            $table->decimal('decklane_length_capacity', 8, 3)->default(0.000);
+            $table->decimal('decklane_length_capacity', 8, 2)->default(0.00);
             $table->decimal('weight_capacity', 10, 2)->default(0.00);
             $table->text('description')->nullable();
             $table->unsignedTinyInteger("status")->default(0);

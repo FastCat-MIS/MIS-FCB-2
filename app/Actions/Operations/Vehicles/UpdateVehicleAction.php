@@ -15,8 +15,8 @@ class UpdateVehicleAction extends Action
         $validator = Validator::make($data, [
             'vehicle_type' => 'required|integer|min:1',
             'vehicle_class' => 'required|string|max:50',
-            'weight' => 'sometimes|integer|min:1',
-            'length' => 'sometimes|integer|min:1',
+            'weight' => 'sometimes|integer',
+            'length' => 'sometimes|integer',
         ]);
 
         if ($validator->fails()) {
