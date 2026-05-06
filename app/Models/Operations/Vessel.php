@@ -12,6 +12,8 @@ class Vessel extends Model
     protected $fillable = [
         'vessel_name',
         'capacity',
+        'decklane_length_capacity',
+        'weight_capacity',
         'description',
         'status',
     ];
