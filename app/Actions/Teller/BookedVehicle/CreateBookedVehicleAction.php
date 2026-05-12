@@ -24,7 +24,7 @@ class CreateBookedVehicleAction extends Action
             'route_id' => 'required|integer|min:1',
             'route_snapshot' => 'required|string|max:255',
             'vehicle_type' => 'required|string|max:50',
-            'plate_no' => 'required|string|max:20',
+            'plate_no' => 'nullable|string|max:20',
             'length' => 'nullable|numeric|min:0',
             'weight' => 'nullable|numeric|min:0',
             'fare' => 'required|numeric|min:0',

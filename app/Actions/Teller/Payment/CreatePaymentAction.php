@@ -20,7 +20,6 @@ class CreatePaymentAction extends Action
 
         $validator = Validator::make($data, [
             'serial_no' => 'required|string|max:50',
-            'booking_id' => 'required|integer|min:1',
             'total_fare' => 'required|numeric|min:0',
             'total_discount' => 'required|numeric|min:0',
             'grand_total' => 'required|numeric|min:0',
@@ -35,6 +34,14 @@ class CreatePaymentAction extends Action
         return DB::transaction(function () use ($validator) {
             $validated = $validator->validated();
 
+            // Generate 5-digit booking_id with lock to prevent race condition
+            $maxBookingId = DB::connection('teller_booking')
+                ->table('booking_payments')
+                ->lockForUpdate()
+                ->max('booking_id') ?? 9999; // Start from 10000 if no records exist
+            
+            $validated['booking_id'] = $maxBookingId + 1;
+            //Generation of booking_id up to here only
             // Log the serial number being used for transfer
         \Log::info("Processing payment with serial_no: {$validated['serial_no']}, booking_id: {$validated['booking_id']}");
 
