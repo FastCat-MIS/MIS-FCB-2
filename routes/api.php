@@ -54,3 +54,4 @@ require __DIR__ . '/Accounts/auth.php';
 require __DIR__ . '/Operations/routes.php';
 require __DIR__ . '/Marketing/routes.php';
 require __DIR__ . '/Teller/routes.php';
+require __DIR__ . '/pem.php';
