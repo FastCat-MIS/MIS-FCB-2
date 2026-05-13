@@ -5,7 +5,12 @@ use App\Http\Controllers\Teller\BookedVehicleController;
 use App\Http\Controllers\Teller\PaymentController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('jwt.auth')->group(function () {
+// Generate share token without authentication
+Route::get('/teller-booking/share-token', function () {
+    return app(\App\Actions\Teller\GenerateShareTokenAction::class)->execute();
+});
+
+Route::middleware('pem.jwt:payment.read')->group(function () {
     Route::prefix('teller-booking')->group(function () {
     Route::get('/book-passenger', [BookedPassengerController::class, 'index']);
     Route::get('/book-passenger/{bookedPassengerId}', [BookedPassengerController::class, 'show']);

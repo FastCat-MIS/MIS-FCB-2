@@ -34,12 +34,12 @@ class BookingPayment extends Model
 
     public function bookedPassengers()
     {
-        return $this->hasMany(BookedPassenger::class, 'booking_id', 'booking_id');
+        return $this->hasMany(PermanentBookedPassenger::class, 'booking_id', 'booking_id');
     }
 
     public function bookedVehicles()
     {
-        return $this->hasMany(BookedVehicle::class, 'booking_id', 'booking_id');
+        return $this->hasMany(PermanentBookedVehicle::class, 'booking_id', 'booking_id');
     }
 }
 

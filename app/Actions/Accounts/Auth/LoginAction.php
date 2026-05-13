@@ -24,7 +24,9 @@ class LoginAction extends Action
             throw new AuthenticationException('The provided credentials are incorrect.');
         }
 
-        $token = JWTAuth::fromUser($user);
+        $token = JWTAuth::customClaims([
+            'purpose' => 'standard_authentication'
+        ])->fromUser($user);
 
         $bearerToken = 'Bearer ' . $token;
 
