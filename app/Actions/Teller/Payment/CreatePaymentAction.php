@@ -33,7 +33,8 @@ class CreatePaymentAction extends Action
 
         return DB::transaction(function () use ($validator) {
             $validated = $validator->validated();
-
+            // Auto-populate created_by from JWT token
+            $validated['created_by'] = auth()->id() ?? \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getClaim('user_id');
             // Generate 5-digit booking_id with lock to prevent race condition
             $maxBookingId = DB::connection('teller_booking')
                 ->table('booking_payments')
@@ -110,6 +111,7 @@ class CreatePaymentAction extends Action
                     'discount_amount' => $tempPassenger->discount_amount,
                     'discount_id' => $tempPassenger->discount_id,
                     'institutional_account_id' => $tempPassenger->institutional_account_id,
+                    'created_by' => $tempPassenger->created_by,
                     'expires_at' => null, // Remove expiration for permanent records
                 ]);
 
@@ -160,6 +162,7 @@ class CreatePaymentAction extends Action
                     'fare' => $tempVehicle->fare,
                     'driver_passenger_booking_id' => $tempVehicle->driver_passenger_booking_id,
                     'institutional_account_id' => $tempVehicle->institutional_account_id,
+                    'created_by' => $tempVehicle->created_by,
                     'expires_at' => null, // Remove expiration for permanent records
                 ]);
 

@@ -39,6 +39,7 @@ class PermanentBookedPassenger extends Model
         'discount_amount',
         'discount_id',
         'institutional_account_id',
+        'created_by',
         'expires_at',
     ];
 

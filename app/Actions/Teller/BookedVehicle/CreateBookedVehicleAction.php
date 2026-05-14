@@ -36,7 +36,12 @@ class CreateBookedVehicleAction extends Action
             throw new ValidationException($validator);
         }
 
-        $bookedVehicle = BookedVehicle::create($validator->validated());
+        $validated = $validator->validated();
+        
+        // Auto-populate created_by from JWT token
+        $validated['created_by'] = auth()->id() ?? \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getClaim('user_id');
+
+        $bookedVehicle = BookedVehicle::create($validated);
 
         return $this->success([
             'booked_vehicle' => $bookedVehicle,

@@ -33,6 +33,7 @@ class BookedVehicle extends Model
         'fare',
         'driver_passenger_booking_id',
         'institutional_account_id',
+        'created_by',
         'expires_at',
     ];
 

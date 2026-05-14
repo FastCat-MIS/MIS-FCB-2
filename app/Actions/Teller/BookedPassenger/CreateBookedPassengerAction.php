@@ -42,7 +42,12 @@ class CreateBookedPassengerAction extends Action
             throw new ValidationException($validator);
         }
 
-        $bookedPassenger = BookedPassenger::create($validator->validated());
+        $validated = $validator->validated();
+        
+        // Auto-populate created_by from JWT token
+        $validated['created_by'] = auth()->id() ?? \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getClaim('user_id');
+
+        $bookedPassenger = BookedPassenger::create($validated);
 
         return $this->success([
             'booked_passenger' => $bookedPassenger,
