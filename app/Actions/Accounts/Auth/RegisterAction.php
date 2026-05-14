@@ -9,6 +9,7 @@ use Illuminate\Validation\Rules;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\QueryException;
@@ -30,7 +31,9 @@ class RegisterAction extends Action
         ])->validate();
 
         try {
-            $roleId = $validated['role_id'] ?? 5;
+            $roleId = $validated['role_id'] ?? Role::where('name', 'Customer')
+                ->where('guard_name', 'api')
+                ->value('id');
 
             $user = User::create([
                 'first_name' => $validated['first_name'],
@@ -41,7 +44,7 @@ class RegisterAction extends Action
                 'phone' => $validated['phone'] ?? null,
                 'address' => $validated['address'] ?? null,
                 'role_id' => $roleId,
-                'status' => 'active'
+                'status' => true
             ]);
 
             // Generate JWT token
