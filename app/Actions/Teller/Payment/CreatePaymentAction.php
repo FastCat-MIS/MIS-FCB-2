@@ -57,11 +57,11 @@ class CreatePaymentAction extends Action
             // Create payment
             $payment = BookingPayment::create($validated);
 
-            // Transfer passengers from temporary to permanent tables
-            $this->transferPassengersToPermanent($validated['serial_no'], $payment->booking_id);
+            // Transfer passengers from temporary to permanent tables and get ID mapping
+            $passengerIdMap = $this->transferPassengersToPermanent($validated['serial_no'], $payment->booking_id);
 
-            // Transfer vehicles from temporary to permanent tables
-            $this->transferVehiclesToPermanent($validated['serial_no'], $payment->booking_id);
+            // Transfer vehicles from temporary to permanent tables with passenger ID mapping
+            $this->transferVehiclesToPermanent($validated['serial_no'], $payment->booking_id, $passengerIdMap);
 
             // Load the transferred data for the response
             $payment->load(['bookedPassengers', 'bookedVehicles']);
@@ -84,7 +84,7 @@ class CreatePaymentAction extends Action
             return [];
         }
 
-        $transferredPassengers = [];
+        $idMapping = []; // Map temp ID to permanent ID
 
         foreach ($temporaryPassengers as $tempPassenger) {
             try {
@@ -115,21 +115,21 @@ class CreatePaymentAction extends Action
                     'expires_at' => null, // Remove expiration for permanent records
                 ]);
 
+                // Map temp ID to permanent ID
+                $idMapping[$tempPassenger->booked_passenger_id] = $permanentPassenger->booked_passenger_id;
+
                 // Delete from temporary table
                 $tempPassenger->delete();
-                \Log::info("Transferred passenger ID: {$tempPassenger->booked_passenger_id} to permanent storage");
-
-                // Add to transferred collection
-                $transferredPassengers[] = $permanentPassenger;
+                \Log::info("Transferred passenger ID: {$tempPassenger->booked_passenger_id} to permanent storage with new ID: {$permanentPassenger->booked_passenger_id}");
             } catch (\Exception $e) {
                 \Log::error("Failed to transfer passenger ID: {$tempPassenger->booked_passenger_id}. Error: " . $e->getMessage());
             }
         }
 
-        return $transferredPassengers;
+        return $idMapping;
     }
 
-    private function transferVehiclesToPermanent(string $serialNo, int $bookingId): array
+    private function transferVehiclesToPermanent(string $serialNo, int $bookingId, array $passengerIdMap = []): array
     {
         $temporaryVehicles = BookedVehicle::where('serial_no', $serialNo)->get();
 
@@ -145,6 +145,12 @@ class CreatePaymentAction extends Action
 
         foreach ($temporaryVehicles as $tempVehicle) {
             try {
+                // Map temp driver_passenger_booking_id to permanent ID
+                $permanentDriverId = null;
+                if ($tempVehicle->driver_passenger_booking_id && isset($passengerIdMap[$tempVehicle->driver_passenger_booking_id])) {
+                    $permanentDriverId = $passengerIdMap[$tempVehicle->driver_passenger_booking_id];
+                }
+
                 $permanentVehicle = PermanentBookedVehicle::create([
                     'serial_no' => $tempVehicle->serial_no,
                     'booking_id' => $bookingId,
@@ -160,7 +166,7 @@ class CreatePaymentAction extends Action
                     'length' => $tempVehicle->length,
                     'weight' => $tempVehicle->weight,
                     'fare' => $tempVehicle->fare,
-                    'driver_passenger_booking_id' => $tempVehicle->driver_passenger_booking_id,
+                    'driver_passenger_booking_id' => $permanentDriverId, // Use mapped permanent ID
                     'institutional_account_id' => $tempVehicle->institutional_account_id,
                     'created_by' => $tempVehicle->created_by,
                     'expires_at' => null, // Remove expiration for permanent records
