@@ -36,13 +36,17 @@ return new class extends Migration
     public function down(): void
     {
         Schema::connection('teller_booking')->table('temp_booked_passengers', function (Blueprint $table) {
-            $table->dropIndex(['temp_booking_id']);
-            $table->dropColumn('temp_booking_id');
+            if (Schema::connection('teller_booking')->hasColumn('temp_booked_passengers', 'temp_booking_id')) {
+                $table->dropIndex(['temp_booking_id']);
+                $table->dropColumn('temp_booking_id');
+            }
         });
 
         Schema::connection('teller_booking')->table('temp_booked_vehicles', function (Blueprint $table) {
-            $table->dropIndex(['temp_booking_id']);
-            $table->dropColumn('temp_booking_id');
+            if (Schema::connection('teller_booking')->hasColumn('temp_booked_vehicles', 'temp_booking_id')) {
+                $table->dropIndex(['temp_booking_id']);
+                $table->dropColumn('temp_booking_id');
+            }
         });
     }
 };

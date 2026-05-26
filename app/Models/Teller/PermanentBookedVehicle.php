@@ -19,21 +19,17 @@ class PermanentBookedVehicle extends Model
     protected $fillable = [
         'booking_id',
         'serial_no',
-        'schedule_booking_id',
-        'is_return_trip',
         'vehicle_type',
         'plate_no',
         'length',
         'weight',
         'fare',
         'driver_passenger_booking_id',
-        'institutional_account_id',
         'created_by',
         'expires_at',
     ];
 
     protected $casts = [
-        'is_return_trip' => 'boolean',
         'length' => 'decimal:2',
         'weight' => 'decimal:2',
         'fare' => 'decimal:2',

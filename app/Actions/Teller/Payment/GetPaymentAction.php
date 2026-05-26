@@ -24,9 +24,10 @@ class GetPaymentAction extends Action
             $payment->creator = \App\Models\Accounts\User::find($payment->created_by, ['id', 'first_name', 'middle_name', 'last_name', 'email']);
         }
 
-        // Manually load booking info (schedule/route snapshots)
+        // Manually load booking info with passengers and vehicles
         if ($payment->booking_id) {
-            $payment->booking = Booking::find($payment->booking_id);
+            $payment->booking = Booking::with(['passengers', 'vehicles.driver'])
+                ->find($payment->booking_id);
         }
 
         return $this->success([

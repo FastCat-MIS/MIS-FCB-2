@@ -23,6 +23,7 @@ class BookingPayment extends Model
         'grand_total',
         'total_admin_fee',
         'payment_method',
+        'reference_number',
         'created_by',
     ];
 

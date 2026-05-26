@@ -29,10 +29,13 @@ class GetPaymentsAction extends Action
             });
         }
 
-        // Manually load booking info (schedule/route snapshots)
+        // Manually load booking info (schedule/route/vessel snapshots + institutional_account_id)
         $bookingIds = $payments->pluck('booking_id')->unique()->filter();
         if ($bookingIds->isNotEmpty()) {
-            $bookings = Booking::whereIn('booking_id', $bookingIds)->get()->keyBy('booking_id');
+            $bookings = Booking::with(['passengers', 'vehicles.driver'])
+                ->whereIn('booking_id', $bookingIds)
+                ->get()
+                ->keyBy('booking_id');
             
             $payments->each(function ($payment) use ($bookings) {
                 $payment->booking = $bookings->get($payment->booking_id);

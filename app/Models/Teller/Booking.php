@@ -11,18 +11,21 @@ class Booking extends Model
     protected $primaryKey = 'booking_id';
 
     protected $fillable = [
+        'schedule_booking_id',
+        'is_return_trip',
         'travel_date',
         'schedule_id',
         'schedule_snapshot',
         'route_id',
         'route_snapshot',
-        'origin_port_snapshot',
-        'destination_port_snapshot',
         'vessel_snapshot',
+        'institutional_account_id',
+        'institutional_account_snapshot',
         'created_by',
     ];
 
     protected $casts = [
+        'is_return_trip' => 'boolean',
         'travel_date' => 'date',
         'schedule_snapshot' => 'datetime:H:i:s',
     ];

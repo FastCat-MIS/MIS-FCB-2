@@ -25,10 +25,6 @@ return new class extends Migration
             $table->unsignedBigInteger('route_id');
             $table->string('route_snapshot')->nullable();
             
-            // Port snapshots
-            $table->string('origin_port_snapshot')->nullable();
-            $table->string('destination_port_snapshot')->nullable();
-            
             // Vessel snapshot
             $table->string('vessel_snapshot')->nullable();
             

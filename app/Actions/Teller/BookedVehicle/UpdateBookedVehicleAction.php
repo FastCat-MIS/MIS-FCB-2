@@ -17,8 +17,6 @@ class UpdateBookedVehicleAction extends Action
 
         $validator = Validator::make($data, [
             'booking_id' => 'sometimes|nullable|integer|min:1',
-            'schedule_booking_id' => 'sometimes|nullable|integer|min:1',
-            'is_return_trip' => 'sometimes|boolean',
             'travel_date' => 'sometimes|required|date',
             'schedule_id' => 'sometimes|required|integer|min:1',
             'schedule_snapshot' => 'sometimes|required|date_format:H:i:s',
@@ -30,7 +28,6 @@ class UpdateBookedVehicleAction extends Action
             'weight' => 'sometimes|nullable|numeric|min:0',
             'fare' => 'sometimes|required|numeric|min:0',
             'driver_passenger_booking_id' => 'sometimes|nullable|integer|min:1',
-            'institutional_account_id' => 'sometimes|nullable|integer|min:1',
         ]);
 
         if ($validator->fails()) {

@@ -12,6 +12,7 @@ class GetBookedPassengersAction extends Action
     {
         try {
             $bookedPassengers = BookedPassenger::query()
+                ->with('tempBooking')
                 ->latest('booked_passenger_id')
                 ->get();
 

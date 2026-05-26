@@ -113,38 +113,78 @@ return new class extends Migration
     {
         // Add back snapshots to temp_booked_passengers
         Schema::connection('teller_booking')->table('temp_booked_passengers', function (Blueprint $table) {
-            $table->date('travel_date');
-            $table->unsignedBigInteger('schedule_id');
-            $table->time('schedule_snapshot')->nullable();
-            $table->unsignedBigInteger('route_id');
-            $table->string('route_snapshot')->nullable();
+            if (!Schema::connection('teller_booking')->hasColumn('temp_booked_passengers', 'travel_date')) {
+                $table->date('travel_date');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('temp_booked_passengers', 'schedule_id')) {
+                $table->unsignedBigInteger('schedule_id');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('temp_booked_passengers', 'schedule_snapshot')) {
+                $table->time('schedule_snapshot')->nullable();
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('temp_booked_passengers', 'route_id')) {
+                $table->unsignedBigInteger('route_id');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('temp_booked_passengers', 'route_snapshot')) {
+                $table->string('route_snapshot')->nullable();
+            }
         });
 
         // Add back snapshots to temp_booked_vehicles
         Schema::connection('teller_booking')->table('temp_booked_vehicles', function (Blueprint $table) {
-            $table->date('travel_date');
-            $table->unsignedBigInteger('schedule_id');
-            $table->time('schedule_snapshot')->nullable();
-            $table->unsignedBigInteger('route_id');
-            $table->string('route_snapshot')->nullable();
+            if (!Schema::connection('teller_booking')->hasColumn('temp_booked_vehicles', 'travel_date')) {
+                $table->date('travel_date');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('temp_booked_vehicles', 'schedule_id')) {
+                $table->unsignedBigInteger('schedule_id');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('temp_booked_vehicles', 'schedule_snapshot')) {
+                $table->time('schedule_snapshot')->nullable();
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('temp_booked_vehicles', 'route_id')) {
+                $table->unsignedBigInteger('route_id');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('temp_booked_vehicles', 'route_snapshot')) {
+                $table->string('route_snapshot')->nullable();
+            }
         });
 
         // Add back snapshots to booked_passengers
         Schema::connection('teller_booking')->table('booked_passengers', function (Blueprint $table) {
-            $table->date('travel_date');
-            $table->unsignedBigInteger('schedule_id');
-            $table->time('schedule_snapshot')->nullable();
-            $table->unsignedBigInteger('route_id');
-            $table->string('route_snapshot')->nullable();
+            if (!Schema::connection('teller_booking')->hasColumn('booked_passengers', 'travel_date')) {
+                $table->date('travel_date');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('booked_passengers', 'schedule_id')) {
+                $table->unsignedBigInteger('schedule_id');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('booked_passengers', 'schedule_snapshot')) {
+                $table->time('schedule_snapshot')->nullable();
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('booked_passengers', 'route_id')) {
+                $table->unsignedBigInteger('route_id');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('booked_passengers', 'route_snapshot')) {
+                $table->string('route_snapshot')->nullable();
+            }
         });
 
         // Add back snapshots to booked_vehicles
         Schema::connection('teller_booking')->table('booked_vehicles', function (Blueprint $table) {
-            $table->date('travel_date');
-            $table->unsignedBigInteger('schedule_id');
-            $table->time('schedule_snapshot')->nullable();
-            $table->unsignedBigInteger('route_id');
-            $table->string('route_snapshot')->nullable();
+            if (!Schema::connection('teller_booking')->hasColumn('booked_vehicles', 'travel_date')) {
+                $table->date('travel_date');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('booked_vehicles', 'schedule_id')) {
+                $table->unsignedBigInteger('schedule_id');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('booked_vehicles', 'schedule_snapshot')) {
+                $table->time('schedule_snapshot')->nullable();
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('booked_vehicles', 'route_id')) {
+                $table->unsignedBigInteger('route_id');
+            }
+            if (!Schema::connection('teller_booking')->hasColumn('booked_vehicles', 'route_snapshot')) {
+                $table->string('route_snapshot')->nullable();
+            }
         });
     }
 };

@@ -12,6 +12,7 @@ class GetBookedVehiclesAction extends Action
     {
         try {
             $bookedVehicles = BookedVehicle::query()
+                ->with('tempBooking')
                 ->latest('booked_vehicle_id')
                 ->get();
 

@@ -27,6 +27,7 @@ class CreatePaymentAction extends Action
             'grand_total' => 'required|numeric|min:0',
             'total_admin_fee' => 'required|numeric|min:0',
             'payment_method' => 'required|string|max:50',
+            'reference_number' => 'nullable|string|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -49,8 +50,20 @@ class CreatePaymentAction extends Action
                 throw new \Exception("No booking found with serial_no: {$validated['serial_no']}");
             }
 
-            // Transfer temp_booking to permanent booking
-            $booking = $this->transferBookingToPermanent($tempBooking, $createdBy);
+            // Create permanent booking (but don't delete temp yet!)
+            $booking = Booking::create([
+                'schedule_booking_id' => $tempBooking->schedule_booking_id,
+                'is_return_trip' => $tempBooking->is_return_trip,
+                'travel_date' => $tempBooking->travel_date,
+                'schedule_id' => $tempBooking->schedule_id,
+                'schedule_snapshot' => $tempBooking->schedule_snapshot,
+                'route_id' => $tempBooking->route_id,
+                'route_snapshot' => $tempBooking->route_snapshot,
+                'vessel_snapshot' => $tempBooking->vessel_snapshot,
+                'institutional_account_id' => $tempBooking->institutional_account_id,
+                'institutional_account_snapshot' => $tempBooking->institutional_account_snapshot,
+                'created_by' => $createdBy,
+            ]);
             
             \Log::info("Created permanent booking with ID: {$booking->booking_id}");
 
@@ -60,6 +73,10 @@ class CreatePaymentAction extends Action
             // Transfer vehicles from temporary to permanent tables with passenger ID mapping
             $this->transferVehiclesToPermanent($validated['serial_no'], $booking->booking_id, $passengerIdMap);
 
+            // NOW delete temp_booking after passengers/vehicles are transferred
+            $tempBooking->delete();
+            \Log::info("Deleted temp_booking ID: {$tempBooking->temp_booking_id}");
+
             // Create payment linked to the booking
             $paymentData = [
                 'booking_id' => $booking->booking_id,
@@ -68,6 +85,7 @@ class CreatePaymentAction extends Action
                 'grand_total' => $validated['grand_total'],
                 'total_admin_fee' => $validated['total_admin_fee'],
                 'payment_method' => $validated['payment_method'],
+                'reference_number' => $validated['reference_number'] ?? null,
                 'created_by' => $createdBy,
             ];
             
@@ -84,29 +102,6 @@ class CreatePaymentAction extends Action
                 'booking' => $booking,
             ], 'Payment processed successfully. Booking and passengers/vehicles transferred to permanent storage.', 201);
         });
-    }
-
-    private function transferBookingToPermanent(TempBooking $tempBooking, int $createdBy): Booking
-    {
-        // Create permanent booking
-        $booking = Booking::create([
-            'travel_date' => $tempBooking->travel_date,
-            'schedule_id' => $tempBooking->schedule_id,
-            'schedule_snapshot' => $tempBooking->schedule_snapshot,
-            'route_id' => $tempBooking->route_id,
-            'route_snapshot' => $tempBooking->route_snapshot,
-            'origin_port_snapshot' => $tempBooking->origin_port_snapshot,
-            'destination_port_snapshot' => $tempBooking->destination_port_snapshot,
-            'vessel_snapshot' => $tempBooking->vessel_snapshot,
-            'created_by' => $createdBy,
-        ]);
-
-        // Delete temp booking
-        $tempBooking->delete();
-        
-        \Log::info("Transferred temp_booking ID: {$tempBooking->temp_booking_id} to permanent booking ID: {$booking->booking_id}");
-
-        return $booking;
     }
 
     private function transferPassengersToPermanent(string $serialNo, int $bookingId): array
@@ -128,8 +123,6 @@ class CreatePaymentAction extends Action
                 $permanentPassenger = PermanentBookedPassenger::create([
                     'booking_id' => $bookingId,
                     'serial_no' => $tempPassenger->serial_no,
-                    'schedule_booking_id' => $tempPassenger->schedule_booking_id,
-                    'is_return_trip' => $tempPassenger->is_return_trip,
                     'fullname' => $tempPassenger->fullname,
                     'gender' => $tempPassenger->gender,
                     'passenger_type_id' => $tempPassenger->passenger_type_id,
@@ -138,11 +131,9 @@ class CreatePaymentAction extends Action
                     'passenger_category_snapshot' => $tempPassenger->passenger_category_snapshot,
                     'seat_id' => $tempPassenger->seat_id,
                     'seat_number_snapshot' => $tempPassenger->seat_number_snapshot,
-                    'agent_id' => $tempPassenger->agent_id,
                     'fare' => $tempPassenger->fare,
                     'discount_amount' => $tempPassenger->discount_amount,
                     'discount_id' => $tempPassenger->discount_id,
-                    'institutional_account_id' => $tempPassenger->institutional_account_id,
                     'created_by' => $tempPassenger->created_by,
                     'expires_at' => null, // Remove expiration for permanent records
                 ]);
@@ -150,8 +141,8 @@ class CreatePaymentAction extends Action
                 // Map temp ID to permanent ID
                 $idMapping[$tempPassenger->booked_passenger_id] = $permanentPassenger->booked_passenger_id;
 
-                // Delete from temporary table
-                $tempPassenger->delete();
+                // Permanently delete from temporary table
+                $tempPassenger->forceDelete();
                 \Log::info("Transferred passenger ID: {$tempPassenger->booked_passenger_id} to permanent storage with new ID: {$permanentPassenger->booked_passenger_id}");
             } catch (\Exception $e) {
                 \Log::error("Failed to transfer passenger ID: {$tempPassenger->booked_passenger_id}. Error: " . $e->getMessage());
@@ -186,21 +177,18 @@ class CreatePaymentAction extends Action
                 $permanentVehicle = PermanentBookedVehicle::create([
                     'booking_id' => $bookingId,
                     'serial_no' => $tempVehicle->serial_no,
-                    'schedule_booking_id' => $tempVehicle->schedule_booking_id,
-                    'is_return_trip' => $tempVehicle->is_return_trip,
                     'vehicle_type' => $tempVehicle->vehicle_type,
                     'plate_no' => $tempVehicle->plate_no,
                     'length' => $tempVehicle->length,
                     'weight' => $tempVehicle->weight,
                     'fare' => $tempVehicle->fare,
                     'driver_passenger_booking_id' => $permanentDriverId, // Use mapped permanent ID
-                    'institutional_account_id' => $tempVehicle->institutional_account_id,
                     'created_by' => $tempVehicle->created_by,
                     'expires_at' => null, // Remove expiration for permanent records
                 ]);
 
-                // Delete from temporary table
-                $tempVehicle->delete();
+                // Permanently delete from temporary table
+                $tempVehicle->forceDelete();
                 \Log::info("Transferred vehicle ID: {$tempVehicle->booked_vehicle_id} to permanent storage");
 
                 // Add to transferred collection
@@ -222,6 +210,7 @@ class CreatePaymentAction extends Action
             'grandTotal' => 'grand_total',
             'totalAdminFee' => 'total_admin_fee',
             'paymentMethod' => 'payment_method',
+            'referenceNumber' => 'reference_number',
         ];
 
         foreach ($map as $from => $to) {
