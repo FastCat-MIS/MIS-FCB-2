@@ -17,15 +17,11 @@ class BookedPassenger extends Model
     protected $primaryKey = 'booked_passenger_id';
 
     protected $fillable = [
+        'temp_booking_id',
         'serial_no',
         'booking_id',
         'schedule_booking_id',
         'is_return_trip',
-        'travel_date',
-        'schedule_id',
-        'schedule_snapshot',
-        'route_id',
-        'route_snapshot',
         'fullname',
         'gender',
         'passenger_type_id',
@@ -45,14 +41,12 @@ class BookedPassenger extends Model
 
     protected $casts = [
         'is_return_trip' => 'boolean',
-        'travel_date' => 'date:Y-m-d',
-        'schedule_snapshot' => 'string',
         'fare' => 'decimal:2',
         'discount_amount' => 'decimal:2',
     ];
 
-    public function payment()
+    public function tempBooking()
     {
-        return $this->belongsTo(BookingPayment::class, 'booking_id', 'booking_id');
+        return $this->belongsTo(TempBooking::class, 'temp_booking_id', 'temp_booking_id');
     }
 }

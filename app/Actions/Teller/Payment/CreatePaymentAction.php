@@ -4,6 +4,8 @@ namespace App\Actions\Teller\Payment;
 
 use App\Actions\Action;
 use App\Models\Teller\BookingPayment;
+use App\Models\Teller\TempBooking;
+use App\Models\Teller\Booking;
 use App\Models\Teller\BookedPassenger;
 use App\Models\Teller\BookedVehicle;
 use App\Models\Teller\PermanentBookedPassenger;
@@ -33,43 +35,78 @@ class CreatePaymentAction extends Action
 
         return DB::transaction(function () use ($validator) {
             $validated = $validator->validated();
-            // Auto-populate created_by from JWT token
-            $validated['created_by'] = auth()->id() ?? \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getClaim('user_id');
-            // Generate 5-digit booking_id with lock to prevent race condition
-            $maxBookingId = DB::connection('teller_booking')
-                ->table('booking_payments')
-                ->lockForUpdate()
-                ->max('booking_id') ?? 9999; // Start from 10000 if no records exist
             
-            $validated['booking_id'] = $maxBookingId + 1;
-            //Generation of booking_id up to here only
+            // Auto-populate created_by from JWT token
+            $createdBy = auth()->id() ?? \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getClaim('user_id');
+            $validated['created_by'] = $createdBy;
+
             // Log the serial number being used for transfer
-        \Log::info("Processing payment with serial_no: {$validated['serial_no']}, booking_id: {$validated['booking_id']}");
+            \Log::info("Processing payment with serial_no: {$validated['serial_no']}");
 
-        // DEBUG: Check if passenger exists before transfer
-        $passengerCount = BookedPassenger::where('serial_no', $validated['serial_no'])->count();
-        \Log::info("DEBUG: Found {$passengerCount} passengers with serial_no: {$validated['serial_no']}");
+            // Find the temp_booking
+            $tempBooking = TempBooking::where('serial_no', $validated['serial_no'])->first();
+            if (!$tempBooking) {
+                throw new \Exception("No booking found with serial_no: {$validated['serial_no']}");
+            }
 
-        // DEBUG: Check if vehicle exists before transfer
-        $vehicleCount = BookedVehicle::where('serial_no', $validated['serial_no'])->count();
-        \Log::info("DEBUG: Found {$vehicleCount} vehicles with serial_no: {$validated['serial_no']}");
-
-            // Create payment
-            $payment = BookingPayment::create($validated);
+            // Transfer temp_booking to permanent booking
+            $booking = $this->transferBookingToPermanent($tempBooking, $createdBy);
+            
+            \Log::info("Created permanent booking with ID: {$booking->booking_id}");
 
             // Transfer passengers from temporary to permanent tables and get ID mapping
-            $passengerIdMap = $this->transferPassengersToPermanent($validated['serial_no'], $payment->booking_id);
+            $passengerIdMap = $this->transferPassengersToPermanent($validated['serial_no'], $booking->booking_id);
 
             // Transfer vehicles from temporary to permanent tables with passenger ID mapping
-            $this->transferVehiclesToPermanent($validated['serial_no'], $payment->booking_id, $passengerIdMap);
+            $this->transferVehiclesToPermanent($validated['serial_no'], $booking->booking_id, $passengerIdMap);
+
+            // Create payment linked to the booking
+            $paymentData = [
+                'booking_id' => $booking->booking_id,
+                'total_fare' => $validated['total_fare'],
+                'total_discount' => $validated['total_discount'],
+                'grand_total' => $validated['grand_total'],
+                'total_admin_fee' => $validated['total_admin_fee'],
+                'payment_method' => $validated['payment_method'],
+                'created_by' => $createdBy,
+            ];
+            
+            $payment = BookingPayment::create($paymentData);
 
             // Load the transferred data for the response
             $payment->load(['bookedPassengers', 'bookedVehicles']);
+            
+            // Load booking with snapshots
+            $booking->load(['passengers', 'vehicles']);
 
             return $this->success([
                 'payment' => $payment,
-            ], 'Payment processed successfully. Passengers and vehicles transferred to permanent storage.', 201);
+                'booking' => $booking,
+            ], 'Payment processed successfully. Booking and passengers/vehicles transferred to permanent storage.', 201);
         });
+    }
+
+    private function transferBookingToPermanent(TempBooking $tempBooking, int $createdBy): Booking
+    {
+        // Create permanent booking
+        $booking = Booking::create([
+            'travel_date' => $tempBooking->travel_date,
+            'schedule_id' => $tempBooking->schedule_id,
+            'schedule_snapshot' => $tempBooking->schedule_snapshot,
+            'route_id' => $tempBooking->route_id,
+            'route_snapshot' => $tempBooking->route_snapshot,
+            'origin_port_snapshot' => $tempBooking->origin_port_snapshot,
+            'destination_port_snapshot' => $tempBooking->destination_port_snapshot,
+            'vessel_snapshot' => $tempBooking->vessel_snapshot,
+            'created_by' => $createdBy,
+        ]);
+
+        // Delete temp booking
+        $tempBooking->delete();
+        
+        \Log::info("Transferred temp_booking ID: {$tempBooking->temp_booking_id} to permanent booking ID: {$booking->booking_id}");
+
+        return $booking;
     }
 
     private function transferPassengersToPermanent(string $serialNo, int $bookingId): array
@@ -89,15 +126,10 @@ class CreatePaymentAction extends Action
         foreach ($temporaryPassengers as $tempPassenger) {
             try {
                 $permanentPassenger = PermanentBookedPassenger::create([
-                    'serial_no' => $tempPassenger->serial_no,
                     'booking_id' => $bookingId,
+                    'serial_no' => $tempPassenger->serial_no,
                     'schedule_booking_id' => $tempPassenger->schedule_booking_id,
                     'is_return_trip' => $tempPassenger->is_return_trip,
-                    'travel_date' => $tempPassenger->travel_date,
-                    'schedule_id' => $tempPassenger->schedule_id,
-                    'schedule_snapshot' => $tempPassenger->schedule_snapshot,
-                    'route_id' => $tempPassenger->route_id,
-                    'route_snapshot' => $tempPassenger->route_snapshot,
                     'fullname' => $tempPassenger->fullname,
                     'gender' => $tempPassenger->gender,
                     'passenger_type_id' => $tempPassenger->passenger_type_id,
@@ -152,15 +184,10 @@ class CreatePaymentAction extends Action
                 }
 
                 $permanentVehicle = PermanentBookedVehicle::create([
-                    'serial_no' => $tempVehicle->serial_no,
                     'booking_id' => $bookingId,
+                    'serial_no' => $tempVehicle->serial_no,
                     'schedule_booking_id' => $tempVehicle->schedule_booking_id,
                     'is_return_trip' => $tempVehicle->is_return_trip,
-                    'travel_date' => $tempVehicle->travel_date,
-                    'schedule_id' => $tempVehicle->schedule_id,
-                    'schedule_snapshot' => $tempVehicle->schedule_snapshot,
-                    'route_id' => $tempVehicle->route_id,
-                    'route_snapshot' => $tempVehicle->route_snapshot,
                     'vehicle_type' => $tempVehicle->vehicle_type,
                     'plate_no' => $tempVehicle->plate_no,
                     'length' => $tempVehicle->length,

@@ -17,15 +17,10 @@ class PermanentBookedVehicle extends Model
     protected $primaryKey = 'booked_vehicle_id';
 
     protected $fillable = [
-        'serial_no',
         'booking_id',
+        'serial_no',
         'schedule_booking_id',
         'is_return_trip',
-        'travel_date',
-        'schedule_id',
-        'schedule_snapshot',
-        'route_id',
-        'route_snapshot',
         'vehicle_type',
         'plate_no',
         'length',
@@ -39,15 +34,23 @@ class PermanentBookedVehicle extends Model
 
     protected $casts = [
         'is_return_trip' => 'boolean',
-        'travel_date' => 'date:Y-m-d',
-        'schedule_snapshot' => 'string',
         'length' => 'decimal:2',
         'weight' => 'decimal:2',
         'fare' => 'decimal:2',
     ];
 
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class, 'booking_id', 'booking_id');
+    }
+
     public function payment()
     {
         return $this->belongsTo(BookingPayment::class, 'booking_id', 'booking_id');
+    }
+
+    public function driver()
+    {
+        return $this->belongsTo(PermanentBookedPassenger::class, 'driver_passenger_booking_id', 'booked_passenger_id');
     }
 }

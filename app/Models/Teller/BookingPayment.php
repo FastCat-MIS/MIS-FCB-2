@@ -42,5 +42,10 @@ class BookingPayment extends Model
     {
         return $this->hasMany(PermanentBookedVehicle::class, 'booking_id', 'booking_id');
     }
+
+    public function creator()
+    {
+        return $this->belongsTo(\App\Models\Accounts\User::class, 'created_by', 'id');
+    }
 }
 
