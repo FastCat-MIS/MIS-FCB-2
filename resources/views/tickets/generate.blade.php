@@ -120,35 +120,35 @@
 
 @foreach($tickets as $ticket)
     <center>
-        <table class='table table-responsive'>
+        <table class="table table-responsive">
             <tbody>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center><img src="/assets/img/fastcat.png" width="50"/></center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center>Archipelago Philippine Ferries Corporation<br/><br/><small>TEL NO. : (02) 8842 9341</small></center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center>Ticket No</center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center>{{ $ticket['booking_number'] }}</center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
-                    <center><img src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ $ticket['qr_data'] }}' id='qrcode' width='80' height='80'/></center>
+                <td colspan="2">
+                    <center><img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ $ticket['qr_data'] }}" id="qrcode" width="80" height="80"/></center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center>
                         <b>Date</b><br/>
                         {{ $ticket['travel_date']->format('F j, Y') }}
@@ -156,22 +156,22 @@
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center><b>Fullname</b><br/>{{ $ticket['fullname'] }}</center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center><b>Accommodation</b><br/>{{ $ticket['accommodation'] }}</center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center><b>Seat No</b><br/>{{ $ticket['seat_number'] }}</center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                    <center>
                         <b>Departure Time</b><br/>
                         {{ date('g:i A', strtotime($ticket['departure_time'])) }}
@@ -179,27 +179,27 @@
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center><b>Discount</b><br/>{{ $ticket['discount'] }}%</center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center><b>Amount</b><br/>{{ $ticket['amount'] }}</center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center><b>Vehicle Type</b><br/>{{ $ticket['vehicle_type'] ?? 'N/A' }}</center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center><b>Plate No</b><br/>{{ $ticket['plate_number'] ?? 'N/A' }}</center>
                 </td>
             </tr>
             <tr>
-                <td colspan='2'>
+                <td colspan="2">
                     <center><b>Passenger's Copy</b></center>
                 </td>
             </tr>
