@@ -8,6 +8,15 @@ use App\Models\Operations\Schedule;
 
 class GenerateTicketAction extends Action
 {
+    /**
+     * Generate passenger tickets for a completed booking
+     * 
+     * Creates printable thermal receipt tickets (56mm width) for each passenger
+     * in the booking. Includes QR code for validation and all trip details.
+     * 
+     * @param string $bookingNumber The permanent booking number (format: 7EA5-00001)
+     * @return mixed Blade view with ticket data or error response
+     */
     public function execute(string $bookingNumber)
     {
         // Fetch booking with relationships
@@ -26,24 +35,25 @@ class GenerateTicketAction extends Action
             return $this->error(null, 'Schedule not found', 404);
         }
 
-        // Prepare ticket data for each passenger
+        // Prepare ticket data for each passenger in the booking
         $tickets = [];
         foreach ($booking->passengers as $passenger) {
-            // Calculate discount percentage
+            // Calculate discount percentage from discount amount and original fare
             $discountPercentage = 0;
             if ($passenger->fare > 0) {
                 $discountPercentage = ($passenger->discount_amount / $passenger->fare) * 100;
             }
 
-            // Get vehicle info if passenger is a driver
+            // Check if passenger is a vehicle driver and get vehicle details
             $vehicle = $booking->vehicles->firstWhere('driver_passenger_booking_id', $passenger->booked_passenger_id);
 
-            // Parse passenger category snapshot for accommodation
+            // Get accommodation type from passenger category (auto-cast to array by model)
             $passengerCategory = $passenger->passenger_category_snapshot;
             
             $accommodation = $passengerCategory['category_name'] ?? 'N/A';
 
-            // Generate QR code data
+            // Generate QR code data string for ticket validation
+            // Format: date,time,port,schedule,booking,name,accommodation,seat,origin
             $qrData = implode(',', [
                 $booking->travel_date->format('Y-m-d'),
                 $schedule->departure_time,

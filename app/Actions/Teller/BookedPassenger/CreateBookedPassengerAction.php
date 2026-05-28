@@ -117,9 +117,11 @@ class CreateBookedPassengerAction extends Action
 
             $bookedPassenger = BookedPassenger::create($passengerData);
 
-            // 🔒 AUTO-LOCK SEAT (if seat_id provided)
+            // Automatically lock the seat if a seat_id was provided
+            // This prevents double-booking by creating a database constraint violation
+            // if another transaction tries to book the same seat
             if (isset($validated['seat_id']) && $validated['seat_id'] !== null) {
-                // Get vessel_id from schedule (main database)
+                // Get vessel_id from schedule (queried from main database)
                 $schedule = Schedule::find($tempBooking->schedule_id);
                 
                 if (!$schedule) {
@@ -130,6 +132,7 @@ class CreateBookedPassengerAction extends Action
                 $vesselId = $schedule->vessel_id;
                 
                 try {
+                    // Create seat lock - will fail with unique constraint error if seat already taken
                     $lock = ScheduleSeatLock::create([
                         'schedule_id' => $tempBooking->schedule_id,
                         'seat_id' => $validated['seat_id'],
@@ -146,7 +149,8 @@ class CreateBookedPassengerAction extends Action
                 } catch (QueryException $lockException) {
                     DB::connection('teller_booking')->rollBack();
                     
-                    // Check if duplicate entry error (seat already locked)
+                    // Check if this is a duplicate entry error (MySQL error code 23000)
+                    // This means the seat is already locked by another booking
                     if ($lockException->getCode() === '23000' && str_contains($lockException->getMessage(), 'unique_schedule_seat_date')) {
                         return $this->error('Seat already taken by another booking', 409);
                     }

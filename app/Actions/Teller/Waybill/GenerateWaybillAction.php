@@ -8,6 +8,15 @@ use App\Models\Operations\Schedule;
 
 class GenerateWaybillAction extends Action
 {
+    /**
+     * Generate waybills (Bill of Lading) for vehicles in a completed booking
+     * 
+     * Creates printable A4 waybill documents for each vehicle. Used as official
+     * cargo manifest and receipt for vehicle transportation.
+     * 
+     * @param string $bookingNumber The permanent booking number (format: 7EA5-00001)
+     * @return mixed Blade view with waybill data or error response
+     */
     public function execute(string $bookingNumber)
     {
         // Fetch booking with relationships
@@ -19,7 +28,7 @@ class GenerateWaybillAction extends Action
             return $this->error(null, 'Booking not found', 404);
         }
 
-        // Check if booking has vehicles
+        // Check if booking has vehicles - waybills only for vehicle bookings
         if ($booking->vehicles->isEmpty()) {
             return $this->error(null, 'No vehicles found for this booking', 404);
         }
@@ -31,34 +40,34 @@ class GenerateWaybillAction extends Action
             return $this->error(null, 'Schedule not found', 404);
         }
 
-        // Parse route snapshot to get origin and destination
+        // Extract route information from snapshot (auto-cast to array by model)
         $routeSnapshot = $booking->route_snapshot;
 
         $portOrigin = $routeSnapshot['port_a_name'] ?? 'N/A';
         $portDestination = $routeSnapshot['port_b_name'] ?? 'N/A';
 
-        // Parse vessel snapshot
+        // Extract vessel information from snapshot (auto-cast to array by model)
         $vesselSnapshot = $booking->vessel_snapshot;
 
         $vesselName = $vesselSnapshot['vessel_name'] ?? ($schedule->vessel->vessel_name ?? 'N/A');
 
-        // Prepare waybill data
+        // Generate waybill document for each vehicle in the booking
         $waybills = [];
         foreach ($booking->vehicles as $vehicle) {
-            // Get driver info
+            // Get driver information from linked passenger record
             $driver = $vehicle->driver;
             $driverName = $driver ? $driver->fullname : 'N/A';
             
-            // Driver's passenger category is already auto-cast to array
+            // Address field placeholder - passenger category snapshot is auto-cast to array
             $address = 'N/A';
 
-            // Calculate total with admin fee
+            // Calculate total charges including fixed admin fee
             $netAmount = (float) $vehicle->fare;
             $adminFee = 25.00;
             $totalCharges = $netAmount + $adminFee;
             $amountInWords = $this->convertNumberToWords($totalCharges);
 
-            // Generate QR code data
+            // Generate QR code data string for waybill validation
             $qrData = implode(',', [
                 $booking->travel_date->format('Y-m-d'),
                 $schedule->port_id,
@@ -67,8 +76,8 @@ class GenerateWaybillAction extends Action
                 $driverName
             ]);
 
-            // Get voyage code (you may need to implement voyage system)
-            $voyageCode = 'N/A'; // TODO: Implement voyage system
+            // Voyage code placeholder - voyage tracking system not yet implemented
+            $voyageCode = 'N/A';
 
             $waybills[] = [
                 'voyage_code' => $voyageCode,
@@ -96,8 +105,15 @@ class GenerateWaybillAction extends Action
     }
 
     /**
-     * Convert number to words for waybill
+     * Convert numeric amount to words for waybill
+     * 
+     * Converts a decimal number to its English word representation
+     * with Philippine peso format.
+     * 
      * Example: 1250.50 => "One Thousand Two Hundred Fifty Pesos and Fifty Centavos"
+     * 
+     * @param float|int $number The amount to convert
+     * @return string The amount in words
      */
     private function convertNumberToWords($number): string
     {

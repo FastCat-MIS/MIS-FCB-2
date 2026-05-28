@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Temporary Booked Passenger Model
+ * 
+ * Represents a passenger on a pending booking before payment. Data is transferred
+ * to PermanentBookedPassenger model when payment is completed.
+ * 
+ * Database: teller_booking
+ * Table: temp_booked_passengers
+ * Primary Key: booked_passenger_id
+ */
 class BookedPassenger extends Model
 {
     use HasFactory, SoftDeletes;
@@ -33,6 +43,11 @@ class BookedPassenger extends Model
         'expires_at',
     ];
 
+    /**
+     * Cast attributes to native types
+     * 
+     * Note: Snapshot columns are automatically cast to arrays
+     */
     protected $casts = [
         'fare' => 'decimal:2',
         'discount_amount' => 'decimal:2',

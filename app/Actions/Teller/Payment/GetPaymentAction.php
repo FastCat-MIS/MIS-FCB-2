@@ -8,13 +8,24 @@ use App\Models\Teller\Booking;
 
 class GetPaymentAction extends Action
 {
+    /**
+     * Retrieve detailed information for a single completed booking
+     * 
+     * Returns complete payment details including all passengers, vehicles,
+     * driver information, and schedule details. Used for viewing full
+     * booking information after payment is completed.
+     * 
+     * @param int $paymentId The booking_payment_id to retrieve
+     * @return array Success response with full payment details or error
+     */
     public function execute(int $paymentId)
     {
-        // Validate ID is provided and valid
+        // Validate that a positive payment ID was provided
         if ($paymentId <= 0) {
             return $this->error('Invalid payment ID provided. Please provide a valid booking_payment_id in the URL: GET /teller-booking/payment/{id}', 400);
         }
 
+        // Load payment with all related passengers and vehicles (eager loading to avoid N+1)
         $payment = BookingPayment::with([
             'bookedPassengers', 
             'bookedVehicles.driver'
@@ -24,12 +35,12 @@ class GetPaymentAction extends Action
             return $this->error("Payment with ID {$paymentId} not found.", 404);
         }
 
-        // Manually load creator info from main database
+        // Load user information from main database for the creator
         if ($payment->created_by) {
             $payment->creator = \App\Models\Accounts\User::find($payment->created_by, ['id', 'first_name', 'middle_name', 'last_name', 'email']);
         }
 
-        // Manually load booking info with passengers and vehicles
+        // Load complete booking information with all passengers and vehicles
         if ($payment->booking_id) {
             $payment->booking = Booking::with(['passengers', 'vehicles.driver'])
                 ->find($payment->booking_id);
