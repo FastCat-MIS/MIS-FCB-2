@@ -39,9 +39,7 @@ class GenerateTicketAction extends Action
             $vehicle = $booking->vehicles->firstWhere('driver_passenger_booking_id', $passenger->booked_passenger_id);
 
             // Parse passenger category snapshot for accommodation
-            $passengerCategory = is_string($passenger->passenger_category_snapshot) 
-                ? json_decode($passenger->passenger_category_snapshot, true) 
-                : $passenger->passenger_category_snapshot;
+            $passengerCategory = $passenger->passenger_category_snapshot;
             
             $accommodation = $passengerCategory['category_name'] ?? 'N/A';
 

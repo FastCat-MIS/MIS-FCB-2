@@ -32,17 +32,13 @@ class GenerateWaybillAction extends Action
         }
 
         // Parse route snapshot to get origin and destination
-        $routeSnapshot = is_string($booking->route_snapshot) 
-            ? json_decode($booking->route_snapshot, true) 
-            : $booking->route_snapshot;
+        $routeSnapshot = $booking->route_snapshot;
 
         $portOrigin = $routeSnapshot['port_a_name'] ?? 'N/A';
         $portDestination = $routeSnapshot['port_b_name'] ?? 'N/A';
 
         // Parse vessel snapshot
-        $vesselSnapshot = is_string($booking->vessel_snapshot) 
-            ? json_decode($booking->vessel_snapshot, true) 
-            : $booking->vessel_snapshot;
+        $vesselSnapshot = $booking->vessel_snapshot;
 
         $vesselName = $vesselSnapshot['vessel_name'] ?? ($schedule->vessel->vessel_name ?? 'N/A');
 
@@ -53,14 +49,8 @@ class GenerateWaybillAction extends Action
             $driver = $vehicle->driver;
             $driverName = $driver ? $driver->fullname : 'N/A';
             
-            // Parse driver's passenger category for address if available
+            // Driver's passenger category is already auto-cast to array
             $address = 'N/A';
-            if ($driver) {
-                $passengerCategory = is_string($driver->passenger_category_snapshot) 
-                    ? json_decode($driver->passenger_category_snapshot, true) 
-                    : $driver->passenger_category_snapshot;
-                // You can add address field to passenger model if needed
-            }
 
             // Calculate total with admin fee
             $netAmount = (float) $vehicle->fare;

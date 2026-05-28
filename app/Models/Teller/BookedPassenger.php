@@ -36,6 +36,8 @@ class BookedPassenger extends Model
     protected $casts = [
         'fare' => 'decimal:2',
         'discount_amount' => 'decimal:2',
+        'passenger_type_snapshot' => 'array',
+        'passenger_category_snapshot' => 'array',
     ];
 
     public function tempBooking()

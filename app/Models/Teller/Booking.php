@@ -30,6 +30,9 @@ class Booking extends Model
         'is_return_trip' => 'boolean',
         'travel_date' => 'date',
         'schedule_snapshot' => 'datetime:H:i:s',
+        'route_snapshot' => 'array',
+        'vessel_snapshot' => 'array',
+        'institutional_account_snapshot' => 'array',
     ];
 
     // Relationships
