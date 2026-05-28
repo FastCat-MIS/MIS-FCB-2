@@ -52,6 +52,15 @@ class CreateBookedPassengerAction extends Action
 
         $validated = $validator->validated();
         
+        // Decode JSON-encoded snapshot strings from frontend
+        // Frontend sometimes sends "\"Senior\/PWD\"" instead of "Senior/PWD"
+        if (isset($validated['passenger_type_snapshot'])) {
+            $validated['passenger_type_snapshot'] = $this->decodeJsonString($validated['passenger_type_snapshot']);
+        }
+        if (isset($validated['passenger_category_snapshot'])) {
+            $validated['passenger_category_snapshot'] = $this->decodeJsonString($validated['passenger_category_snapshot']);
+        }
+        
         // Auto-populate created_by from JWT token
         $createdBy = auth()->id() ?? \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getClaim('user_id');
         $validated['created_by'] = $createdBy;
@@ -219,5 +228,28 @@ class CreateBookedPassengerAction extends Action
         }
 
         return $data;
+    }
+
+    /**
+     * Decode JSON-encoded strings from frontend
+     * 
+     * If the value is a JSON-encoded string (e.g., "\"Senior\/PWD\""), 
+     * decode it to a plain string (e.g., "Senior/PWD").
+     * Otherwise, return the original value.
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function decodeJsonString($value)
+    {
+        if (!is_string($value)) {
+            return $value;
+        }
+
+        $decoded = json_decode($value, true);
+        
+        // If decoding succeeded and returned a string, use it
+        // Otherwise keep the original value
+        return is_string($decoded) ? $decoded : $value;
     }
 }
