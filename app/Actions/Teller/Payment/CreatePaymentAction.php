@@ -45,8 +45,10 @@ class CreatePaymentAction extends Action
             // Log the serial number being used for transfer
             \Log::info("Processing payment with serial_no: {$validated['serial_no']}");
 
-            // Find the temp_booking
-            $tempBooking = TempBooking::where('serial_no', $validated['serial_no'])->first();
+            // Find the temp_booking with passengers and vehicles (eager load to avoid N+1)
+            $tempBooking = TempBooking::with(['passengers', 'vehicles'])
+                ->where('serial_no', $validated['serial_no'])
+                ->first();
             if (!$tempBooking) {
                 throw new \Exception("No booking found with serial_no: {$validated['serial_no']}");
             }
@@ -75,10 +77,10 @@ class CreatePaymentAction extends Action
             \Log::info("Created permanent booking with ID: {$booking->booking_id}");
 
             // Transfer passengers from temporary to permanent tables and get ID mapping
-            $passengerIdMap = $this->transferPassengersToPermanent($validated['serial_no'], $booking->booking_id);
+            $passengerIdMap = $this->transferPassengersToPermanent($tempBooking, $booking->booking_id);
 
             // Transfer vehicles from temporary to permanent tables with passenger ID mapping
-            $this->transferVehiclesToPermanent($validated['serial_no'], $booking->booking_id, $passengerIdMap);
+            $this->transferVehiclesToPermanent($tempBooking, $booking->booking_id, $passengerIdMap);
 
             // 🔒 UPDATE SEAT LOCKS: serial_no → booking_number AND mark as permanent
             $updatedLocks = ScheduleSeatLock::where('serial_no', $validated['serial_no'])
@@ -119,20 +121,12 @@ class CreatePaymentAction extends Action
         });
     }
 
-    private function transferPassengersToPermanent(string $serialNo, int $bookingId): array
+    private function transferPassengersToPermanent(TempBooking $tempBooking, int $bookingId): array
     {
-        // Get temp booking first
-        $tempBooking = TempBooking::where('serial_no', $serialNo)->first();
-        
-        if (!$tempBooking) {
-            \Log::warning("No temp booking found with serial_no: {$serialNo}");
-            return [];
-        }
-
-        // Get passengers through relationship
+        // Get passengers through relationship (already eager loaded)
         $temporaryPassengers = $tempBooking->passengers;
 
-        \Log::info("Transferring passengers for serial_no: {$serialNo}, found: " . $temporaryPassengers->count() . " records");
+        \Log::info("Transferring passengers for serial_no: {$tempBooking->serial_no}, found: " . $temporaryPassengers->count() . " records");
 
         if ($temporaryPassengers->isEmpty()) {
             \Log::warning("No passengers found for temp_booking_id: {$tempBooking->temp_booking_id}");
@@ -174,20 +168,12 @@ class CreatePaymentAction extends Action
         return $idMapping;
     }
 
-    private function transferVehiclesToPermanent(string $serialNo, int $bookingId, array $passengerIdMap = []): array
+    private function transferVehiclesToPermanent(TempBooking $tempBooking, int $bookingId, array $passengerIdMap = []): array
     {
-        // Get temp booking first
-        $tempBooking = TempBooking::where('serial_no', $serialNo)->first();
-        
-        if (!$tempBooking) {
-            \Log::warning("No temp booking found with serial_no: {$serialNo}");
-            return [];
-        }
-
-        // Get vehicles through relationship
+        // Get vehicles through relationship (already eager loaded)
         $temporaryVehicles = $tempBooking->vehicles;
 
-        \Log::info("Transferring vehicles for serial_no: {$serialNo}, found: " . $temporaryVehicles->count() . " records");
+        \Log::info("Transferring vehicles for serial_no: {$tempBooking->serial_no}, found: " . $temporaryVehicles->count() . " records");
 
         if ($temporaryVehicles->isEmpty()) {
             \Log::warning("No vehicles found for temp_booking_id: {$tempBooking->temp_booking_id}");
