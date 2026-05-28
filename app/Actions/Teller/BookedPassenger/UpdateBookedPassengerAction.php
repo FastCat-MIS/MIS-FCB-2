@@ -13,6 +13,11 @@ class UpdateBookedPassengerAction extends Action
 {
     public function execute(int $bookedPassengerId, array $data)
     {
+        // Validate ID is provided and valid
+        if ($bookedPassengerId <= 0) {
+            return $this->error('Invalid passenger ID provided. Please provide a valid temp_booked_passenger_id in the URL: PATCH /teller-booking/book-passenger/{id}', 400);
+        }
+
         $data = $this->normalizeKeys($data);
 
         $validator = Validator::make($data, [

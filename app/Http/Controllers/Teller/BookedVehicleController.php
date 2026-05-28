@@ -17,9 +17,9 @@ class BookedVehicleController extends Controller
         return $action->execute();
     }
 
-    public function show(int $bookedVehicleId, GetBookedVehicleAction $action)
+    public function show($bookedVehicleId, GetBookedVehicleAction $action)
     {
-        return $action->execute($bookedVehicleId);
+        return $action->execute((int) $bookedVehicleId);
     }
 
     public function store(Request $request, CreateBookedVehicleAction $action)
@@ -27,14 +27,14 @@ class BookedVehicleController extends Controller
         return $action->execute($request->all());
     }
 
-    public function update(Request $request, int $bookedVehicleId, UpdateBookedVehicleAction $action)
+    public function update(Request $request, $bookedVehicleId, UpdateBookedVehicleAction $action)
     {
-        return $action->execute($bookedVehicleId, $request->all());
+        return $action->execute((int) $bookedVehicleId, $request->all());
     }
 
-    public function destroy(int $bookedVehicleId, DeleteBookedVehicleAction $action)
+    public function destroy($bookedVehicleId, DeleteBookedVehicleAction $action)
     {
-        return $action->execute($bookedVehicleId);
+        return $action->execute((int) $bookedVehicleId);
     }
 }
 

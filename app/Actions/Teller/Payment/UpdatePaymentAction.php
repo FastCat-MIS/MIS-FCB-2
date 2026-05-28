@@ -8,6 +8,11 @@ class UpdatePaymentAction
 {
     public function execute(int $paymentId, array $data)
     {
+        // Validate ID is provided and valid
+        if ($paymentId <= 0) {
+            throw new \Exception('Invalid payment ID provided. Please provide a valid booking_payment_id in the URL: PATCH /teller-booking/payment/{id}');
+        }
+
         $payment = BookingPayment::find($paymentId);
 
         if (!$payment) {

@@ -5,8 +5,12 @@ namespace App\Actions\Teller\BookedPassenger;
 use App\Actions\Action;
 use App\Models\Teller\BookedPassenger;
 use App\Models\Teller\TempBooking;
+use App\Models\Teller\ScheduleSeatLock;
+use App\Models\Operations\Schedule;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\QueryException;
 
 class CreateBookedPassengerAction extends Action
 {
@@ -52,12 +56,16 @@ class CreateBookedPassengerAction extends Action
         $createdBy = auth()->id() ?? \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getClaim('user_id');
         $validated['created_by'] = $createdBy;
 
-        // Find or create temp_booking
-        $tempBooking = TempBooking::where('serial_no', $validated['serial_no'])->first();
+        // Wrap in transaction for atomicity
+        DB::connection('teller_booking')->beginTransaction();
         
-        if ($tempBooking) {
-            // Update only the fields that are provided
-            $updateData = [];
+        try {
+            // Find or create temp_booking
+            $tempBooking = TempBooking::where('serial_no', $validated['serial_no'])->first();
+        
+            if ($tempBooking) {
+                // Update only the fields that are provided
+                $updateData = [];
             if (isset($validated['schedule_booking_id'])) $updateData['schedule_booking_id'] = $validated['schedule_booking_id'];
             if (isset($validated['is_return_trip'])) $updateData['is_return_trip'] = $validated['is_return_trip'];
             if (isset($validated['travel_date'])) $updateData['travel_date'] = $validated['travel_date'];
@@ -69,51 +77,112 @@ class CreateBookedPassengerAction extends Action
             if (isset($validated['institutional_account_id'])) $updateData['institutional_account_id'] = $validated['institutional_account_id'];
             if (isset($validated['institutional_account_snapshot'])) $updateData['institutional_account_snapshot'] = $validated['institutional_account_snapshot'];
             
-            if (!empty($updateData)) {
-                $tempBooking->update($updateData);
+                if (!empty($updateData)) {
+                    $tempBooking->update($updateData);
+                }
+            } else {
+                // Create new temp_booking
+                $tempBooking = TempBooking::create([
+                    'serial_no' => $validated['serial_no'],
+                    'schedule_booking_id' => $validated['schedule_booking_id'] ?? null,
+                    'is_return_trip' => $validated['is_return_trip'] ?? false,
+                    'travel_date' => $validated['travel_date'],
+                    'schedule_id' => $validated['schedule_id'],
+                    'schedule_snapshot' => $validated['schedule_snapshot'],
+                    'route_id' => $validated['route_id'],
+                    'route_snapshot' => $validated['route_snapshot'],
+                    'vessel_snapshot' => $validated['vessel_snapshot'] ?? null,
+                    'institutional_account_id' => $validated['institutional_account_id'] ?? null,
+                    'institutional_account_snapshot' => $validated['institutional_account_snapshot'] ?? null,
+                    'booking_origin' => 'teller',
+                    'created_by' => $createdBy,
+                ]);
             }
-        } else {
-            // Create new temp_booking
-            $tempBooking = TempBooking::create([
-                'serial_no' => $validated['serial_no'],
-                'schedule_booking_id' => $validated['schedule_booking_id'] ?? null,
-                'is_return_trip' => $validated['is_return_trip'] ?? false,
-                'travel_date' => $validated['travel_date'],
-                'schedule_id' => $validated['schedule_id'],
-                'schedule_snapshot' => $validated['schedule_snapshot'],
-                'route_id' => $validated['route_id'],
-                'route_snapshot' => $validated['route_snapshot'],
-                'vessel_snapshot' => $validated['vessel_snapshot'] ?? null,
-                'institutional_account_id' => $validated['institutional_account_id'] ?? null,
-                'institutional_account_snapshot' => $validated['institutional_account_snapshot'] ?? null,
-                'created_by' => $createdBy,
-            ]);
+
+            // Create passenger data
+            $passengerData = [
+                'temp_booking_id' => $tempBooking->temp_booking_id,
+                'fullname' => $validated['fullname'],
+                'gender' => $validated['gender'] ?? null,
+                'passenger_type_id' => $validated['passenger_type_id'],
+                'passenger_type_snapshot' => $validated['passenger_type_snapshot'],
+                'passenger_category_id' => $validated['passenger_category_id'] ?? null,
+                'passenger_category_snapshot' => $validated['passenger_category_snapshot'] ?? null,
+                'seat_id' => $validated['seat_id'] ?? null,
+                'seat_number_snapshot' => $validated['seat_number_snapshot'] ?? null,
+                'fare' => $validated['fare'],
+                'discount_amount' => $validated['discount_amount'] ?? 0,
+                'discount_id' => $validated['discount_id'] ?? null,
+            ];
+
+            $bookedPassenger = BookedPassenger::create($passengerData);
+
+            // 🔒 AUTO-LOCK SEAT (if seat_id provided)
+            if (isset($validated['seat_id']) && $validated['seat_id'] !== null) {
+                // Get vessel_id from schedule (main database)
+                $schedule = Schedule::find($tempBooking->schedule_id);
+                
+                if (!$schedule) {
+                    DB::connection('teller_booking')->rollBack();
+                    return $this->error("Schedule with ID {$tempBooking->schedule_id} not found", 404);
+                }
+                
+                $vesselId = $schedule->vessel_id;
+                
+                try {
+                    $lock = ScheduleSeatLock::create([
+                        'schedule_id' => $tempBooking->schedule_id,
+                        'seat_id' => $validated['seat_id'],
+                        'travel_date' => $tempBooking->travel_date,
+                        'vessel_id' => $vesselId,
+                        'vessel_snapshot' => $tempBooking->vessel_snapshot,
+                        'serial_no' => $tempBooking->serial_no,
+                        'locked_by_user_id' => $createdBy,
+                        'locked_by_type' => 'teller',
+                        'expires_at' => $bookedPassenger->expires_at ?? now()->addMinutes(30),
+                    ]);
+                    
+                    \Log::info('Seat lock created', ['lock_id' => $lock->id, 'seat_id' => $validated['seat_id']]);
+                } catch (QueryException $lockException) {
+                    DB::connection('teller_booking')->rollBack();
+                    
+                    // Check if duplicate entry error (seat already locked)
+                    if ($lockException->getCode() === '23000' && str_contains($lockException->getMessage(), 'unique_schedule_seat_date')) {
+                        return $this->error('Seat already taken by another booking', 409);
+                    }
+                    
+                    \Log::error('Failed to create seat lock', [
+                        'error' => $lockException->getMessage(),
+                        'seat_id' => $validated['seat_id'],
+                        'schedule_id' => $tempBooking->schedule_id,
+                    ]);
+                    
+                    throw $lockException;
+                }
+            } else {
+                \Log::info('No seat lock created - seat_id not provided or null', ['seat_id' => $validated['seat_id'] ?? 'not set']);
+            }
+
+            DB::connection('teller_booking')->commit();
+
+            return $this->success([
+                'booked_passenger' => $bookedPassenger,
+                'temp_booking' => $tempBooking,
+            ], 'Booked passenger created successfully', 201);
+            
+        } catch (QueryException $e) {
+            DB::connection('teller_booking')->rollBack();
+            
+            // Check if duplicate entry error (seat already locked)
+            if ($e->getCode() === '23000' && str_contains($e->getMessage(), 'unique_schedule_seat_date')) {
+                return $this->error('Seat already taken by another booking', 409);
+            }
+            
+            throw $e;
+        } catch (\Exception $e) {
+            DB::connection('teller_booking')->rollBack();
+            throw $e;
         }
-
-        // Create passenger linked to temp_booking
-        $passengerData = [
-            'temp_booking_id' => $tempBooking->temp_booking_id,
-            'serial_no' => $validated['serial_no'],
-            'fullname' => $validated['fullname'],
-            'gender' => $validated['gender'] ?? null,
-            'passenger_type_id' => $validated['passenger_type_id'],
-            'passenger_type_snapshot' => $validated['passenger_type_snapshot'],
-            'passenger_category_id' => $validated['passenger_category_id'] ?? null,
-            'passenger_category_snapshot' => $validated['passenger_category_snapshot'] ?? null,
-            'seat_id' => $validated['seat_id'] ?? null,
-            'seat_number_snapshot' => $validated['seat_number_snapshot'] ?? null,
-            'fare' => $validated['fare'],
-            'discount_amount' => $validated['discount_amount'] ?? 0,
-            'discount_id' => $validated['discount_id'] ?? null,
-            'created_by' => $createdBy,
-        ];
-
-        $bookedPassenger = BookedPassenger::create($passengerData);
-
-        return $this->success([
-            'booked_passenger' => $bookedPassenger,
-            'temp_booking' => $tempBooking,
-        ], 'Booked passenger created successfully', 201);
     }
 
     private function normalizeKeys(array $data): array

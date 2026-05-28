@@ -12,14 +12,14 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function index(GetPaymentsAction $action)
+    public function index(Request $request, GetPaymentsAction $action)
     {
-        return $action->execute();
+        return $action->execute($request->all());
     }
 
-    public function show(int $paymentId, GetPaymentAction $action)
+    public function show($paymentId, GetPaymentAction $action)
     {
-        return $action->execute($paymentId);
+        return $action->execute((int) $paymentId);
     }
 
     public function store(Request $request, CreatePaymentAction $action)
@@ -27,14 +27,14 @@ class PaymentController extends Controller
         return $action->execute($request->all());
     }
 
-    public function update(Request $request, int $paymentId, UpdatePaymentAction $action)
+    public function update(Request $request, $paymentId, UpdatePaymentAction $action)
     {
-        return $action->execute($paymentId, $request->all());
+        return $action->execute((int) $paymentId, $request->all());
     }
 
-    public function destroy(int $paymentId, DeletePaymentAction $action)
+    public function destroy($paymentId, DeletePaymentAction $action)
     {
-        return $action->execute($paymentId);
+        return $action->execute((int) $paymentId);
     }
 }
 

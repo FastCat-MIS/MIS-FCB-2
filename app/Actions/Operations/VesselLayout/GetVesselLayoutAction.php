@@ -20,6 +20,7 @@ class GetVesselLayoutAction
                     'wifi' => (bool) $accom->wifi,
                     'seats' => $accom->seats()->get()->map(function ($seat) {
                         return [
+                            'id' => $seat->id,
                             'seat_no' => $seat->seat_no,
                             'row' => $seat->row,
                             'col' => $seat->col,

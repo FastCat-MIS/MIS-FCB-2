@@ -88,7 +88,6 @@ class CreateBookedVehicleAction extends Action
         // Create vehicle linked to temp_booking
         $vehicleData = [
             'temp_booking_id' => $tempBooking->temp_booking_id,
-            'serial_no' => $validated['serial_no'],
             'vehicle_type' => $validated['vehicle_type'],
             'plate_no' => $validated['plate_no'] ?? null,
             'length' => $validated['length'] ?? null,

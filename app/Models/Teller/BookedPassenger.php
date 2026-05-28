@@ -18,7 +18,6 @@ class BookedPassenger extends Model
 
     protected $fillable = [
         'temp_booking_id',
-        'serial_no',
         'fullname',
         'gender',
         'passenger_type_id',

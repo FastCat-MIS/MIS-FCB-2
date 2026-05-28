@@ -11,6 +11,11 @@ class DeleteBookedVehicleAction extends Action
 {
     public function execute(int $bookedVehicleId)
     {
+        // Validate ID is provided and valid
+        if ($bookedVehicleId <= 0) {
+            return $this->error('Invalid vehicle ID provided. Please provide a valid temp_booked_vehicle_id in the URL: DELETE /teller-booking/book-vehicle/{id}', 400);
+        }
+
         try {
             $bookedVehicle = BookedVehicle::findOrFail($bookedVehicleId);
             $bookedVehicle->delete();

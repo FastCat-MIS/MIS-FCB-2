@@ -18,7 +18,6 @@ class PermanentBookedVehicle extends Model
 
     protected $fillable = [
         'booking_id',
-        'serial_no',
         'vehicle_type',
         'plate_no',
         'length',

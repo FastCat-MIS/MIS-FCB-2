@@ -22,6 +22,7 @@ class TempBooking extends Model
         'vessel_snapshot',
         'institutional_account_id',
         'institutional_account_snapshot',
+        'booking_origin',
         'created_by',
     ];
 

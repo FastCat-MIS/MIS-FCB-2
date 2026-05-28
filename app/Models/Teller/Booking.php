@@ -11,6 +11,7 @@ class Booking extends Model
     protected $primaryKey = 'booking_id';
 
     protected $fillable = [
+        'booking_number',
         'schedule_booking_id',
         'is_return_trip',
         'travel_date',
@@ -21,6 +22,7 @@ class Booking extends Model
         'vessel_snapshot',
         'institutional_account_id',
         'institutional_account_snapshot',
+        'booking_origin',
         'created_by',
     ];
 

@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Teller\BookedPassengerController;
 use App\Http\Controllers\Teller\BookedVehicleController;
+use App\Http\Controllers\Teller\BookingController;
 use App\Http\Controllers\Teller\PaymentController;
+use App\Http\Controllers\Teller\SeatController;
 use Illuminate\Support\Facades\Route;
 
 // Generate share token without authentication
@@ -12,22 +14,24 @@ Route::get('/teller-booking/share-token', function () {
 
 Route::middleware('pem.jwt:payment.read')->group(function () {
     Route::prefix('teller-booking')->group(function () {
-    Route::get('/book-passenger', [BookedPassengerController::class, 'index']);
-    Route::get('/book-passenger/{bookedPassengerId}', [BookedPassengerController::class, 'show']);
-    Route::post('/book-passenger', [BookedPassengerController::class, 'store']);
-    Route::patch('/book-passenger/{bookedPassengerId}', [BookedPassengerController::class, 'update']);
-    Route::delete('/book-passenger/{bookedPassengerId}', [BookedPassengerController::class, 'destroy']);
+        // Temp booking endpoints
+        Route::get('/bookings', [BookingController::class, 'index']);
+        Route::get('/bookings/{serialNo}', [BookingController::class, 'show']);
+        
+        // Create temp bookings
+        Route::post('/booked-passengers', [BookedPassengerController::class, 'store']);
+        Route::post('/booked-vehicles', [BookedVehicleController::class, 'store']);
 
-    Route::get('/book-vehicle', [BookedVehicleController::class, 'index']);
-    Route::get('/book-vehicle/{bookedVehicleId}', [BookedVehicleController::class, 'show']);
-    Route::post('/book-vehicle', [BookedVehicleController::class, 'store']);
-    Route::patch('/book-vehicle/{bookedVehicleId}', [BookedVehicleController::class, 'update']);
-    Route::delete('/book-vehicle/{bookedVehicleId}', [BookedVehicleController::class, 'destroy']);
+        // Completed bookings (after payment)
+        Route::get('/completed-bookings', [PaymentController::class, 'index']);
+        Route::get('/completed-bookings/{paymentId}', [PaymentController::class, 'show']);
+        
+        // Process payment
+        Route::post('/payment', [PaymentController::class, 'store']);
 
-    Route::get('/payment', [PaymentController::class, 'index']);
-    Route::get('/payment/{paymentId}', [PaymentController::class, 'show']);
-    Route::post('/payment', [PaymentController::class, 'store']);
-    Route::patch('/payment/{paymentId}', [PaymentController::class, 'update']);
-    Route::delete('/payment/{paymentId}', [PaymentController::class, 'destroy']);
-});
+        // Seat availability
+        Route::post('/check-seat', [SeatController::class, 'checkSeat']);
+        Route::get('/schedule-seats', [SeatController::class, 'getScheduleSeats']);
+        Route::get('/booked-seats', [SeatController::class, 'getBookedSeats']);
+    });
 });
