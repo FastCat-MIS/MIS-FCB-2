@@ -45,13 +45,19 @@ class CreatePaymentAction extends Action
             // Log the serial number being used for transfer
             \Log::info("Processing payment with serial_no: {$validated['serial_no']}");
 
-            // Find the temp_booking
-            $tempBooking = TempBooking::where('serial_no', $validated['serial_no'])->first();
+            // Find the temp_booking with passengers and vehicles (eager load to avoid N+1 queries)
+            // Use lockForUpdate() to prevent concurrent payment processing - ensures only one
+            // transaction can process this booking at a time, preventing race conditions
+            $tempBooking = TempBooking::with(['passengers', 'vehicles'])
+                ->where('serial_no', $validated['serial_no'])
+                ->lockForUpdate()
+                ->first();
             if (!$tempBooking) {
                 throw new \Exception("No booking found with serial_no: {$validated['serial_no']}");
             }
 
-            // 🎯 GENERATE NEW BOOKING NUMBER (incremental format: 7EA5-00001)
+            // Generate new booking number in incremental format: 7EA5-00001
+            // Format: {YEAR_HEX}{MONTH}-{COUNT} where 7EA=2026, 5=May, 00001=first booking
             $bookingNumber = $this->generateBookingNumber();
             \Log::info("Generated booking_number: {$bookingNumber} for serial_no: {$validated['serial_no']}");
 
@@ -75,20 +81,21 @@ class CreatePaymentAction extends Action
             \Log::info("Created permanent booking with ID: {$booking->booking_id}");
 
             // Transfer passengers from temporary to permanent tables and get ID mapping
-            $passengerIdMap = $this->transferPassengersToPermanent($validated['serial_no'], $booking->booking_id);
+            $passengerIdMap = $this->transferPassengersToPermanent($tempBooking, $booking->booking_id);
 
             // Transfer vehicles from temporary to permanent tables with passenger ID mapping
-            $this->transferVehiclesToPermanent($validated['serial_no'], $booking->booking_id, $passengerIdMap);
+            $this->transferVehiclesToPermanent($tempBooking, $booking->booking_id, $passengerIdMap);
 
-            // 🔒 UPDATE SEAT LOCKS: serial_no → booking_number AND mark as permanent
+            // Update seat locks: replace temporary serial_no with permanent booking_number
+            // Set expires_at to null to mark these locks as permanent (never expire)
             $updatedLocks = ScheduleSeatLock::where('serial_no', $validated['serial_no'])
                 ->update([
                     'serial_no' => $bookingNumber,  // Replace temp serial_no with permanent booking_number
-                    'expires_at' => null            // Mark as permanent
+                    'expires_at' => null            // Mark as permanent (never expires)
                 ]);
             \Log::info("Updated {$updatedLocks} seat locks from serial_no: {$validated['serial_no']} to booking_number: {$bookingNumber}");
 
-            // NOW delete temp_booking after passengers/vehicles are transferred
+            // Delete temp_booking record now that all data has been transferred to permanent tables
             $tempBooking->delete();
             \Log::info("Deleted temp_booking ID: {$tempBooking->temp_booking_id}");
 
@@ -119,27 +126,27 @@ class CreatePaymentAction extends Action
         });
     }
 
-    private function transferPassengersToPermanent(string $serialNo, int $bookingId): array
+    /**
+     * Transfer passengers from temporary to permanent storage
+     * 
+     * @param TempBooking $tempBooking The temporary booking with eager-loaded passengers
+     * @param int $bookingId The permanent booking ID to associate passengers with
+     * @return array Mapping of temporary passenger IDs to permanent passenger IDs
+     */
+    private function transferPassengersToPermanent(TempBooking $tempBooking, int $bookingId): array
     {
-        // Get temp booking first
-        $tempBooking = TempBooking::where('serial_no', $serialNo)->first();
-        
-        if (!$tempBooking) {
-            \Log::warning("No temp booking found with serial_no: {$serialNo}");
-            return [];
-        }
-
-        // Get passengers through relationship
+        // Get passengers through relationship (already eager loaded to avoid N+1)
         $temporaryPassengers = $tempBooking->passengers;
 
-        \Log::info("Transferring passengers for serial_no: {$serialNo}, found: " . $temporaryPassengers->count() . " records");
+        \Log::info("Transferring passengers for serial_no: {$tempBooking->serial_no}, found: " . $temporaryPassengers->count() . " records");
 
         if ($temporaryPassengers->isEmpty()) {
             \Log::warning("No passengers found for temp_booking_id: {$tempBooking->temp_booking_id}");
             return [];
         }
 
-        $idMapping = []; // Map temp ID to permanent ID
+        // Track mapping of temporary IDs to permanent IDs for vehicle driver assignment
+        $idMapping = [];
 
         foreach ($temporaryPassengers as $tempPassenger) {
             try {
@@ -174,20 +181,20 @@ class CreatePaymentAction extends Action
         return $idMapping;
     }
 
-    private function transferVehiclesToPermanent(string $serialNo, int $bookingId, array $passengerIdMap = []): array
+    /**
+     * Transfer vehicles from temporary to permanent storage
+     * 
+     * @param TempBooking $tempBooking The temporary booking with eager-loaded vehicles
+     * @param int $bookingId The permanent booking ID to associate vehicles with
+     * @param array $passengerIdMap Mapping of temp passenger IDs to permanent IDs (for driver assignment)
+     * @return array List of transferred permanent vehicle records
+     */
+    private function transferVehiclesToPermanent(TempBooking $tempBooking, int $bookingId, array $passengerIdMap = []): array
     {
-        // Get temp booking first
-        $tempBooking = TempBooking::where('serial_no', $serialNo)->first();
-        
-        if (!$tempBooking) {
-            \Log::warning("No temp booking found with serial_no: {$serialNo}");
-            return [];
-        }
-
-        // Get vehicles through relationship
+        // Get vehicles through relationship (already eager loaded to avoid N+1)
         $temporaryVehicles = $tempBooking->vehicles;
 
-        \Log::info("Transferring vehicles for serial_no: {$serialNo}, found: " . $temporaryVehicles->count() . " records");
+        \Log::info("Transferring vehicles for serial_no: {$tempBooking->serial_no}, found: " . $temporaryVehicles->count() . " records");
 
         if ($temporaryVehicles->isEmpty()) {
             \Log::warning("No vehicles found for temp_booking_id: {$tempBooking->temp_booking_id}");
@@ -198,7 +205,7 @@ class CreatePaymentAction extends Action
 
         foreach ($temporaryVehicles as $tempVehicle) {
             try {
-                // Map temp driver_passenger_booking_id to permanent ID
+                // Map temporary driver ID to permanent passenger ID if driver was assigned
                 $permanentDriverId = null;
                 if ($tempVehicle->driver_passenger_booking_id && isset($passengerIdMap[$tempVehicle->driver_passenger_booking_id])) {
                     $permanentDriverId = $passengerIdMap[$tempVehicle->driver_passenger_booking_id];
@@ -252,8 +259,17 @@ class CreatePaymentAction extends Action
 
     /**
      * Generate unique booking number with incremental count
+     * 
      * Format: {YEAR_HEX}{MONTH}-{COUNT}
-     * Example: 7EA5-00001 (2026, May, 1st booking)
+     * Example: 7EA5-00001 means:
+     *   - 7EA = year 2026 in hexadecimal
+     *   - 5 = month (May)
+     *   - 00001 = first booking of that month
+     * 
+     * Uses lockForUpdate() to prevent race conditions when multiple payments
+     * are processed simultaneously
+     * 
+     * @return string The generated booking number
      */
     private function generateBookingNumber(): string
     {
@@ -261,19 +277,20 @@ class CreatePaymentAction extends Action
         $year = now()->year;
         $month = now()->month;
         
-        // Convert year to hex (uppercase)
+        // Convert year to hexadecimal (uppercase) - e.g., 2026 becomes 7EA
         $yearHex = strtoupper(dechex($year));
         
-        // Generate prefix: {YEAR_HEX}{MONTH}
+        // Generate prefix combining hex year and month - e.g., 7EA5 for May 2026
         $prefix = $yearHex . $month;
         
-        // Get the last booking number with this prefix (already in transaction from execute())
+        // Get the last booking number with this prefix and lock the row to prevent
+        // concurrent transactions from generating duplicate numbers
         $lastBooking = Booking::where('booking_number', 'LIKE', $prefix . '-%')
             ->orderBy('booking_number', 'desc')
             ->lockForUpdate()
             ->first();
         
-        // Extract count and increment
+        // Extract the count from last booking and increment, or start at 1
         $count = 1;
         if ($lastBooking) {
             $parts = explode('-', $lastBooking->booking_number);
