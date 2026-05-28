@@ -47,13 +47,12 @@ class PermanentBookedPassenger extends Model
     /**
      * Cast attributes to native types
      * 
-     * Note: Snapshot columns are automatically cast to arrays
+     * Note: passenger_type_snapshot and passenger_category_snapshot are stored
+     * as plain strings (e.g., "Adult", "Economy"), not JSON objects.
      */
     protected $casts = [
         'fare' => 'decimal:2',
         'discount_amount' => 'decimal:2',
-        'passenger_type_snapshot' => 'array',
-        'passenger_category_snapshot' => 'array',
     ];
 
     public function booking()

@@ -40,11 +40,24 @@ class GenerateWaybillAction extends Action
             return $this->error(null, 'Schedule not found', 404);
         }
 
-        // Extract route information from snapshot (auto-cast to array by model)
+        // Extract route information from snapshot
+        // Route snapshot can be either a string ("Batangas Port - Calapan Port")
+        // or an array with port_a_name and port_b_name keys
         $routeSnapshot = $booking->route_snapshot;
-
-        $portOrigin = $routeSnapshot['port_a_name'] ?? 'N/A';
-        $portDestination = $routeSnapshot['port_b_name'] ?? 'N/A';
+        
+        if (is_string($routeSnapshot)) {
+            // Parse string format: "Origin Port - Destination Port"
+            $ports = explode(' - ', $routeSnapshot);
+            $portOrigin = trim($ports[0] ?? 'N/A');
+            $portDestination = trim($ports[1] ?? 'N/A');
+        } elseif (is_array($routeSnapshot)) {
+            // Use array keys if available
+            $portOrigin = $routeSnapshot['port_a_name'] ?? 'N/A';
+            $portDestination = $routeSnapshot['port_b_name'] ?? 'N/A';
+        } else {
+            $portOrigin = 'N/A';
+            $portDestination = 'N/A';
+        }
 
         // Extract vessel information from snapshot (auto-cast to array by model)
         $vesselSnapshot = $booking->vessel_snapshot;

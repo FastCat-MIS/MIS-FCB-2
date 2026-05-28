@@ -47,10 +47,8 @@ class GenerateTicketAction extends Action
             // Check if passenger is a vehicle driver and get vehicle details
             $vehicle = $booking->vehicles->firstWhere('driver_passenger_booking_id', $passenger->booked_passenger_id);
 
-            // Get accommodation type from passenger category (auto-cast to array by model)
-            $passengerCategory = $passenger->passenger_category_snapshot;
-            
-            $accommodation = $passengerCategory['category_name'] ?? 'N/A';
+            // Get accommodation type from passenger category snapshot (stored as plain string)
+            $accommodation = $passenger->passenger_category_snapshot ?? 'N/A';
 
             // Generate QR code data string for ticket validation
             // Format: date,time,port,schedule,booking,name,accommodation,seat,origin
