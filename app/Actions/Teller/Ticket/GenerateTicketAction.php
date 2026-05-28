@@ -48,7 +48,8 @@ class GenerateTicketAction extends Action
             $vehicle = $booking->vehicles->firstWhere('driver_passenger_booking_id', $passenger->booked_passenger_id);
 
             // Get accommodation type from passenger category snapshot
-            $accommodation = $passenger->passenger_category_snapshot ?? 'N/A';
+            // Handle legacy double-encoded data from older records
+            $accommodation = $this->cleanSnapshot($passenger->passenger_category_snapshot);
 
             // Generate QR code data string for ticket validation
             // Format: date,time,port,schedule,booking,name,accommodation,seat,origin
@@ -82,4 +83,32 @@ class GenerateTicketAction extends Action
         // Return view with tickets data
         return view('tickets.generate', ['tickets' => $tickets]);
     }
+
+    /**
+     * Clean snapshot data that may be double-encoded from legacy records
+     * 
+     * Older records in the database have double-encoded JSON strings like "\"Senior\/PWD\""
+     * while newer records have clean strings like "Senior/PWD". This method handles both.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    private function cleanSnapshot($value): string
+    {
+        if ($value === null) {
+            return 'N/A';
+        }
+
+        if (!is_string($value)) {
+            return 'N/A';
+        }
+
+        // Try to decode if it's JSON-encoded (legacy data)
+        $decoded = json_decode($value, true);
+        
+        // If decoding succeeded and returned a string, it was double-encoded
+        // Otherwise, it's already a clean string
+        return is_string($decoded) ? $decoded : $value;
+    }
 }
+
