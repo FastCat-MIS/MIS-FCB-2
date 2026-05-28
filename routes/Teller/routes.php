@@ -5,6 +5,7 @@ use App\Http\Controllers\Teller\BookedVehicleController;
 use App\Http\Controllers\Teller\BookingController;
 use App\Http\Controllers\Teller\PaymentController;
 use App\Http\Controllers\Teller\SeatController;
+use App\Http\Controllers\Teller\TicketController;
 use Illuminate\Support\Facades\Route;
 
 // Generate share token without authentication
@@ -21,10 +22,22 @@ Route::middleware('pem.jwt:payment.read')->group(function () {
         // Create temp bookings
         Route::post('/booked-passengers', [BookedPassengerController::class, 'store']);
         Route::post('/booked-vehicles', [BookedVehicleController::class, 'store']);
+        
+        // Update temp bookings (e.g., assign driver)
+        Route::patch('/booked-vehicles/{bookedVehicleId}', [BookedVehicleController::class, 'update']);
+        
+        // Backwards compatibility aliases
+        Route::post('/book-passenger', [BookedPassengerController::class, 'store']);
+        Route::post('/book-vehicle', [BookedVehicleController::class, 'store']);
+        Route::patch('/book-vehicle/{bookedVehicleId}', [BookedVehicleController::class, 'update']);
 
         // Completed bookings (after payment)
         Route::get('/completed-bookings', [PaymentController::class, 'index']);
         Route::get('/completed-bookings/{paymentId}', [PaymentController::class, 'show']);
+        
+        // Generate ticket and waybill
+        Route::get('/generate-ticket', [TicketController::class, 'generate']);
+        Route::get('/generate-waybill', [TicketController::class, 'generateWaybill']);
         
         // Process payment
         Route::post('/payment', [PaymentController::class, 'store']);

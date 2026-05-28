@@ -11,7 +11,6 @@ use App\Models\Teller\BookedVehicle;
 use App\Models\Teller\PermanentBookedPassenger;
 use App\Models\Teller\PermanentBookedVehicle;
 use App\Models\Teller\ScheduleSeatLock;
-use App\Helpers\BookingNumberGenerator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -52,8 +51,8 @@ class CreatePaymentAction extends Action
                 throw new \Exception("No booking found with serial_no: {$validated['serial_no']}");
             }
 
-            // 🎯 GENERATE NEW BOOKING NUMBER (hex format)
-            $bookingNumber = BookingNumberGenerator::generate();
+            // 🎯 GENERATE NEW BOOKING NUMBER (incremental format: 7EA5-00001)
+            $bookingNumber = $this->generateBookingNumber();
             \Log::info("Generated booking_number: {$bookingNumber} for serial_no: {$validated['serial_no']}");
 
             // Create permanent booking (but don't delete temp yet!)
@@ -249,6 +248,44 @@ class CreatePaymentAction extends Action
         }
 
         return $data;
+    }
+
+    /**
+     * Generate unique booking number with incremental count
+     * Format: {YEAR_HEX}{MONTH}-{COUNT}
+     * Example: 7EA5-00001 (2026, May, 1st booking)
+     */
+    private function generateBookingNumber(): string
+    {
+        // Get current year and month
+        $year = now()->year;
+        $month = now()->month;
+        
+        // Convert year to hex (uppercase)
+        $yearHex = strtoupper(dechex($year));
+        
+        // Generate prefix: {YEAR_HEX}{MONTH}
+        $prefix = $yearHex . $month;
+        
+        // Get the last booking number with this prefix (already in transaction from execute())
+        $lastBooking = Booking::where('booking_number', 'LIKE', $prefix . '-%')
+            ->orderBy('booking_number', 'desc')
+            ->lockForUpdate()
+            ->first();
+        
+        // Extract count and increment
+        $count = 1;
+        if ($lastBooking) {
+            $parts = explode('-', $lastBooking->booking_number);
+            if (isset($parts[1])) {
+                $count = (int)$parts[1] + 1;
+            }
+        }
+        
+        // Format count as 5-digit zero-padded
+        $countFormatted = str_pad($count, 5, '0', STR_PAD_LEFT);
+        
+        return "{$prefix}-{$countFormatted}";
     }
 }
 

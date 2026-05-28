@@ -39,29 +39,47 @@ The teller booking system uses a **two-stage booking flow** with centralized sna
 | Stage | Identifier | Format | Purpose | Example |
 |-------|-----------|--------|---------|---------|
 | **Temporary** | `serial_no` | Simple string | Track booking during process | BK-123, TEMP-001 |
-| **Permanent** | `booking_number` | Hex (YYYYMMDD-XXXXXXXX) | Unique permanent reference | 20260527-A3F2E8B1 |
+| **Permanent** | `booking_number` | Year-Month-Count | Unique permanent reference | 7EA3-00001 |
 
 **Why two identifiers?**
 - ✅ **Temporary bookings** use simple `serial_no` for easy tracking during booking process
-- ✅ **Permanent bookings** get unique hex `booking_number` generated at payment
+- ✅ **Permanent bookings** get unique incremental `booking_number` generated at payment
 - ✅ `serial_no` is **discarded** after payment (we don't care about it anymore)
 - ✅ `booking_number` is the **official record** for confirmed bookings
 
 **Booking Number Format:**
 ```
-20260527-A3F2E8B1
-└──┬───┘ └───┬───┘
-   │         └─ 8-char hex (4.2B combinations/day)
-   └─────────── Date (YYYYMMDD)
+7EA3-00001
+└┬┘│ └─┬──┘
+ │ │   └─ 5-digit incremental count (00001-99999)
+ │ └───── Month (1-12)
+ └─────── Year in hex (7EA = 2026)
 ```
+
+**Format Breakdown:**
+- **Year (Hex):** 2026 → 7EA, 2027 → 7EB, etc.
+- **Month:** 1 = January, 3 = March, 12 = December
+- **Count:** Incremental per year-month (resets each month)
+
+**Examples:**
+- `7EA3-00001` → 2026, March, 1st booking
+- `7EA3-00042` → 2026, March, 42nd booking
+- `7EA12-00001` → 2026, December, 1st booking
+- `7EB1-00001` → 2027, January, 1st booking
 
 **Generation:**
 ```php
-use App\Helpers\BookingNumberGenerator;
+// In CreatePaymentAction, booking numbers are auto-generated
+// Format: 7EA5-00001 (May 2026, 1st booking)
 
-$bookingNumber = BookingNumberGenerator::generate();
-// Output: 20260527-B6F0485E
+// Thread-safe with lockForUpdate() inside DB transaction
+$bookingNumber = $this->generateBookingNumber();
 ```
+
+**Thread-Safe:**
+- Uses database transaction with `lockForUpdate()`
+- Prevents duplicate booking numbers in concurrent requests
+- Automatically increments count per month
 
 ---
 
@@ -86,6 +104,26 @@ schedule_seat_locks
 **Auto-Cleanup:**
 - Expired temp locks (abandoned bookings) auto-deleted every 5 minutes
 - Permanent locks (completed bookings) kept forever
+
+**Running the Scheduler:**
+
+For **development**:
+```bash
+php artisan schedule:work
+```
+Leave this running in a separate terminal.
+
+For **production (Linux/Mac)**:
+Add to crontab (`crontab -e`):
+```bash
+* * * * * cd /path/to/fastcat-v2 && php artisan schedule:run >> /dev/null 2>&1
+```
+
+For **production (Windows)**:
+Create a Windows Task Scheduler task that runs every minute:
+```powershell
+cd C:\fastcat-v2; php artisan schedule:run
+```
 
 ---
 

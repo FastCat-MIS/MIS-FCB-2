@@ -1,0 +1,333 @@
+ public function generateWayBill()
+    {
+
+        $template = '';
+        $code = $this->request->getGet('code');
+        
+        $subquery = $this->db->table('tblvoyage g')
+            ->select('g.Code, g.vesselID, g.DateCreated')
+            ->orderBy('g.DateCreated', 'DESC')  
+            ->orderBy('g.voyageID', 'DESC')
+            ->limit(1);  
+        
+        
+        $builder = $this->db->table('tbltransaction a');
+        $builder->select('
+            a.vID,
+            a.mID,
+            a.plate_number,
+            a.Fullname,
+            a.TrxnDate,
+            a.Discount,
+            a.Address,
+            a.ID,
+            a.BookingNumber,
+            b.Route,
+            b.portID,
+            c.Code,
+            c.Name AS VesselName,
+            d.Rate,
+            d.NetAmount,
+            e.Wheel,
+            f.Name,
+            g_latest.Code AS LatestCode,
+            h.Amount AS ConvFee
+        ');
+        $builder->join('tblschedule b', 'b.ID = a.ID', 'LEFT'); 
+        $builder->join('tblvessels c', 'c.vesselID = b.vesselID', 'LEFT');
+        $builder->join('tblcustomer_cargo d', 'd.trxnID = a.trxnID', 'LEFT');
+        $builder->join('tblclasses e', 'e.vID = a.vID', 'LEFT');
+        $builder->join('tblvehicle_model f', 'f.mID = a.mID', 'LEFT');
+        $builder->join("({$subquery->getCompiledSelect()}) g_latest", 
+            'b.vesselID = g_latest.vesselID AND g_latest.DateCreated = a.TrxnDate', 'LEFT'); 
+        $builder->join('tblconvenience_online h', 'h.BookingNumber = a.BookingNumber', 'LEFT');
+        
+        $builder->where('a.Passenger', 'DRIVER');
+        $builder->where('a.BookingNumber', $code);
+        $builder->groupBy('a.trxnID');
+        
+        $data = $builder->get();
+
+          foreach ($data->getResult() as $row) {
+                   $qr = $row->TrxnDate . "," . $row->portID . "," . $row->ID . "," . $row->BookingNumber . "," . $row->Fullname;
+        
+                    $route = explode('-', $row->Route);
+                    $portOrigin = $route[0] ?? ''; 
+                    $portDestination = $route[1] ?? ''; 
+                    
+                    $userModel = new \App\Models\UserModel();
+                    $loggedUserID = session()->get('loggedUser');
+                    $userInfo = $userModel->find($loggedUserID);
+                    
+                    $netAmount = $row->NetAmount;
+                    $amountInWords = $this->convertNumberToWords($netAmount); 
+                    date_default_timezone_set('Asia/Manila');
+        
+        
+                $template .= '
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <link rel="preconnect" href="https://fonts.googleapis.com">
+                    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+                </head>
+                <style>
+                body {
+
+                }
+                .table__body td {
+                    border-bottom: 1px solid black;
+                    font-size: 11px;
+                    width: 100%;
+                    padding: 5px;
+
+                }
+
+                 table__body {
+                    border-collapse: collapse;
+                 }
+                 
+                 .table__second {
+                    border-collapse: collapse;
+                 }
+                 .table__second td {
+                    border: 1px solid black;
+                    text-align:center;
+                    padding: 5px;
+                 }
+                 .table__second td:last-child {
+                     border-right: none;
+                 }
+                 .table__second td:first-child {
+                     border-left: none;
+                 }
+                 .heading__text {
+                     font-size: 14px;
+                     font-weight: 600;
+                     padding: 20px 0;
+                 }
+                 .logo {
+                     font-size: 30px;
+                     font-weight: 900;
+                 }
+
+                </style>
+                <body style="margin:0px;padding:0px;">
+               <table class="table__body" style="font-size:10pt;">
+               <thead>
+                 <tr>
+                 
+                 <td class="logo" style="border: none"; colspan="2"><img style="width: 150px; height: 75px;"src="https://cdn.jsdelivr.net/gh/tovvydumaplin/image/black_logo.png"></td>
+                 <td style="border: none"; colspan="4">
+                    <strong>Archipelago Philippine Ferries Corporation</strong><br>
+                    <small>Unit 5b, 5th Floor UNIOIL Center Bldg. Commerce Ave.,</small>
+                    <small>Madrigal Business Park, Ayala Alabang Muntinlupa City</small>
+                    <small>Tel. No.:831-5212/816-1183 Fax No.:842-93-41/42</small>
+                    <small>VAT REG. Tin : 223-662-279-000</small>
+                 </td>
+                </tr>
+                <tr>
+                    <td class="heading__text" style="border: none"; colspan="12"><center>BILL OF LADING</center></td>
+                </tr>
+               </thead>
+                    <tbody class="t__body">
+                        <tr>
+                            <td style="width:2.2cm; border: none;">Voyage No.:</td>
+                            <td>'; $template .= !empty($row->LatestCode) ? $row->LatestCode : 'N/A'; $template .= '</td>
+                            <td style="padding-left: 10px; width:2.2cm; border: none; margin-left: 10px;">Series Number:</td>
+                            <td style="width: 100%";>N/A</td>
+                        </tr>
+                        <tr>
+                            <td style="width:2.2cm; border: none;">FERRY:</td>
+                            <td style="padding-left: 10px;">'; $template .= $row->VesselName; $template .= '</td>
+                            <td style="padding-left: 10px; width:2.2cm; border: none;">DATE:</td>
+                            <td style="padding-left: 10px;">'; $template .= $row->TrxnDate; $template .= '</td>
+                        </tr>
+                        <tr>
+                            <td style="width:2.2cm; border: none;">SHIPPER:</td>
+                            <td style="width:6.3cm; padding-left: 10px;">'; 
+                               $template .= $row->Fullname . '</td>' . '&nbsp;&nbsp;&nbsp;';
+                                $template .= '</td>
+                            <td style="padding-left: 10px; width:2.2cm; border: none;">ADDRESS:</td>
+                            <td>'; $template .= $row->Address; $template .= '</td>
+                        </tr>  
+                        
+                            $date = $row->TrxnDate;
+                            $formattedDate = date("F j, Y", strtotime($date));
+                            echo $formattedDate;
+                        <tr>
+                            <td style="width:2.2cm; border: none;">PT. OF ORIGIN:</td>
+                            <td style="padding-left: 10px;">'; $template .= $portOrigin; $template .= '</td>
+                            <td style="padding-left: 10px; width:2.2cm; border: none;">DESTINATION:</td>
+                            <td style="padding-left: 10px;">'; $template .= $portDestination; $template .= '</td>
+                        </tr>
+                    </tbody>
+                </table>
+        
+                <table class="table__second" style="margin-top:0.5cm; border: 1px solid black; margin-left:0; font-size:10pt; width: 100%;" cellpadding="0">
+                    <tbody>
+                    <tr>
+                        <td>CLASSIFICATION</td>
+                        <td>DESCRIPTION</td>
+                        <td>QTY</td>
+                        <td>VALUE</td>
+                        <td>WT</td>
+                        <td>RATE</td>
+                        <td>FREIGHT CHARGES</td>
+                    </tr>
+                    <tr>
+                        <td>';$template .= $row->Wheel . 'W'; $template .= '</td>
+                        <td>';$template .= $row->Name . '&nbsp;'.  $row->plate_number; $template .= '</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>';$template .= $row->Rate; $template .= '</td>
+                        <td>'.'P ';$template .= $row->NetAmount; $template .= '</td>
+                    </tr>
+                    <tr>
+                        <td style="color: transparent">A</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="color: transparent">A</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="color: transparent">A</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="color: transparent">A</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="color: transparent">A</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>TOTAL</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>'.'P ';$template .= $row->NetAmount; $template .= '</td>
+                    </tr>
+            </tbody>
+        </table>
+        <table class="table__bottom" style="margin-top:0.5cm; margin-left:0; font-size:10pt; width: 100%; border-collapse: collapse; border-spacing: 10px; border: 1px solid black;" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td colspan="2">Add: Other Charges (Specify)</td>
+                    <td style="border: none"></td>
+                    <td colspan="2"></td>
+                    <td style="border: none"></td>
+                    <td style="border: none">Admin Fee: 25</td>
+                    <td style="border: none"></td>
+                </tr>
+                <tr>
+                    <td style="border: none"></td>
+                    <td colspan="2"></td>
+                    <td colspan="2"></td>
+                    <td style="border: none"></td>
+                    <td style="border: none"></td>
+                    <td style="border: none"></td>
+                </tr>
+                <tr>
+                    <td style="border: none"></td>
+                    <td colspan="2"></td>
+                    <td colspan="2"></td>
+                    <td style="border: none"></td>
+                    <td style="border: none"></td>
+                    <td style="border: none"></td>
+                </tr>
+                <tr>
+                    <td style="border: none">TOTAL CHARGES</td>
+                    <td style="border: none"></td>
+                    <td style="border: none"></td>
+                    <td style="border: none"></td>
+                    <td style="border: none"></td>
+                    <td colspan="2" style="text-align: right">'.'P ';$template .= $row->NetAmount + 25; $template .= '</td>
+                    <td style="border: none"></td>
+                </tr>
+                <tr>
+                    <td colspan="8"></td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black" colspan="8">Amount in Words: <'.'<strong>'; $template .= $amountInWords; $template .= '</strong></td>
+
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; padding-right: 70px;" colspan="4">This is to certify that the shipper is agreeable to the terms and conditions stated on the reverse side of this document</td>
+                    <td colspan="4" rowspan="2" style="font-size: 15px; text-align: center; font-weight: 600; border: 1px solid black">PERSONAL COPY</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="border: 1px solid black;">Shipper Signature</td>
+                </tr>
+                <tr>
+                    <td style="padding: 50px; border: 1px solid black" colspan="2">QR CODE HERE</td>
+                    <td style="border: 1px solid black; padding: 0 100px" colspan="6">This QR code is intended for single-use upon passenger onboarding. Kindly present it to our personnel for verification.</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black" colspan="4">Archipelago Philippine Ferries Corporation 6th Floor Unioil Center Bldg., Commerce Avenue corner Acacia Avenue, Madrigal Business Park, Ayala Alabang, Muntinlupa City, 1780</td>
+                    <td style="border: 1px solid black; text-align: right" colspan="4">customercare@apfc.com.ph</br>fastcatinquiries@apfc.com.ph</br>(632) 8831 5212, 0906-367-0007</td>
+                </tr>
+            </tbody>
+        </table>
+     <center>
+        <div style="position: absolute; top: 25%; left: 7.5%;">
+            <div style="width: 100%; z-index: -1; font-weight: 900; font-size: 150px; opacity: 0.05">
+                <img style="width: 600px; height: 300px;"src="https://cdn.jsdelivr.net/gh/tovvydumaplin/image/black_logo.png">
+            </div>
+        </div>
+    </center>
+    </body>
+    </html>';
+        }
+        
+        $options = new Options();
+            $options->set([
+                'isRemoteEnabled' => true
+            ]);
+            
+            $options->set('isRemoteEnabled', true);
+            $dompdf = new Dompdf($options);
+            $dompdf->loadHtml($template);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+            $dompdf->stream($row->BookingNumber . "-eticket", array("Attachment" => 1));  // Attach as PDF download
+            exit();
+        
+            // echo $template;
+            // exit();
+        }
+    
