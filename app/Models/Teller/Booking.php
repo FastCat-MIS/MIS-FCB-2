@@ -40,14 +40,14 @@ class Booking extends Model
     /**
      * Cast attributes to native types
      * 
-     * Note: JSON columns (route_snapshot, vessel_snapshot, institutional_account_snapshot)
-     * are automatically cast to arrays, eliminating the need for manual json_decode()
+     * Note: vessel_snapshot and institutional_account_snapshot are JSON columns
+     * automatically cast to arrays. route_snapshot is stored as a plain string
+     * (e.g., "Batangas Port - Calapan Port") and should not be cast to array.
      */
     protected $casts = [
         'is_return_trip' => 'boolean',
         'travel_date' => 'date',
         'schedule_snapshot' => 'datetime:H:i:s',
-        'route_snapshot' => 'array',
         'vessel_snapshot' => 'array',
         'institutional_account_snapshot' => 'array',
     ];

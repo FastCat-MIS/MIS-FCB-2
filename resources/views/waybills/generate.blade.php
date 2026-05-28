@@ -56,8 +56,8 @@ body {
 <thead>
  <tr>
  
- <td class="logo" style="border: none"; colspan="2"><img style="width: 150px; height: 75px;"src="https://cdn.jsdelivr.net/gh/tovvydumaplin/image/black_logo.png"></td>
- <td style="border: none"; colspan="4">
+ <td class="logo" style="border: none" colspan="2"><img style="width: 150px; height: 75px;" src="https://cdn.jsdelivr.net/gh/tovvydumaplin/image/black_logo.png"></td>
+ <td style="border: none" colspan="4">
     <strong>Archipelago Philippine Ferries Corporation</strong><br>
     <small>Unit 5b, 5th Floor UNIOIL Center Bldg. Commerce Ave.,</small>
     <small>Madrigal Business Park, Ayala Alabang Muntinlupa City</small>
@@ -66,33 +66,33 @@ body {
  </td>
 </tr>
 <tr>
-    <td class="heading__text" style="border: none"; colspan="12"><center>BILL OF LADING</center></td>
+    <td class="heading__text" style="border: none" colspan="12"><center>BILL OF LADING</center></td>
 </tr>
 </thead>
     <tbody class="t__body">
         <tr>
-            <td style="width:2.2cm; border: none;">Voyage No.:</td>
+            <td style="width:2.2cm; border: none">Voyage No.:</td>
             <td>{{ $waybill['voyage_code'] }}</td>
-            <td style="padding-left: 10px; width:2.2cm; border: none; margin-left: 10px;">Series Number:</td>
-            <td style="width: 100%";>{{ $waybill['series_number'] }}</td>
+            <td style="padding-left: 10px; width:2.2cm; border: none; margin-left: 10px">Series Number:</td>
+            <td style="width: 100%">{{ $waybill['series_number'] }}</td>
         </tr>
         <tr>
-            <td style="width:2.2cm; border: none;">FERRY:</td>
-            <td style="padding-left: 10px;">{{ $waybill['vessel_name'] }}</td>
-            <td style="padding-left: 10px; width:2.2cm; border: none;">DATE:</td>
-            <td style="padding-left: 10px;">{{ $waybill['travel_date']->format('Y-m-d') }}</td>
+            <td style="width:2.2cm; border: none">FERRY:</td>
+            <td style="padding-left: 10px">{{ $waybill['vessel_name'] }}</td>
+            <td style="padding-left: 10px; width:2.2cm; border: none">DATE:</td>
+            <td style="padding-left: 10px">{{ $waybill['travel_date']->format('Y-m-d') }}</td>
         </tr>
         <tr>
-            <td style="width:2.2cm; border: none;">SHIPPER:</td>
-            <td style="width:6.3cm; padding-left: 10px;">{{ $waybill['shipper'] }}</td>
-            <td style="padding-left: 10px; width:2.2cm; border: none;">ADDRESS:</td>
+            <td style="width:2.2cm; border: none">SHIPPER:</td>
+            <td style="width:6.3cm; padding-left: 10px">{{ $waybill['shipper'] }}</td>
+            <td style="padding-left: 10px; width:2.2cm; border: none">ADDRESS:</td>
             <td>{{ $waybill['address'] }}</td>
         </tr>  
         <tr>
-            <td style="width:2.2cm; border: none;">PT. OF ORIGIN:</td>
-            <td style="padding-left: 10px;">{{ $waybill['port_origin'] }}</td>
-            <td style="padding-left: 10px; width:2.2cm; border: none;">DESTINATION:</td>
-            <td style="padding-left: 10px;">{{ $waybill['port_destination'] }}</td>
+            <td style="width:2.2cm; border: none">PT. OF ORIGIN:</td>
+            <td style="padding-left: 10px">{{ $waybill['port_origin'] }}</td>
+            <td style="padding-left: 10px; width:2.2cm; border: none">DESTINATION:</td>
+            <td style="padding-left: 10px">{{ $waybill['port_destination'] }}</td>
         </tr>
     </tbody>
 </table>
