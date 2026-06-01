@@ -161,6 +161,7 @@ class CreatePaymentAction extends Action
                     'seat_id' => $tempPassenger->seat_id,
                     'seat_number_snapshot' => $tempPassenger->seat_number_snapshot,
                     'fare' => $tempPassenger->fare,
+                    'convenience_fee' => $tempPassenger->convenience_fee ?? 2.00,
                     'discount_amount' => $tempPassenger->discount_amount,
                     'discount_id' => $tempPassenger->discount_id,
                     'created_by' => $tempPassenger->created_by,

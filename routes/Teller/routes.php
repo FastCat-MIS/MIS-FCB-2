@@ -35,8 +35,9 @@ Route::middleware('pem.jwt:payment.read')->group(function () {
         Route::get('/completed-bookings', [PaymentController::class, 'index']);
         Route::get('/completed-bookings/{paymentId}', [PaymentController::class, 'show']);
         
-        // Generate ticket and waybill
+        // Generate ticket, e-ticket, and waybill
         Route::get('/generate-ticket', [TicketController::class, 'generate']);
+        Route::get('/generate-eticket', [TicketController::class, 'generateETicket']);
         Route::get('/generate-waybill', [TicketController::class, 'generateWaybill']);
         
         // Process payment
