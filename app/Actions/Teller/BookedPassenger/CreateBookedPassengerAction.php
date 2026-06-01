@@ -111,6 +111,7 @@ class CreateBookedPassengerAction extends Action
                 'seat_id' => $validated['seat_id'] ?? null,
                 'seat_number_snapshot' => $validated['seat_number_snapshot'] ?? null,
                 'fare' => $validated['fare'],
+                'convenience_fee' => 2.00,
                 'discount_amount' => $validated['discount_amount'] ?? 0,
                 'discount_id' => $validated['discount_id'] ?? null,
             ];

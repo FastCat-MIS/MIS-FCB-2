@@ -37,20 +37,16 @@ class BookedPassenger extends Model
         'seat_id',
         'seat_number_snapshot',
         'fare',
+        'convenience_fee',
         'discount_amount',
         'discount_id',
         'created_by',
         'expires_at',
     ];
 
-    /**
-     * Cast attributes to native types
-     * 
-     * Note: passenger_type_snapshot and passenger_category_snapshot are stored
-     * as plain strings (e.g., "Adult", "Economy"), not JSON objects.
-     */
     protected $casts = [
         'fare' => 'decimal:2',
+        'convenience_fee' => 'decimal:2',
         'discount_amount' => 'decimal:2',
     ];
 

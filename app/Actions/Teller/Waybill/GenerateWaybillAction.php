@@ -76,7 +76,7 @@ class GenerateWaybillAction extends Action
 
             // Calculate total charges including fixed admin fee
             $netAmount = (float) $vehicle->fare;
-            $adminFee = 25.00;
+            $adminFee = (float) ($vehicle->convenience_fee ?? 25.00);
             $totalCharges = $netAmount + $adminFee;
             $amountInWords = $this->convertNumberToWords($totalCharges);
 

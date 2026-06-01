@@ -23,6 +23,7 @@ class PermanentBookedVehicle extends Model
         'length',
         'weight',
         'fare',
+        'convenience_fee',
         'driver_passenger_booking_id',
         'created_by',
         'expires_at',
@@ -32,6 +33,7 @@ class PermanentBookedVehicle extends Model
         'length' => 'decimal:2',
         'weight' => 'decimal:2',
         'fare' => 'decimal:2',
+        'convenience_fee' => 'decimal:2',
     ];
 
     public function booking()
