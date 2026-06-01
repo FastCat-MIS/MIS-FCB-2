@@ -93,6 +93,7 @@ class CreateBookedVehicleAction extends Action
             'length' => $validated['length'] ?? null,
             'weight' => $validated['weight'] ?? null,
             'fare' => $validated['fare'],
+            'convenience_fee' => 25.00,
             'driver_passenger_booking_id' => $validated['driver_passenger_booking_id'] ?? null,
             'created_by' => $createdBy,
         ];

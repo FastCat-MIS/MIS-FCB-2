@@ -219,6 +219,7 @@ class CreatePaymentAction extends Action
                     'length' => $tempVehicle->length,
                     'weight' => $tempVehicle->weight,
                     'fare' => $tempVehicle->fare,
+                    'convenience_fee' => $tempVehicle->convenience_fee ?? 25.00,
                     'driver_passenger_booking_id' => $permanentDriverId,
                     'created_by' => $tempVehicle->created_by,
                     'expires_at' => null,
