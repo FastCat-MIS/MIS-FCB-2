@@ -66,6 +66,7 @@ class CheckSeatAvailabilityAction extends Action
         // Seat is available
         return $this->success([
             'available' => true,
+            // returns available, locked, or booked status for frontend
             'status' => 'available',
             'reason' => null,
         ], 'Seat is available');
