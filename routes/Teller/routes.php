@@ -25,6 +25,9 @@ Route::middleware('pem.jwt:payment.read')->group(function () {
         
         // Update temp bookings (e.g., assign driver)
         Route::patch('/booked-vehicles/{bookedVehicleId}', [BookedVehicleController::class, 'update']);
+
+        // Delete temp bookings
+        Route::delete('/booked-passengers/{bookedPassengerId}', [BookedPassengerController::class, 'destroy']);
         
         // Backwards compatibility aliases
         Route::post('/book-passenger', [BookedPassengerController::class, 'store']);
