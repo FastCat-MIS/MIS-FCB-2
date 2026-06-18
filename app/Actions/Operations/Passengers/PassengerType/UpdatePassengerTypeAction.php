@@ -11,10 +11,11 @@ class UpdatePassengerTypeAction extends Action
     public function execute(PassengerType $passengerType, array $data)
     {
         $validator = Validator::make($data, [
-            'type' => 'nullable|string|max:255',
-            'discount'  => 'nullable|numeric|min:0|max:1',
-            'waived'    => 'nullable|boolean',
-            'status'         => 'nullable|in:0,1,2,3',
+            'type'     => 'nullable|string|max:255',
+            'discount' => 'nullable|numeric|min:0|max:1',
+            'waived'   => 'nullable|boolean',
+            'has_seat' => 'nullable|boolean',
+            'status'   => 'nullable|in:0,1,2,3',
         ]);
 
         $validator->validate();

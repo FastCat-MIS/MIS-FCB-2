@@ -14,15 +14,17 @@ class CreatePassengerTypeAction extends Action
             'type'     => 'required|string|max:255',
             'discount' => 'required|numeric|min:0|max:1',
             'waived'   => 'nullable|boolean',
-            'status'         => 'nullable|in:0,1,2,3',
+            'has_seat' => 'nullable|boolean',
+            'status'   => 'nullable|in:0,1,2,3',
         ]);
 
         $validator->validate();
 
         // Merge defaults for optional fields
         $validated = array_merge([
-            'waived'  => false,
-            'status'  => 'active',
+            'waived'   => false,
+            'has_seat' => true,
+            'status'   => 'active',
         ], $validator->validated());
 
         $passengerType = PassengerType::create($validated);
