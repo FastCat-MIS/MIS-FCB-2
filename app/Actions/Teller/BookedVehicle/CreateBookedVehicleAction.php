@@ -92,7 +92,7 @@ class CreateBookedVehicleAction extends Action
             $bookedVehicle = BookedVehicle::create([
                 'temp_booking_id' => $tempBooking->temp_booking_id,
                 'vehicle_type' => $validated['vehicle_type'],
-                'plate_no' => $validated['plate_no'] ?? null,
+                'plate_no' => $validated['plate_no'] ?? '',
                 'length' => $validated['length'] ?? null,
                 'weight' => $validated['weight'] ?? null,
                 'fare' => $validated['fare'],

@@ -28,7 +28,7 @@ class UpdateBookedVehicleAction extends Action
             'route_id' => 'sometimes|required|integer|min:1',
             'route_snapshot' => 'sometimes|required|string|max:255',
             'vehicle_type' => 'sometimes|required|string|max:50',
-            'plate_no' => 'sometimes|required|string|max:20',
+            'plate_no' => 'sometimes|nullable|string|max:20',
             'length' => 'sometimes|nullable|numeric|min:0',
             'weight' => 'sometimes|nullable|numeric|min:0',
             'fare' => 'sometimes|required|numeric|min:0',
@@ -41,7 +41,13 @@ class UpdateBookedVehicleAction extends Action
 
         try {
             $bookedVehicle = BookedVehicle::findOrFail($bookedVehicleId);
-            $bookedVehicle->update($validator->validated());
+
+            $updateData = $validator->validated();
+            if (array_key_exists('plate_no', $updateData) && $updateData['plate_no'] === null) {
+                $updateData['plate_no'] = '';
+            }
+
+            $bookedVehicle->update($updateData);
 
             return $this->success([
                 'booked_vehicle' => $bookedVehicle->fresh(),
@@ -49,7 +55,7 @@ class UpdateBookedVehicleAction extends Action
         } catch (ModelNotFoundException $e) {
             throw new RuntimeException("Booked vehicle with ID {$bookedVehicleId} not found.");
         } catch (\Exception $e) {
-            throw new RuntimeException('Failed to update booked vehicle.');
+            throw new RuntimeException('Failed to update booked vehicle: ' . $e->getMessage());
         }
     }
 
