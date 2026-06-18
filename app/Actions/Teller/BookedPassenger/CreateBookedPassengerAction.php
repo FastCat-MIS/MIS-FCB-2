@@ -64,6 +64,11 @@ class CreateBookedPassengerAction extends Action
             $tempBooking = TempBooking::where('serial_no', $validated['serial_no'])->first();
         
             if ($tempBooking) {
+                if ((string) $tempBooking->created_by !== (string) $createdBy) {
+                    DB::connection('teller_booking')->rollBack();
+                    return $this->error('Unauthorized: this booking belongs to another teller', 403);
+                }
+
                 // Update only the fields that are provided
                 $updateData = [];
             if (isset($validated['schedule_booking_id'])) $updateData['schedule_booking_id'] = $validated['schedule_booking_id'];

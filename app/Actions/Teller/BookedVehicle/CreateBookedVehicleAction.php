@@ -5,6 +5,7 @@ namespace App\Actions\Teller\BookedVehicle;
 use App\Actions\Action;
 use App\Models\Teller\BookedVehicle;
 use App\Models\Teller\TempBooking;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -47,63 +48,64 @@ class CreateBookedVehicleAction extends Action
         $createdBy = auth()->id() ?? \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getClaim('user_id');
         $validated['created_by'] = $createdBy;
 
-        // Find or create temp_booking
-        $tempBooking = TempBooking::where('serial_no', $validated['serial_no'])->first();
-        
-        if ($tempBooking) {
-            // Update only the fields that are provided
-            $updateData = [];
-            if (isset($validated['schedule_booking_id'])) $updateData['schedule_booking_id'] = $validated['schedule_booking_id'];
-            if (isset($validated['is_return_trip'])) $updateData['is_return_trip'] = $validated['is_return_trip'];
-            if (isset($validated['travel_date'])) $updateData['travel_date'] = $validated['travel_date'];
-            if (isset($validated['schedule_id'])) $updateData['schedule_id'] = $validated['schedule_id'];
-            if (isset($validated['schedule_snapshot'])) $updateData['schedule_snapshot'] = $validated['schedule_snapshot'];
-            if (isset($validated['route_id'])) $updateData['route_id'] = $validated['route_id'];
-            if (isset($validated['route_snapshot'])) $updateData['route_snapshot'] = $validated['route_snapshot'];
-            if (isset($validated['vessel_snapshot'])) $updateData['vessel_snapshot'] = $validated['vessel_snapshot'];
-            if (isset($validated['institutional_account_id'])) $updateData['institutional_account_id'] = $validated['institutional_account_id'];
-            if (isset($validated['institutional_account_snapshot'])) $updateData['institutional_account_snapshot'] = $validated['institutional_account_snapshot'];
-            
-            if (!empty($updateData)) {
-                $tempBooking->update($updateData);
+        return DB::connection('teller_booking')->transaction(function () use ($validated, $createdBy) {
+            $tempBooking = TempBooking::where('serial_no', $validated['serial_no'])->first();
+
+            if ($tempBooking) {
+                if ((string) $tempBooking->created_by !== (string) $createdBy) {
+                    return $this->error('Unauthorized: this booking belongs to another teller', 403);
+                }
+
+                $updateData = [];
+                if (isset($validated['schedule_booking_id'])) $updateData['schedule_booking_id'] = $validated['schedule_booking_id'];
+                if (isset($validated['is_return_trip'])) $updateData['is_return_trip'] = $validated['is_return_trip'];
+                if (isset($validated['travel_date'])) $updateData['travel_date'] = $validated['travel_date'];
+                if (isset($validated['schedule_id'])) $updateData['schedule_id'] = $validated['schedule_id'];
+                if (isset($validated['schedule_snapshot'])) $updateData['schedule_snapshot'] = $validated['schedule_snapshot'];
+                if (isset($validated['route_id'])) $updateData['route_id'] = $validated['route_id'];
+                if (isset($validated['route_snapshot'])) $updateData['route_snapshot'] = $validated['route_snapshot'];
+                if (isset($validated['vessel_snapshot'])) $updateData['vessel_snapshot'] = $validated['vessel_snapshot'];
+                if (isset($validated['institutional_account_id'])) $updateData['institutional_account_id'] = $validated['institutional_account_id'];
+                if (isset($validated['institutional_account_snapshot'])) $updateData['institutional_account_snapshot'] = $validated['institutional_account_snapshot'];
+
+                if (!empty($updateData)) {
+                    $tempBooking->update($updateData);
+                }
+            } else {
+                $tempBooking = TempBooking::create([
+                    'serial_no' => $validated['serial_no'],
+                    'schedule_booking_id' => $validated['schedule_booking_id'] ?? null,
+                    'is_return_trip' => $validated['is_return_trip'] ?? false,
+                    'travel_date' => $validated['travel_date'],
+                    'schedule_id' => $validated['schedule_id'],
+                    'schedule_snapshot' => $validated['schedule_snapshot'],
+                    'route_id' => $validated['route_id'],
+                    'route_snapshot' => $validated['route_snapshot'],
+                    'vessel_snapshot' => $validated['vessel_snapshot'] ?? null,
+                    'institutional_account_id' => $validated['institutional_account_id'] ?? null,
+                    'institutional_account_snapshot' => $validated['institutional_account_snapshot'] ?? null,
+                    'booking_origin' => 'teller',
+                    'created_by' => $createdBy,
+                ]);
             }
-        } else {
-            // Create new temp_booking
-            $tempBooking = TempBooking::create([
-                'serial_no' => $validated['serial_no'],
-                'schedule_booking_id' => $validated['schedule_booking_id'] ?? null,
-                'is_return_trip' => $validated['is_return_trip'] ?? false,
-                'travel_date' => $validated['travel_date'],
-                'schedule_id' => $validated['schedule_id'],
-                'schedule_snapshot' => $validated['schedule_snapshot'],
-                'route_id' => $validated['route_id'],
-                'route_snapshot' => $validated['route_snapshot'],
-                'vessel_snapshot' => $validated['vessel_snapshot'] ?? null,
-                'institutional_account_id' => $validated['institutional_account_id'] ?? null,
-                'institutional_account_snapshot' => $validated['institutional_account_snapshot'] ?? null,
+
+            $bookedVehicle = BookedVehicle::create([
+                'temp_booking_id' => $tempBooking->temp_booking_id,
+                'vehicle_type' => $validated['vehicle_type'],
+                'plate_no' => $validated['plate_no'] ?? null,
+                'length' => $validated['length'] ?? null,
+                'weight' => $validated['weight'] ?? null,
+                'fare' => $validated['fare'],
+                'convenience_fee' => 25.00,
+                'driver_passenger_booking_id' => $validated['driver_passenger_booking_id'] ?? null,
                 'created_by' => $createdBy,
             ]);
-        }
 
-        // Create vehicle linked to temp_booking
-        $vehicleData = [
-            'temp_booking_id' => $tempBooking->temp_booking_id,
-            'vehicle_type' => $validated['vehicle_type'],
-            'plate_no' => $validated['plate_no'] ?? null,
-            'length' => $validated['length'] ?? null,
-            'weight' => $validated['weight'] ?? null,
-            'fare' => $validated['fare'],
-            'convenience_fee' => 25.00,
-            'driver_passenger_booking_id' => $validated['driver_passenger_booking_id'] ?? null,
-            'created_by' => $createdBy,
-        ];
-
-        $bookedVehicle = BookedVehicle::create($vehicleData);
-
-        return $this->success([
-            'booked_vehicle' => $bookedVehicle,
-            'temp_booking' => $tempBooking,
-        ], 'Booked vehicle created successfully', 201);
+            return $this->success([
+                'booked_vehicle' => $bookedVehicle,
+                'temp_booking' => $tempBooking,
+            ], 'Booked vehicle created successfully', 201);
+        });
     }
 
     private function normalizeKeys(array $data): array

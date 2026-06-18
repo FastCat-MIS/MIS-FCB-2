@@ -35,7 +35,7 @@ class CreatePaymentAction extends Action
             throw new ValidationException($validator);
         }
 
-        return DB::transaction(function () use ($validator) {
+        return DB::connection('teller_booking')->transaction(function () use ($validator) {
             $validated = $validator->validated();
             
             // Auto-populate created_by from JWT token
@@ -149,34 +149,28 @@ class CreatePaymentAction extends Action
         $idMapping = [];
 
         foreach ($temporaryPassengers as $tempPassenger) {
-            try {
-                $permanentPassenger = PermanentBookedPassenger::create([
-                    'booking_id' => $bookingId,
-                    'fullname' => $tempPassenger->fullname,
-                    'gender' => $tempPassenger->gender,
-                    'passenger_type_id' => $tempPassenger->passenger_type_id,
-                    'passenger_type_snapshot' => $tempPassenger->passenger_type_snapshot,
-                    'passenger_category_id' => $tempPassenger->passenger_category_id,
-                    'passenger_category_snapshot' => $tempPassenger->passenger_category_snapshot,
-                    'seat_id' => $tempPassenger->seat_id,
-                    'seat_number_snapshot' => $tempPassenger->seat_number_snapshot,
-                    'fare' => $tempPassenger->fare,
-                    'convenience_fee' => $tempPassenger->convenience_fee ?? 2.00,
-                    'discount_amount' => $tempPassenger->discount_amount,
-                    'discount_id' => $tempPassenger->discount_id,
-                    'created_by' => $tempPassenger->created_by,
-                    'expires_at' => null,
-                ]);
+            $permanentPassenger = PermanentBookedPassenger::create([
+                'booking_id' => $bookingId,
+                'fullname' => $tempPassenger->fullname,
+                'gender' => $tempPassenger->gender,
+                'passenger_type_id' => $tempPassenger->passenger_type_id,
+                'passenger_type_snapshot' => $tempPassenger->passenger_type_snapshot,
+                'passenger_category_id' => $tempPassenger->passenger_category_id,
+                'passenger_category_snapshot' => $tempPassenger->passenger_category_snapshot,
+                'seat_id' => $tempPassenger->seat_id,
+                'seat_number_snapshot' => $tempPassenger->seat_number_snapshot,
+                'fare' => $tempPassenger->fare,
+                'convenience_fee' => $tempPassenger->convenience_fee ?? 2.00,
+                'discount_amount' => $tempPassenger->discount_amount,
+                'discount_id' => $tempPassenger->discount_id,
+                'created_by' => $tempPassenger->created_by,
+                'expires_at' => null,
+            ]);
 
-                // Map temp ID to permanent ID
-                $idMapping[$tempPassenger->booked_passenger_id] = $permanentPassenger->booked_passenger_id;
+            $idMapping[$tempPassenger->booked_passenger_id] = $permanentPassenger->booked_passenger_id;
 
-                // Permanently delete from temporary table
-                $tempPassenger->forceDelete();
-                \Log::info("Transferred passenger ID: {$tempPassenger->booked_passenger_id} to permanent ID: {$permanentPassenger->booked_passenger_id}");
-            } catch (\Exception $e) {
-                \Log::error("Failed to transfer passenger ID: {$tempPassenger->booked_passenger_id}. Error: " . $e->getMessage());
-            }
+            $tempPassenger->forceDelete();
+            \Log::info("Transferred passenger ID: {$tempPassenger->booked_passenger_id} to permanent ID: {$permanentPassenger->booked_passenger_id}");
         }
 
         return $idMapping;
@@ -205,34 +199,28 @@ class CreatePaymentAction extends Action
         $transferredVehicles = [];
 
         foreach ($temporaryVehicles as $tempVehicle) {
-            try {
-                // Map temporary driver ID to permanent passenger ID if driver was assigned
-                $permanentDriverId = null;
-                if ($tempVehicle->driver_passenger_booking_id && isset($passengerIdMap[$tempVehicle->driver_passenger_booking_id])) {
-                    $permanentDriverId = $passengerIdMap[$tempVehicle->driver_passenger_booking_id];
-                }
-
-                $permanentVehicle = PermanentBookedVehicle::create([
-                    'booking_id' => $bookingId,
-                    'vehicle_type' => $tempVehicle->vehicle_type,
-                    'plate_no' => $tempVehicle->plate_no,
-                    'length' => $tempVehicle->length,
-                    'weight' => $tempVehicle->weight,
-                    'fare' => $tempVehicle->fare,
-                    'convenience_fee' => $tempVehicle->convenience_fee ?? 25.00,
-                    'driver_passenger_booking_id' => $permanentDriverId,
-                    'created_by' => $tempVehicle->created_by,
-                    'expires_at' => null,
-                ]);
-
-                // Permanently delete from temporary table
-                $tempVehicle->forceDelete();
-                \Log::info("Transferred vehicle ID: {$tempVehicle->booked_vehicle_id} to permanent storage");
-
-                $transferredVehicles[] = $permanentVehicle;
-            } catch (\Exception $e) {
-                \Log::error("Failed to transfer vehicle ID: {$tempVehicle->booked_vehicle_id}. Error: " . $e->getMessage());
+            $permanentDriverId = null;
+            if ($tempVehicle->driver_passenger_booking_id && isset($passengerIdMap[$tempVehicle->driver_passenger_booking_id])) {
+                $permanentDriverId = $passengerIdMap[$tempVehicle->driver_passenger_booking_id];
             }
+
+            $permanentVehicle = PermanentBookedVehicle::create([
+                'booking_id' => $bookingId,
+                'vehicle_type' => $tempVehicle->vehicle_type,
+                'plate_no' => $tempVehicle->plate_no,
+                'length' => $tempVehicle->length,
+                'weight' => $tempVehicle->weight,
+                'fare' => $tempVehicle->fare,
+                'convenience_fee' => $tempVehicle->convenience_fee ?? 25.00,
+                'driver_passenger_booking_id' => $permanentDriverId,
+                'created_by' => $tempVehicle->created_by,
+                'expires_at' => null,
+            ]);
+
+            $tempVehicle->forceDelete();
+            \Log::info("Transferred vehicle ID: {$tempVehicle->booked_vehicle_id} to permanent storage");
+
+            $transferredVehicles[] = $permanentVehicle;
         }
 
         return $transferredVehicles;
