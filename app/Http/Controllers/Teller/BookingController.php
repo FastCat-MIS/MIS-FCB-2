@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Teller;
 
-use App\Actions\Teller\Booking\GetBookingsAction;
+use App\Actions\Teller\Booking\CancelTempBookingAction;
 use App\Actions\Teller\Booking\GetBookingAction;
+use App\Actions\Teller\Booking\GetBookingsAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -21,10 +22,20 @@ class BookingController extends Controller
 
     /**
      * Get single booking by serial_no
-     * 
+     *
      * GET /teller-booking/bookings/{serial_no}
      */
     public function show(string $serialNo, GetBookingAction $action)
+    {
+        return $action->execute($serialNo);
+    }
+
+    /**
+     * Cancel a pending booking (pre-payment)
+     *
+     * DELETE /teller-booking/bookings/{serialNo}
+     */
+    public function destroy(string $serialNo, CancelTempBookingAction $action)
     {
         return $action->execute($serialNo);
     }

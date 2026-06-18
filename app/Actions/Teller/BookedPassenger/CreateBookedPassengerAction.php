@@ -6,6 +6,7 @@ use App\Actions\Action;
 use App\Models\Teller\BookedPassenger;
 use App\Models\Teller\TempBooking;
 use App\Models\Teller\ScheduleSeatLock;
+use App\Models\Operations\PassengerType;
 use App\Models\Operations\Schedule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -55,6 +56,15 @@ class CreateBookedPassengerAction extends Action
         // Auto-populate created_by from JWT token
         $createdBy = auth()->id() ?? \Tymon\JWTAuth\Facades\JWTAuth::parseToken()->getClaim('user_id');
         $validated['created_by'] = $createdBy;
+
+        // Strip seat assignment for passenger types that don't occupy a seat (e.g. Infant)
+        if (isset($validated['seat_id']) && $validated['seat_id'] !== null) {
+            $passengerType = PassengerType::find($validated['passenger_type_id']);
+            if ($passengerType && !$passengerType->has_seat) {
+                $validated['seat_id'] = null;
+                $validated['seat_number_snapshot'] = null;
+            }
+        }
 
         // Wrap in transaction for atomicity
         DB::connection('teller_booking')->beginTransaction();

@@ -16,12 +16,14 @@ class PassengerType extends Model
         'type',
         'discount',
         'waived',
+        'has_seat',
         'status',
     ];
 
     protected $casts = [
         'discount' => 'decimal:2',
         'waived' => 'boolean',
+        'has_seat' => 'boolean',
     ];
 
     public $timestamps = true;

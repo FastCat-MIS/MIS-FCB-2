@@ -18,6 +18,7 @@ Route::middleware('pem.jwt:payment.read')->group(function () {
         // Temp booking endpoints
         Route::get('/bookings', [BookingController::class, 'index']);
         Route::get('/bookings/{serialNo}', [BookingController::class, 'show']);
+        Route::delete('/bookings/{serialNo}', [BookingController::class, 'destroy']);
         
         // Create temp bookings
         Route::post('/booked-passengers', [BookedPassengerController::class, 'store']);
