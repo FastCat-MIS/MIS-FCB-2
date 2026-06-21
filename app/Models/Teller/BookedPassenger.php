@@ -48,6 +48,7 @@ class BookedPassenger extends Model
         'fare' => 'decimal:2',
         'convenience_fee' => 'decimal:2',
         'discount_amount' => 'decimal:2',
+        'expires_at' => 'datetime',
     ];
 
     public function tempBooking()

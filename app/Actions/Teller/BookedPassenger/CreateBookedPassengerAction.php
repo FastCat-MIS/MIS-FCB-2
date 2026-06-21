@@ -129,6 +129,7 @@ class CreateBookedPassengerAction extends Action
                 'convenience_fee' => 2.00,
                 'discount_amount' => $validated['discount_amount'] ?? 0,
                 'discount_id' => $validated['discount_id'] ?? null,
+                'expires_at' => now()->addMinutes(30),
             ];
 
             $bookedPassenger = BookedPassenger::create($passengerData);
