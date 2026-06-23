@@ -17,6 +17,7 @@ class Vehicle extends Model
       'vehicle_class',
       'weight',
       'length',
+      'with_plate_number',
       ];
 
     public function vehicleRates()

@@ -17,6 +17,7 @@ class UpdateVehicleAction extends Action
             'vehicle_class' => 'required|string|max:50',
             'weight' => 'sometimes|integer',
             'length' => 'sometimes|integer',
+            'with_plate_number' => 'sometimes|boolean',
         ]);
 
         if ($validator->fails()) {
