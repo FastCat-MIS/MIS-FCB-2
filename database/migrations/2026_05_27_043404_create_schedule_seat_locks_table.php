@@ -27,7 +27,7 @@ return new class extends Migration
             
             // When?
             $table->timestamp('locked_at')->useCurrent();
-            $table->timestamp('expires_at');
+            $table->timestamp('expires_at')->nullable();
             
             // Indexes for performance
             $table->unique(['schedule_id', 'seat_id'], 'unique_schedule_seat');

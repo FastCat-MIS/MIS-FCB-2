@@ -31,7 +31,7 @@ return new class extends Migration
             
             // When?
             $table->timestamp('locked_at')->useCurrent();
-            $table->timestamp('expires_at');
+            $table->timestamp('expires_at')->nullable();
             
             // Indexes for performance
             $table->unique(['schedule_id', 'seat_id', 'travel_date'], 'unique_schedule_seat_date'); // ← Updated constraint
@@ -57,7 +57,7 @@ return new class extends Migration
             $table->unsignedBigInteger('locked_by_user_id')->nullable();
             $table->enum('locked_by_type', ['teller', 'public', 'mobile', 'admin', 'api'])->default('teller');
             $table->timestamp('locked_at')->useCurrent();
-            $table->timestamp('expires_at');
+            $table->timestamp('expires_at')->nullable();
             $table->unique(['schedule_id', 'seat_id'], 'unique_schedule_seat');
             $table->index('serial_no', 'idx_serial_no');
             $table->index(['locked_by_user_id', 'locked_by_type'], 'idx_user');
