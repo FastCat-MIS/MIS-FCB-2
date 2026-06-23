@@ -11,7 +11,10 @@ class InstitutionalAccountsSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('institutional_accounts')->insert([
+        $year = now()->format('Y');
+        $counter = 1;
+
+        $data = [
             [
                 'ia_name' => 'ABC Travel Corporation',
                 'image' => null,
@@ -26,8 +29,6 @@ class InstitutionalAccountsSeeder extends Seeder
                 'status' => 1,
                 'effective_date' => Carbon::now(),
                 'eoc_date' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'ia_name' => 'XYZ Corporate Services',
@@ -43,9 +44,17 @@ class InstitutionalAccountsSeeder extends Seeder
                 'status' => 1,
                 'effective_date' => Carbon::now()->subDays(10),
                 'eoc_date' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
-        ]);
+        ];
+
+        // Add ia_code dynamically
+        $finalData = array_map(function ($item) use ($year, &$counter) {
+            $item['ia_code'] = sprintf('IA-%s-%03d', $year, $counter++);
+            $item['created_at'] = now();
+            $item['updated_at'] = now();
+            return $item;
+        }, $data);
+
+        DB::table('institutional_accounts')->insert($finalData);
     }
 }

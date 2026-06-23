@@ -11,7 +11,9 @@ return new class extends Migration
         Schema::create('vessels', function (Blueprint $table) {
             $table->id();
             $table->string('vessel_name', 100);
-            $table->integer('capacity');
+            $table->integer('capacity')->nullable();
+            $table->decimal('decklane_length_capacity', 8, 2)->default(0.00);
+            $table->decimal('weight_capacity', 10, 2)->default(0.00);
             $table->text('description')->nullable();
             $table->unsignedTinyInteger("status")->default(0);
             $table->timestamps();

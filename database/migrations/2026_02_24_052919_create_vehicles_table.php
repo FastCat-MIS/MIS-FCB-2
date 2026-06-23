@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id('vehicle_id');
             $table->tinyInteger('vehicle_type');
             $table->string('vehicle_class');
+            $table->decimal('weight', 8, 3)->default(0.000); 
+            $table->decimal('length', 10, 2)->default(0.00); 
+            $table->boolean('with_plate_number')->default(true);
             $table->timestamps();
 
              $table->unique(['vehicle_type', 'vehicle_class']);

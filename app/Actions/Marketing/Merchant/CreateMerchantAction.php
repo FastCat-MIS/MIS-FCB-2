@@ -4,6 +4,8 @@ namespace App\Actions\Marketing\Merchant;
 
 use App\Actions\Action;
 use App\Models\Marketing\Merchant;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 
@@ -12,6 +14,9 @@ class CreateMerchantAction extends Action
     public function execute(array $data)
     {
         $validated = $this->validate($data);
+
+        $validated['merchant_code'] = $this->generateMerchantCode();
+        
         $validated['password'] = Hash::make('Fastcat_01');
         
         if (isset($data['logo']) && $data['logo'] instanceof \Illuminate\Http\UploadedFile) {
@@ -24,6 +29,28 @@ class CreateMerchantAction extends Action
             'data' => $merchant,
         ], 'Merchant created successfully', 201);
     }
+
+    private function generateMerchantCode(): string
+    {
+        $now = Carbon::now();
+
+        $count = Merchant::whereYear('created_at', $now->year)
+            ->whereMonth('created_at', $now->month)
+            ->lockForUpdate()
+            ->count();
+
+        if ($count >= 100) {
+            throw new Exception('Maximum of 100 merchants per month reached (00–99).');
+        }
+
+        $yearHex  = strtoupper(dechex($now->year));
+        $monthHex = strtoupper(str_pad(dechex($now->month), STR_PAD_LEFT)); // 👈 fixed: was missing length, pad string, and pad type
+        $decimal  = str_pad($count, 2, '0', STR_PAD_LEFT);
+
+        return 'MT' . '-' . $yearHex . $monthHex . '-' . $decimal;
+    }
+
+    
 
     private function validate(array $data): array
     {

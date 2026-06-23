@@ -15,6 +15,8 @@ class CreateVesselAction extends Action
         $validator = Validator::make($data, [
             'vessel_name' => 'required|string|max:100|unique:vessels,vessel_name',
             'capacity' => 'sometimes|nullable|integer|min:0',
+            'decklane_length_capacity' => 'sometimes|nullable|integer|min:0',
+            'weight_capacity' => 'sometimes|nullable|integer|min:0',
             'description' => 'sometimes|nullable|string',
             'status'         => 'nullable|in:0,1,2,3',
             'accommodations' => 'sometimes|array',

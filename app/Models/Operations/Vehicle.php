@@ -15,7 +15,10 @@ class Vehicle extends Model
     protected $fillable = [
       'vehicle_type',
       'vehicle_class',
-    ];
+      'weight',
+      'length',
+      'with_plate_number',
+      ];
 
     public function vehicleRates()
     {
